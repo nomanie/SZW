@@ -1,0 +1,106 @@
+.dashboard {
+    .card {
+        margin: 0 20px;
+        .card-header, .card-body, .card-footer {
+            background: white;
+
+        }
+
+        .card-header {
+            border: none;
+            padding: 0;
+
+            .blue-diagram {
+                background: linear-gradient(60deg, #26c6da, #00acc1);
+                box-shadow: 1px 4px 9px -1px rgba(24, 189, 208, 0.8);
+                margin: -20px 15px 15px;
+                border-radius: 3px;
+                padding: 5px 15px;
+                font-size: 12px;
+                color: #fff;
+                -webkit-font-smoothing: antialiased;
+
+                .ct-grid {
+                    stroke: hsla(0, 0%, 100%, .2);
+                    stroke-width: 1px;
+                    stroke-dasharray: 2px;
+                }
+
+                .ct-line {
+                    stroke: hsla(0, 0%, 100%, .8);
+                    fill: none;
+                    stroke-width: 3px;
+                }
+
+                .ct-point {
+                    stroke-width: 8px;
+                    stroke-linecap: round;
+                    stroke: hsla(0, 0%, 100%, .8);
+                }
+
+                foreignObject {
+                    text-align: right;
+                }
+            }
+
+            .red-diagram {
+                background: linear-gradient(60deg, #ef5350, #e53935);
+                box-shadow: 1px 4px 9px -1px rgba(239, 83, 80, 0.78);
+                margin: -20px 15px 15px;
+                border-radius: 3px;
+                padding: 5px 15px;
+                font-size: 12px;
+                color: #fff;
+                -webkit-font-smoothing: antialiased;
+
+                .ct-grid {
+                    stroke: hsla(0,0%,100%,.2);
+                }
+                .ct-bar{
+                    stroke: hsla(0,0%,100%,.8);
+                    fill: none;
+                    stroke-width: 10px;
+                }
+                foreignObject {
+                    text-align: right;
+                }
+            }
+
+            .green-diagram {
+                background: linear-gradient(60deg,#66bb6a,#43a047);
+                box-shadow: 1px 4px 9px -1px rgba(102, 187, 106, 0.83);
+                margin: -20px 15px 15px;
+                border-radius: 3px;
+                padding: 5px 15px;
+                font-size: 12px;
+                color: #fff;
+                -webkit-font-smoothing: antialiased;
+
+                .ct-grid {
+                    stroke: hsla(0, 0%, 100%, .2);
+                    stroke-width: 1px;
+                    stroke-dasharray: 2px;
+                }
+                .ct-point {
+                    stroke-width: 8px;
+                    stroke-linecap: round;
+                    stroke: hsla(0, 0%, 100%, .8);
+                }
+                .ct-line {
+                    stroke: hsla(0, 0%, 100%, .8);
+                    fill: none;
+                    stroke-width: 3px;
+                }
+                foreignObject {
+                    text-align: right;
+                }
+            }
+        }
+
+        .card-footer {
+            margin: 0 10px;
+            color: grey;
+            font-size: 12px;
+        }
+    }
+}
