@@ -251,7 +251,7 @@
                     </div>
                     <div class="card-footer">
                         <i class="fa-regular fa-clock me-2"></i>
-                        Zaktualizowane  2 godziny temu
+                        Zaktualizowane 2 godziny temu
                     </div>
                 </div>
             </div>
@@ -385,26 +385,296 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row mt-5">
             <div class="col-md-3">
-
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card__small--top">
+                            <div class="image green">
+                                <i class="fa-solid fa-money-bill"></i>
+                            </div>
+                            <div class="text">
+                                <span>
+                                    Zarobek
+                                </span>
+                                <h5>
+                                    2452.50 pln
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <i class="fa-regular fa-calendar me-2"></i>
+                        Przedwczoraj
+                    </div>
+                </div>
             </div>
             <div class="col-md-3">
-
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card__small--top">
+                            <div class="image orange">
+                                <i class="fa-regular fa-calendar"></i>
+                            </div>
+                            <div class="text">
+                                <span>
+                                    Zaplanowanych spotkań
+                                </span>
+                                <h5>
+                                    7
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <i class="fa-regular fa-calendar me-2"></i>
+                        najbliższe 23.08.2022 13:20
+                    </div>
+                </div>
             </div>
             <div class="col-md-3">
-
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card__small--top">
+                            <div class="image red">
+                                <i class="fa-solid fa-wrench"></i>
+                            </div>
+                            <div class="text">
+                                <span>
+                                    Zwrotów gwarancyjncyh
+                                </span>
+                                <h5>
+                                    2
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <i class="fa-regular fa-calendar me-2"></i>
+                        ostatnie zgłoszenie 2 dni temu
+                    </div>
+                </div>
             </div>
             <div class="col-md-3">
-
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card__small--top">
+                            <div class="image blue">
+                                <i class="fa-regular fa-calendar"></i>
+                            </div>
+                            <div class="text">
+                                <span>
+                                    Wolnych terminów
+                                </span>
+                                <h5>
+                                    5
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <i class="fa-regular fa-calendar me-2"></i>
+                        ostatnio zapisany 6 godzin temu
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row mt-5">
             <div class="col-md-6">
-
+                <div class="card">
+                    <div class="card-header mb-3">
+                        <div class="table__top orange">
+                            <h5>
+                                Lista klientów
+                            </h5>
+                            <span>
+                                Ostatni dodany 12 godzin temu
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table__body">
+                            <table class="w-100">
+                                <tr>
+                                    <th>
+                                        ID
+                                    </th>
+                                    <th>
+                                        Imię i Nazwisko
+                                    </th>
+                                    <th>
+                                        Numer telefonu
+                                    </th>
+                                    <th>
+                                        Ilość pojazdów
+                                    </th>
+                                    <th>
+                                        Miasto
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        1
+                                    </td>
+                                    <td>
+                                        Piotr Skwarek
+                                    </td>
+                                    <td>
+                                        123 123 123
+                                    </td>
+                                    <td>
+                                        2
+                                    </td>
+                                    <td>
+                                        Jastrzębie-Zdrój
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        2
+                                    </td>
+                                    <td>
+                                        Adam Kowalski
+                                    </td>
+                                    <td>
+                                        235 473 543
+                                    </td>
+                                    <td>
+                                        1
+                                    </td>
+                                    <td>
+                                        Katowice
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        3
+                                    </td>
+                                    <td>
+                                        Jan Wiśniewski
+                                    </td>
+                                    <td>
+                                        958 743 235
+                                    </td>
+                                    <td>
+                                        4
+                                    </td>
+                                    <td>
+                                        Wrocław
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        4
+                                    </td>
+                                    <td>
+                                        Beata Nowak
+                                    </td>
+                                    <td>
+                                        754 346 453
+                                    </td>
+                                    <td>
+                                        1
+                                    </td>
+                                    <td>
+                                        Warszawa
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        5
+                                    </td>
+                                    <td>
+                                        Bogusław Pudel
+                                    </td>
+                                    <td>
+                                        645 754 346
+                                    </td>
+                                    <td>
+                                        3
+                                    </td>
+                                    <td>
+                                        Olsztyn
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-md-6">
-
+                <div class="card">
+                    <div class="card-header mb-3">
+                        <div class="table__top green">
+                            <h5>
+                                Lista Zadań
+                            </h5>
+                            <span>
+                                22.08.2022
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table__task">
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <input type="checkbox" name="" class="form-check-input">
+                                </div>
+                                <div class="col-md-9">
+                                    Wymiana klocków hamulcowych w Opel Astra G 1998r
+                                </div>
+                                <div class="col-md-1">
+                                    <i class="fa-solid fa-pencil edit"></i>
+                                </div>
+                                <div class="col-md-1">
+                                    <i class="fa-solid fa-x delete"></i>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <input type="checkbox" name="" class="form-check-input">
+                                </div>
+                                <div class="col-md-9 text-left">
+                                    Wymiana opon w Citroen C3
+                                </div>
+                                <div class="col-md-1">
+                                    <i class="fa-solid fa-pencil edit"></i>
+                                </div>
+                                <div class="col-md-1">
+                                    <i class="fa-solid fa-x delete"></i>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <input type="checkbox" name="" class="form-check-input">
+                                </div>
+                                <div class="col-md-9 text-left">
+                                    Naprawa zderzaka w Dacia Duster
+                                </div>
+                                <div class="col-md-1">
+                                    <i class="fa-solid fa-pencil edit"></i>
+                                </div>
+                                <div class="col-md-1">
+                                    <i class="fa-solid fa-x delete"></i>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <input type="checkbox" name="" class="form-check-input">
+                                </div>
+                                <div class="col-md-9 text-left">
+                                    Czyszczenie tapicerki Seat Ibiza
+                                </div>
+                                <div class="col-md-1">
+                                    <i class="fa-solid fa-pencil edit"></i>
+                                </div>
+                                <div class="col-md-1">
+                                    <i class="fa-solid fa-x delete"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
