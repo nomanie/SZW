@@ -28,13 +28,24 @@
                 </div>
             </div>
             <div class="notifications">
-                <i class="fa-regular fa-bell"></i>
-                <div class="counter">
-                    3
+                <div class="dropdown">
+                    <button class="btn-no-style d-flex" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-regular fa-bell"></i>
+                        <div class="counter">
+                            3
+                        </div>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <notification-list></notification-list>
+                    </ul>
                 </div>
+
             </div>
             <div class="messages">
                 <i class="fa-regular fa-envelope"></i>
+                <div class="counter">
+                    +9
+                </div>
             </div>
             <div class="profile">
                 <div class="dropdown">
@@ -85,7 +96,9 @@
 </template>
 
 <script>
+import NotificationList from "../NotificationList";
 export default {
-    name: 'HeaderNav'
+    name: 'HeaderNav',
+    components: {NotificationList}
 }
 </script>

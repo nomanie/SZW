@@ -16,7 +16,7 @@
                <div class="sidebar__container">
                    <sidebar></sidebar>
                </div>
-               <div class="col">
+               <div class="col" style="width: calc(100% - 100px)">
                    <div class="row">
                        <div class="col">
                             <header-nav></header-nav>
@@ -24,7 +24,9 @@
                    </div>
                    <div class="row">
                        <div class="col">
-                            <dashboard></dashboard>
+{{--                            <dashboard></dashboard>--}}
+{{--                           <support></support>--}}
+                           <clients></clients>
                        </div>
                    </div>
                </div>

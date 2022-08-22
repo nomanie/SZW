@@ -28,6 +28,14 @@ app.component('header-nav', HeaderNav);
 import Dashboard from './components/workshop/Dashboard.vue';
 app.component('dashboard', Dashboard);
 
+import Card from './assets/cards/Card';
+app.component('card', Card);
+
+import Support from './components/Support';
+app.component('support', Support);
+
+import Clients from './components/workshop/Clients';
+app.component('clients', Clients);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
