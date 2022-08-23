@@ -1,0 +1,33 @@
+table{
+    &.hover{
+        tr {
+            &:hover{
+                background: #a2b2ea !important;
+            }
+        }
+    }
+    &.striped {
+        tr:nth-child(even){
+            background: #E7E9EB;
+        }
+    }
+    &.border-all {
+        border-collapse: collapse;
+    }
+    &.border-row {
+        tr {
+            border-bottom: 1px solid #c0c2c4;
+        }
+        tr:last-of-type {
+            border-bottom: none;
+        }
+    }
+    &.border-col {
+        td, th {
+            border-right: 1px solid #c0c2c4;
+        }
+        td:last-of-type, th:last-of-type {
+            border-right: none;
+        }
+    }
+}

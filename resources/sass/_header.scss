@@ -38,51 +38,6 @@
             margin-right: 0;
         }
 
-        .global-search {
-            .input__wrapper {
-                position: relative;
-                display: inline-block;
-                overflow: hidden;
-
-                i {
-                    margin-left: -20px;
-                    position: absolute;
-                    top: 5px;
-                    font-size: 15px;
-                }
-            }
-
-            .input__wrapper > input[type=text] {
-                border: none;
-                outline: none;
-                background: none;
-                border-bottom: solid 1px rgba(166, 166, 166, 0.39);
-            }
-
-            .underline-animation {
-                transition: all .3s;
-                display: inline-block;
-                bottom: 0;
-                left: -100%;
-                position: absolute;
-                width: 100%;
-                height: 2px;
-                background-color: hsla(214, 100%, 64%, 0.52);
-            }
-
-            .input__wrapper > input[type=text]:focus + .underline-animation {
-                left: 0;
-            }
-
-            .input__wrapper > input[type=text]:focus::placeholder {
-                color: hsla(214, 100%, 64%, 0.52);
-            }
-
-            @media(max-width: 720px) {
-                display: none;
-            }
-        }
-
         .profile {
             .dropdown {
                 button {
@@ -190,5 +145,50 @@
             --bs-dropdown-min-width: 0;
             --bs-dropdown-item-padding-x: .25rem;
         }
+    }
+}
+
+.global-search {
+    .input__wrapper {
+        position: relative;
+        display: inline-block;
+        overflow: hidden;
+
+        i {
+            margin-left: -20px;
+            position: absolute;
+            top: 5px;
+            font-size: 15px;
+        }
+    }
+
+    .input__wrapper > input[type=text] {
+        border: none;
+        outline: none;
+        background: none;
+        border-bottom: solid 1px rgba(166, 166, 166, 0.39);
+    }
+
+    .underline-animation {
+        transition: all .3s;
+        display: inline-block;
+        bottom: 0;
+        left: -100%;
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background-color: hsla(214, 100%, 64%, 0.52);
+    }
+
+    .input__wrapper > input[type=text]:focus + .underline-animation {
+        left: 0;
+    }
+
+    .input__wrapper > input[type=text]:focus::placeholder {
+        color: hsla(214, 100%, 64%, 0.52);
+    }
+
+    @media(max-width: 720px) {
+        display: none;
     }
 }

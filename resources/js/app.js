@@ -36,6 +36,18 @@ app.component('support', Support);
 
 import Clients from './components/workshop/Clients';
 app.component('clients', Clients);
+
+import Cars from './components/workshop/Cars';
+app.component('cars', Cars);
+
+import Documents from './components/workshop/Documents';
+app.component('documents', Documents);
+
+import Repairs from './components/workshop/Repairs';
+app.component('repairs', Repairs);
+
+import Messages from './components/Messages';
+app.component('messages', Messages);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

@@ -12,7 +12,7 @@
     </head>
     <body class="antialiased">
        <div id="app">
-           <div class="row">
+           <div class="row h-100vh">
                <div class="sidebar__container">
                    <sidebar></sidebar>
                </div>
@@ -22,11 +22,15 @@
                             <header-nav></header-nav>
                        </div>
                    </div>
-                   <div class="row">
-                       <div class="col">
+                   <div class="row h-without-header">
+                       <div class="col h-100">
 {{--                            <dashboard></dashboard>--}}
 {{--                           <support></support>--}}
-                           <clients></clients>
+{{--                           <clients></clients>--}}
+{{--                           <cars></cars>--}}
+{{--                           <documents></documents>--}}
+{{--                           <repairs></repairs>--}}
+                           <messages></messages>
                        </div>
                    </div>
                </div>

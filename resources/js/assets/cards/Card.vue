@@ -1,5 +1,5 @@
 <template>
-    <div class="col-12 col-lg-6 col-xl-4" v-if="type === 'chart'">
+    <div :class="{'col-12 col-lg-6 col-xl-4': !full_width, 'col-12': full_width}" v-if="type === 'chart'">
         <div class="card">
             <div class="card-header">
                 <div :class="[color, chart_data.chart_type + `-diagram` ]">
@@ -234,7 +234,7 @@
             </div>
         </div>
     </div>
-    <div class="col-12 col-lg-6 col-xl-3" v-if="type === 'information'">
+    <div :class="{'col-12 col-lg-6 col-xl-3': !full_width , 'col-12': full_width}" v-if="type === 'information'">
         <div class="card">
             <div class="card-body">
                 <div class="card__small--top">
@@ -257,7 +257,7 @@
             </div>
         </div>
     </div>
-    <div class="col-12 col-lg-12 col-xl-6" v-if="type === 'list'">
+    <div :class="{'col-12 col-lg-12 col-xl-6': !full_width , 'col-12': full_width}" v-if="type === 'list'">
         <div class="card">
             <div class="card-header mb-3">
                 <div class="table__top" :class="color">
@@ -273,7 +273,7 @@
             </div>
             <div class="card-body">
                 <div class="table__body">
-                    <table class="w-100">
+                    <table class="w-100" :class="{'border-all': list_border, 'striped': list_striped, 'hover': list_hover, 'border-row': list_row_border, 'border-col': list_col_border}">
                         <tr>
                             <th v-for="header in table_data.columns">{{ header }}</th>
                         </tr>
@@ -287,7 +287,7 @@
             </div>
         </div>
     </div>
-    <div class="col-12 col-lg-12 col-xl-6" v-if="type === 'task_list'">
+    <div :class="{'col-12 col-lg-12 col-xl-6': !full_width, 'col-12': full_width}" v-if="type === 'task_list'">
         <div class="card">
             <div class="card-header mb-3">
                 <div class="table__top" :class="color">
@@ -347,6 +347,30 @@ export default {
             type: [Object, Array],
             default: () => {
             }
+        },
+        full_width: {
+            type: Boolean,
+            default: () => false
+        },
+        list_hover: {
+            type: Boolean,
+            default: () => false
+        },
+        list_striped: {
+            type: Boolean,
+            default: () => false
+        },
+        list_border: {
+            type: Boolean,
+            default: () => false
+        },
+        list_row_border: {
+            type: Boolean,
+            default: () => false
+        },
+        list_col_border: {
+            type: Boolean,
+            default: () => false
         }
     }
 }
