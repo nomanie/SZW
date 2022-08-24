@@ -31,6 +31,18 @@
                 }
             }
         }
+        @media(max-width: 992px) {
+            flex-direction: row;
+            justify-content: space-around;
+            hr{
+                display: none;
+            }
+        }
+        @media(max-width:600px) {
+            .filters {
+                display: none;
+            }
+        }
     }
 
     &__header {
@@ -86,6 +98,29 @@
         }
         i {
             font-size: 16px;
+        }
+
+        &--toolbar {
+            &.mobile {
+                display: none;
+            }
+            @media (max-width: 600px) {
+                display: none;
+                &.mobile {
+                    display: block;
+                    .dropdown {
+                        .dropdown-menu{
+                            --bs-dropdown-min-width: 0.5rem;
+                        }
+                        ul {
+                            padding: 0;
+                        }
+                        li{
+                            margin-top: 10px;
+                        }
+                    }
+                }
+            }
         }
     }
 }

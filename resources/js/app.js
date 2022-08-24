@@ -5,8 +5,10 @@
  */
 
 import './bootstrap';
-import { createApp } from 'vue';
 import './custom';
+import { createApp } from 'vue';
+import { Ziggy } from './ziggy';
+const ZiggyVue = require("ziggy");
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -14,7 +16,7 @@ import './custom';
  * to use in your application's views. An example is included for you.
  */
 
-const app = createApp({});
+const app = createApp({}).use(Ziggy, ZiggyVue);
 
 import ExampleComponent from './components/ExampleComponent.vue';
 app.component('example-component', ExampleComponent);
@@ -48,6 +50,9 @@ app.component('repairs', Repairs);
 
 import Messages from './components/Messages';
 app.component('messages', Messages);
+
+import Calendar from './components/Calendar'
+app.component('calendar', Calendar);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

@@ -30,7 +30,8 @@
 {{--                           <cars></cars>--}}
 {{--                           <documents></documents>--}}
 {{--                           <repairs></repairs>--}}
-                           <messages></messages>
+{{--                           <messages></messages>--}}
+                           <calendar></calendar>
                        </div>
                    </div>
                </div>

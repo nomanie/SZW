@@ -26,7 +26,7 @@
                     </li>
                 </ul>
                 <hr class="w-75">
-                <ul class="text-center">
+                <ul class="text-center filters">
                     <li class="text-uppercase text-center">Szybkie Filtry</li>
                     <li class="badge red">
                         Klienci z Katowic
@@ -69,26 +69,61 @@
                             <td>
                                 <input type="checkbox" class="form-check-input">
                             </td>
-                            <td>
+                            <td class="message__table--toolbar">
                                 <i class="fa-regular fa-star"></i>
                             </td>
                             <td>
                                 Tytuł wiadomości
                             </td>
-                            <td>
+                            <td class="message__table--toolbar">
                                 Trochę treści z tej wiadomości...
                             </td>
-                            <td>
+                            <td class="message__table--toolbar">
                                 <i class="fa-regular fa-trash-can"></i>
                             </td>
-                            <td>
+                            <td class="message__table--toolbar">
                                 <i class="fa-regular fa-envelope-open"></i>
                             </td>
-                            <td>
+                            <td class="message__table--toolbar">
                                 <i class="fa-solid fa-download"></i>
                             </td>
-                            <td>
+                            <td class="message__table--toolbar">
                                 <i class="fa-solid fa-box-archive"></i>
+                            </td>
+                            <td class="message__table--toolbar mobile">
+                                <div class="dropdown">
+                                    <button class="btn-no-style" type="button" id="dropdownMenuButton1"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="fa-regular fa-star"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="fa-regular fa-trash-can"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="fa-regular fa-envelope-open"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="fa-solid fa-download"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="fa-solid fa-box-archive"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </td>
                         </tr>
                     </table>

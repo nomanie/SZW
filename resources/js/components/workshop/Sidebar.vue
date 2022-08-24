@@ -16,7 +16,7 @@
         <div class="sidebar__list">
             <ul>
                 <li class="sidebar__list--item active">
-                    <a>
+                    <a :href="links[0]">
                         <div>
                             <i class="fa-solid fa-house"></i>
                             <p>
@@ -122,6 +122,13 @@
 
 <script>
 export default {
-    name: 'Sidebar'
+    name: 'Sidebar',
+    data() {
+        return {
+            links: [
+                route('dashboard'),
+            ]
+        }
+    }
 }
 </script>
