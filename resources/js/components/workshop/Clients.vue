@@ -1,28 +1,24 @@
 <template>
-    <div class="mt-5">
-        <card :color="`green`" :type="`list`" :table_data="items" :full_width="true"></card>
-    </div>
+   <div class="mt-3">
+       <nav>
+           <div class="nav nav-tabs ps-3" id="nav-tab" role="tablist">
+               <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Lista Klientów</button>
+               <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Lista Pojazdów</button>
+              </div>
+       </nav>
+       <div class="tab-content" id="nav-tabContent">
+           <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                <clients-list></clients-list>
+           </div>
+           <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+               <car-list></car-list>
+           </div>
+       </div>
+   </div>
 </template>
 
 <script>
 export default {
     name: 'Clients',
-    data() {
-        return {
-            items: {
-                header_text: 'Lista klientów',
-                header_span: 'Ostatni dodany 12 godzin temu',
-                add_text: 'Dodaj klienta',
-                columns: ['ID', 'Imię i Nazwisko', 'Numer telefonu', 'Ilość pojazdów', 'Miasto', 'Akcja'],
-                data: [
-                    [1, 'Piotr Skwarek', '123 123 123', 2, 'Jastrzębie-Zdrój' , 'Dodaj | Usuń'],
-                    [2, 'Adam Kowalski', '235 473 543', 1, 'Katowice' , 'Dodaj | Usuń'],
-                    [3, 'Jan Wiśniewski', '958 743 235', 4, 'Wrocław' , 'Dodaj | Usuń'],
-                    [4, 'Beata Nowak', '754 346 453', 1 , 'Warszawa' , 'Dodaj | Usuń'],
-                    [5, 'Bogusław Pudel', '434 634 634', '3', 'Olsztyn' , 'Dodaj | Usuń']
-                ]
-            }
-        }
-    }
 }
 </script>

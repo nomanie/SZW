@@ -16,74 +16,74 @@
         <div class="sidebar__list">
             <ul>
                 <li class="sidebar__list--item active">
-                    <a :href="links[0]">
+                    <router-link to="/dashboard">
                         <div>
                             <i class="fa-solid fa-house"></i>
                             <p>
                                 Strona główna
                             </p>
                         </div>
-                    </a>
+                    </router-link>
                 </li>
                 <li class="sidebar__list--item">
-                    <a>
+                    <router-link to="/clients">
                         <div>
                             <i class="fa-solid fa-users"></i>
                             <p>
                                 Klienci
                             </p>
                         </div>
-                    </a>
+                    </router-link>
                 </li>
+<!--                <li class="sidebar__list&#45;&#45;item">-->
+<!--                    <a>-->
+<!--                        <div>-->
+<!--                            <i class="fa-solid fa-car"></i>-->
+<!--                            <p>-->
+<!--                                Pojazdy-->
+<!--                            </p>-->
+<!--                        </div>-->
+<!--                    </a>-->
+<!--                </li>-->
                 <li class="sidebar__list--item">
-                    <a>
-                        <div>
-                            <i class="fa-solid fa-car"></i>
-                            <p>
-                                Pojazdy
-                            </p>
-                        </div>
-                    </a>
-                </li>
-                <li class="sidebar__list--item">
-                    <a>
+                    <router-link to="/documents">
                         <div>
                             <i class="fa-solid fa-file-lines"></i>
                             <p>
                                 Dokumenty
                             </p>
                         </div>
-                    </a>
+                    </router-link>
                 </li>
                 <li class="sidebar__list--item">
-                    <a>
+                    <router-link to="/repairs">
                         <div>
                             <i class="fa-solid fa-wrench"></i>
                             <p>
                                 Naprawy
                             </p>
                         </div>
-                    </a>
+                    </router-link>
                 </li>
                 <li class="sidebar__list--item">
-                    <a>
+                    <router-link to="/messages">
                         <div>
                             <i class="fa-solid fa-envelope"></i>
                             <p>
                                 Wiadomości
                             </p>
                         </div>
-                    </a>
+                    </router-link>
                 </li>
                 <li class="sidebar__list--item">
-                    <a>
+                    <router-link to="/calendar">
                         <div>
                             <i class="fa-solid fa-calendar"></i>
                             <p>
                                 Kalendarz
                             </p>
                         </div>
-                    </a>
+                    </router-link>
                 </li>
                 <li class="sidebar__list--item">
                     <a>
@@ -106,14 +106,14 @@
                     </a>
                 </li>
                 <li class="sidebar__list--item">
-                    <a>
+                    <router-link to="/support">
                         <div>
                             <i class="fa-solid fa-info-circle"></i>
                             <p>
                                 Wsparcie
                             </p>
                         </div>
-                    </a>
+                    </router-link>
                 </li>
             </ul>
         </div>
@@ -125,10 +125,22 @@ export default {
     name: 'Sidebar',
     data() {
         return {
-            links: [
-                route('dashboard'),
-            ]
+            links: {
+                dashboard: route('dashboard'),
+                clients: route('clients'),
+                documents: route('documents'),
+                repairs: route('repairs'),
+                messages: route('messages'),
+                calendar: route('calendar'),
+                support: route('support')
+            }
+        }
+    },
+    methods: {
+        change(){
+            document.querySelector('div#content').innerHTML = 'test'
         }
     }
+
 }
 </script>

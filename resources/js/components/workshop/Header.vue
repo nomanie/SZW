@@ -60,13 +60,17 @@
                         <li>
                             <a class="dropdown-item" href="#">
                                 <i class="fa-regular fa-id-card"></i>
-                                <span>Informacje</span>
+                                <router-link to="/informations">
+                                    <span>Informacje</span>
+                                </router-link>
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item" href="#">
                                 <i class="fa-solid fa-cogs"></i>
-                                <span>Ustawienia</span>
+                                <router-link to="/settings">
+                                    <span>Ustawienia</span>
+                                </router-link>
                             </a>
                         </li>
                         <li>
@@ -78,7 +82,9 @@
                         <li>
                             <a class="dropdown-item" href="#">
                                 <i class="fa-solid fa-bug"></i>
-                                <span>Zgłoś błąd</span>
+                                <router-link to="/error-report">
+                                    <span>Zgłoś błąd</span>
+                                </router-link>
                             </a>
                         </li>
                         <li>

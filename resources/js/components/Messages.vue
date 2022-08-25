@@ -6,22 +6,22 @@
                     <button class="btn green mb-3">Napisz wiadomość</button>
 
                     <li class="text-uppercase text-center">Kategorie</li>
-                    <li>
+                    <li class="message__filter">
                         Odebrane
                     </li>
-                    <li>
+                    <li class="message__filter">
                         Ważne
                     </li>
-                    <li>
+                    <li class="message__filter">
                         Wysłane
                     </li>
-                    <li>
+                    <li class="message__filter">
                         Wersje robocze
                     </li>
-                    <li>
+                    <li class="message__filter">
                         Zarchiwizowane
                     </li>
-                    <li>
+                    <li class="message__filter">
                         Kosz
                     </li>
                 </ul>
@@ -42,7 +42,7 @@
             </div>
         </div>
         <div class="col-lg-10 h-100 overflow-hidden">
-            <div class="row ps-3 py-2 message__header">
+            <div class="row ps-3 py-2 message__header mt-3">
                 <div class="col">
                     <div class="toolbar">
                         <input type="checkbox" class="form-check-input">
@@ -62,21 +62,26 @@
                     </div>
                 </div>
             </div>
-            <div class="row h-100">
-                <div class="col overflow-auto h-100">
-                    <table class="message__table hover striped">
+            <div class="row message__container">
+                <div class="col overflow-auto h-100 message__table mt-3">
+                    <table class="hover w-100 border-row">
                         <tr v-for="i in 25">
                             <td>
                                 <input type="checkbox" class="form-check-input">
                             </td>
                             <td class="message__table--toolbar">
-                                <i class="fa-regular fa-star"></i>
+                                <i class="fa-star" :class="{'fa-solid active': i === 1, 'fa-regular': i !== 1}"></i>
                             </td>
                             <td>
                                 Tytuł wiadomości
                             </td>
                             <td class="message__table--toolbar">
                                 Trochę treści z tej wiadomości...
+                            </td>
+                            <td class="message__table--toolbar">
+                                <div class="badge" :class="{'blue' : i %3 === 0, 'red': i % 3 === 1, 'green': i % 3 === 2}">
+                                    Label
+                                </div>
                             </td>
                             <td class="message__table--toolbar">
                                 <i class="fa-regular fa-trash-can"></i>

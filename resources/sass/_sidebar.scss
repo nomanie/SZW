@@ -29,7 +29,7 @@
             background-color: hsla(0, 0%, 70.6%, .3);
         }
 
-        a {
+        a, router-link {
             color: #fff !important;
             text-transform: uppercase;
             padding: 5px 0;
@@ -63,11 +63,8 @@
             height: auto;
             position: relative;
             z-index: 2;
-
-            &.active {
-                a {
-                    background-color: hsla(214, 100%, 64%, 0.52) !important;
-                }
+            a.router-link-active {
+                background-color: hsla(214, 100%, 64%, 0.52) !important;
             }
 
             a {
@@ -157,7 +154,7 @@
         overflow: hidden;
     }
     .sidebar__list--item {
-        a {
+        a, router-link {
             div {
                 align-items: center;
                 display: flex;

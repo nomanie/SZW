@@ -1,0 +1,17 @@
+.informations {
+    .avatar {
+        width: 15%;
+        margin-top: -55px;
+        border-radius: 5px;
+        border: solid 1px black;
+        background: $dark;
+    }
+    .table__top {
+        h5 {
+            margin-bottom: 0;
+        }
+    }
+    .card .card-footer{
+        margin: 0;
+    }
+}

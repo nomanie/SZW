@@ -8,7 +8,8 @@ import './bootstrap';
 import './custom';
 import { createApp } from 'vue';
 import { Ziggy } from './ziggy';
-const ZiggyVue = require("ziggy");
+import {ZiggyVue } from 'ziggy'
+import router from './router';
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -16,7 +17,10 @@ const ZiggyVue = require("ziggy");
  * to use in your application's views. An example is included for you.
  */
 
-const app = createApp({}).use(Ziggy, ZiggyVue);
+const app = createApp({});
+app.use(ZiggyVue);
+app.use(Ziggy)
+app.use(router);
 
 import ExampleComponent from './components/ExampleComponent.vue';
 app.component('example-component', ExampleComponent);
@@ -39,7 +43,13 @@ app.component('support', Support);
 import Clients from './components/workshop/Clients';
 app.component('clients', Clients);
 
-import Cars from './components/workshop/Cars';
+import ClientList from './components/workshop/Clients/List';
+app.component('clients-list', ClientList);
+
+import CarList from './components/workshop/Clients/Cars';
+app.component('car-list', CarList);
+
+import Cars from './components/workshop/Clients/Cars';
 app.component('cars', Cars);
 
 import Documents from './components/workshop/Documents';
@@ -52,7 +62,17 @@ import Messages from './components/Messages';
 app.component('messages', Messages);
 
 import Calendar from './components/Calendar'
+import {createRouter, createWebHistory} from "vue-router";
 app.component('calendar', Calendar);
+
+import ErrorReport from "./components/ErrorReport";
+app.component('error-report', ErrorReport);
+
+import Information from "./components/workshop/Information";
+app.component('information', Information);
+
+import Settings from "./components/workshop/Settings";
+app.component('settings', Settings);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
