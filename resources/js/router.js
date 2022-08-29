@@ -51,6 +51,11 @@ const routes = [
         name: "settings",
         component: () => import('./components/workshop/Settings'),
     },
+    {
+        path: "/users",
+        name: "users",
+        component: () => import('./components/workshop/Users'),
+    },
 ]
 
 const router = createRouter({

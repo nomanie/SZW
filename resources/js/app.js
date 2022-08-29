@@ -8,7 +8,7 @@ import './bootstrap';
 import './custom';
 import { createApp } from 'vue';
 import { Ziggy } from './ziggy';
-import {ZiggyVue } from 'ziggy'
+import {ZiggyVue } from './ziggy'
 import router from './router';
 
 /**
@@ -73,6 +73,9 @@ app.component('information', Information);
 
 import Settings from "./components/workshop/Settings";
 app.component('settings', Settings);
+
+import Users from "./components/workshop/Users";
+app.component('users', Users);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

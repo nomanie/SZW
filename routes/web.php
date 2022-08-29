@@ -43,3 +43,9 @@ Route::get('/informations', function () {
 Route::get('/settings', function () {
     return view('workshop.pages.settings');
 })->name('settings');
+Route::get('/users', function () {
+    return view('workshop.pages.users');
+})->name('users');
+Route::get('/error-report', function () {
+    return view('workshop.pages.errorReport');
+})->name('error-report');
