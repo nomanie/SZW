@@ -1,13 +1,7 @@
 <template>
     <div class="container mt-3">
         <div class="d-flex justify-content-end">
-            <div class="btn-add">
-                <i class="fa fa-plus"></i>
-                <div class="cut"></div>
-                <div class="text">
-                    Pracownika
-                </div>
-            </div>
+            <modal></modal>
         </div>
         <vuetable ref="vuetable"
                   :api-url="apiUrl"
@@ -19,7 +13,13 @@
 </template>
 <script>
 import vuetableStyle from "../../../../config/styles/vuetable";
+import modal from './modal'
+import TaskList from "../../../../assets/task_list/TaskList";
 export default {
+    components: {
+        TaskList,
+      modal
+    },
     data() {
       return {
           table: null,
@@ -52,6 +52,9 @@ export default {
       apiUrl() {
           return route('api.workers.index');
       }
+    },
+    methods: {
+
     }
 }
 </script>
