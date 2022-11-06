@@ -1,7 +1,7 @@
 <template>
     <div class="users mt-5">
         <div class="row">
-            <card :color="`dark-green`" :type="`list`" :table_data="t1" :full_width></card>
+            <card :color="`dark-green`" :type="`list`" :table_data="t1"></card>
         </div>
     </div>
 </template>

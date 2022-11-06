@@ -76,7 +76,7 @@
                         <li>
                             <a class="dropdown-item" href="#">
                                 <i class="fa-solid fa-users"></i>
-                                <router-link to="/users">
+                                <router-link to="/workers">
                                     <span>Użytkownicy</span>
                                 </router-link>
                             </a>

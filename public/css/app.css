@@ -11958,7 +11958,8 @@ textarea.form-control-lg {
   text-decoration: none;
 }
 .sidebar .logo a .text, .sidebar .logo router-link .text {
-  width: 70px;
+  width: 140px;
+  font-size: 12px;
   margin-left: 10px;
 }
 .sidebar__list {
@@ -11980,6 +11981,7 @@ textarea.form-control-lg {
 }
 .sidebar__list--item a.router-link-active {
   background-color: rgba(71, 151, 255, 0.52) !important;
+  border-left: 3px solid red;
 }
 .sidebar__list--item a {
   text-transform: capitalize;
@@ -12359,6 +12361,7 @@ a:hover, router-link:hover {
   color: #fff !important;
 }
 .card .card__small--top .text {
+  margin-right: 10px;
   text-align: right;
 }
 .card .card__small--top .text span {
@@ -12462,6 +12465,48 @@ a:hover, router-link:hover {
   border-color: black;
 }
 
+.btn-add {
+  height: 40px;
+  border-radius: 50px 40px 40px 50px;
+  display: flex;
+  box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.3);
+  align-items: center;
+  background: white;
+  color: #0d6efd;
+  cursor: pointer;
+  transition: linear 0.3s;
+}
+.btn-add:hover {
+  box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.6);
+}
+.btn-add:hover i {
+  color: black;
+  transform: rotateZ(90deg);
+}
+.btn-add:hover .text {
+  color: black;
+}
+.btn-add i {
+  transition: linear 0.3s;
+  background: #0d6efd;
+  color: white;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  font-size: 20px;
+  border-radius: 50px;
+}
+.btn-add .text {
+  display: flex;
+  transition: linear 0.3s;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+  font-size: 18px;
+}
+
 table.hover tr:hover {
   background: #a2b2ea !important;
 }
@@ -12482,6 +12527,19 @@ table.border-col td, table.border-col th {
 }
 table.border-col td:last-of-type, table.border-col th:last-of-type {
   border-right: none;
+}
+
+.vuetable {
+  margin-top: 20px;
+  box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.3);
+}
+.vuetable th {
+  position: relative;
+}
+.vuetable th i {
+  position: absolute;
+  right: 2%;
+  line-height: 170%;
 }
 
 ul li {

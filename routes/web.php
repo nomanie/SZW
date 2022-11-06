@@ -49,3 +49,6 @@ Route::get('/users', function () {
 Route::get('/error-report', function () {
     return view('workshop.pages.errorReport');
 })->name('error-report');
+Route::get('/workers', function () {
+    return view('workshop.pages.errorReport');
+})->name('error-report');

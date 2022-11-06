@@ -40,7 +40,8 @@
             text-decoration: none;
 
             .text {
-                width: 70px;
+                width: 140px;
+                font-size: 12px;
                 margin-left: 10px;
             }
         }
@@ -65,6 +66,7 @@
             z-index: 2;
             a.router-link-active {
                 background-color: hsla(214, 100%, 64%, 0.52) !important;
+                border-left: 3px solid red;
             }
 
             a {

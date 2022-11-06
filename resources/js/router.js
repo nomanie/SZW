@@ -52,9 +52,9 @@ const routes = [
         component: () => import('./components/workshop/Settings'),
     },
     {
-        path: "/users",
-        name: "users",
-        component: () => import('./components/workshop/Users'),
+        path: "/workers",
+        name: "workers",
+        component: () => import('./components/workshop/Workers/workers/list'),
     },
 ]
 

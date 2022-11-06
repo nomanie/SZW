@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row mt-5">
-            <card v-for="d in data" :color="d.color" :type='`information`' :information_data="d.data"></card>
+            <card v-for="(index, d) in data" :key="index" :color="d.color" :type='`information`' :information_data="d.data"></card>
         </div>
         <div class="row text-center mt-5 mx-auto">
             <div class="col-12">

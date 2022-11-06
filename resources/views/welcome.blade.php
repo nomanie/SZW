@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
+        @routes
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -14,6 +15,8 @@
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
             crossorigin="anonymous"></script>
         @routes
+        <meta name="csrf-token" content="{{ csrf_token() }}" />
+        <script src="https://kit.fontawesome.com/9b468e1896.js" crossorigin="anonymous"></script>
     </head>
     <body class="antialiased">
        <div id="app">

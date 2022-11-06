@@ -8,8 +8,8 @@ import './bootstrap';
 import './custom';
 import { createApp } from 'vue';
 import { Ziggy } from './ziggy';
-import {ZiggyVue } from './ziggy'
 import router from './router';
+import Vuetable from 'vue3-vuetable'
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -17,10 +17,14 @@ import router from './router';
  * to use in your application's views. An example is included for you.
  */
 
-const app = createApp({});
-app.use(ZiggyVue);
+const app = createApp({
+    components: {
+        'vuetable': Vuetable,
+    }
+});
 app.use(Ziggy)
 app.use(router);
+app.use(Vuetable)
 
 import ExampleComponent from './components/ExampleComponent.vue';
 app.component('example-component', ExampleComponent);
@@ -76,6 +80,7 @@ app.component('settings', Settings);
 
 import Users from "./components/workshop/Users";
 app.component('users', Users);
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

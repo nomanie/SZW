@@ -1,14 +1,14 @@
 <template>
     <div class="sidebar">
         <div class="logo">
-            <a>
+            <router-link to="/dashboard">
                 <div class="img">
-                    <img src="../../../../public/images/logoSZW.png" width="75">
+                    <img src="../../../../public/images/logoSZW.png" width="50">
                 </div>
                 <div class="text">
                     System Zarządzania Warsztatem
                 </div>
-            </a>
+            </router-link>
         </div>
         <div class="sidebar__list sidebar__list--mobile">
 
