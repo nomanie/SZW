@@ -1,5 +1,6 @@
 <template>
-    <div :class="{'col-12 col-lg-6 col-xl-4': !full_width, 'col-12': full_width}" v-if="type === 'chart'">
+    <span>
+        <div :class="{'col-12 col-lg-6 col-xl-4': !full_width, 'col-12': full_width}" v-if="type === 'chart'">
         <div class="card">
             <div class="card-header">
                 <div :class="[color, chart_data.chart_type + `-diagram` ]">
@@ -308,6 +309,7 @@
             </div>
         </div>
     </div>
+    </span>
 </template>
 
 <script>

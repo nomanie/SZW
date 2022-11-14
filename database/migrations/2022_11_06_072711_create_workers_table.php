@@ -18,12 +18,13 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email');
-            $table->string('password');
-            $table->string('position');
-            $table->string('contract_from');
-            $table->string('contract_to');
-            $table->string('contract_type');
-            $table->float('salary');
+            $table->string('password')->nullable();
+            $table->string('position')->nullable();
+            $table->string('contract_from')->nullable();
+            $table->string('contract_to')->nullable();
+            $table->string('contract_type')->nullable();
+            $table->float('salary')->nullable();
+            $table->string('info')->nullable();
             $table->timestamps();
         });
     }

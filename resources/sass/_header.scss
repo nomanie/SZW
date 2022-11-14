@@ -146,6 +146,26 @@
             --bs-dropdown-item-padding-x: .25rem;
         }
     }
+
+    .dropdown > button {
+        border: none;
+        background: none;
+
+        &:active {
+            background: none;
+            border: none;
+        }
+
+        &:focus-visible {
+            box-shadow: none;
+        }
+    }
+
+    .dropdown-item {
+        &:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+    }
 }
 
 .global-search {

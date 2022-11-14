@@ -1,60 +1,120 @@
 <template>
     <div class="container mt-3">
         <div class="d-flex justify-content-end">
-            <modal></modal>
+            <modal @save="getData"></modal>
         </div>
         <vuetable ref="vuetable"
-                  :api-url="apiUrl"
+                  :key="rerenderTable"
+                  :api-mode="false"
                   :fields="fields"
                   :data="table"
                   :css="style.table"
-        ></vuetable>
+        >
+            <div slot="actions" slot-scope="props">
+                <button @click="remove(props.rowData.id)" class="btn btn-danger" v-b-tooltip.hover title="Usuń">
+                    <i class="fa fa-trash"></i>
+                </button>
+                <button class="btn btn-success" v-b-tooltip.hover title="Edytuj">
+                    <i class="fa fa-pencil"></i>
+                </button>
+                <button class="btn btn-warning" v-b-tooltip.hover title="Archiwizuj">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                </button>
+            </div>
+        </vuetable>
     </div>
 </template>
 <script>
+import Vuetable from 'vuetable-2'
 import vuetableStyle from "../../../../config/styles/vuetable";
 import modal from './modal'
 import TaskList from "../../../../assets/task_list/TaskList";
+
 export default {
     components: {
         TaskList,
-      modal
+        modal,
+        Vuetable
     },
     data() {
-      return {
-          table: null,
-          style: vuetableStyle,
-          fields: [
-              {
-                  name: 'first_name',
-                  sortField: 'first_name',
-                  title: 'Imię'
-              },
-              {
-                  name: 'last_name',
-                  sortField: 'last_name',
-                  title: 'Nazwisko'
-              },
-              {
-                  name: 'email',
-                  sortField: 'email',
-                  title: 'E-mail'
-              },
-              {
-                  name: 'position',
-                  sortField: 'position',
-                  title: 'Stanowisko'
-              },
-          ]
-      }
+        return {
+            rerenderTable: 0,
+            table: null,
+            style: vuetableStyle,
+            fields: [
+                {
+                    name: 'id',
+                    sortField: 'id',
+                    title: 'ID'
+                },
+                {
+                    name: 'first_name',
+                    sortField: 'first_name',
+                    title: 'Imię'
+                },
+                {
+                    name: 'last_name',
+                    sortField: 'last_name',
+                    title: 'Nazwisko'
+                },
+                {
+                    name: 'email',
+                    sortField: 'email',
+                    title: 'E-mail'
+                },
+                {
+                    name: 'position',
+                    sortField: 'position',
+                    title: 'Stanowisko'
+                },
+                {
+                    name: 'actions'
+                }
+            ]
+        }
     },
     computed: {
-      apiUrl() {
-          return route('api.workers.index');
-      }
+        apiUrl() {
+            return route('api.workers.index');
+        }
+    },
+    mounted() {
+      this.getData()
     },
     methods: {
-
+        getData() {
+            this.$http.get(this.apiUrl).then((response) => {
+                this.table = response.data
+            }).catch((error) => {
+                this.$bvToast.toast('Nie udało się pobrać rekordów', {
+                    title: 'Błąd',
+                    autoHideDelay: 5000,
+                    variant: 'danger',
+                })
+            })
+        },
+        remove(id) {
+            this.$http.delete(route('api.workers.destroy', id)).then((response) => {
+                this.rerenderTable++
+                this.$bvToast.toast(response.data.message, {
+                    title: 'Komunikat',
+                    autoHideDelay: 5000,
+                    variant: 'success',
+                })
+            }).catch((error) => {
+                this.$bvToast.toast(error.data.message, {
+                    title: 'Błąd',
+                    autoHideDelay: 5000,
+                    variant: 'danger',
+                })
+            })
+        }
     }
 }
 </script>
+<style type="scss">
+.vuetable-slot {
+    width: 150px !important;
+    max-width: 150px !important;
+}
+</style>

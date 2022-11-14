@@ -1,102 +1,57 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
 
-import './bootstrap';
-import './custom';
-import { createApp } from 'vue';
+import Vue from "vue";
 import { Ziggy } from './ziggy';
 import router from './router';
-import Vuetable from 'vue3-vuetable'
+import VueResource from "vue-resource"
+import Router from 'vue-router'
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+//Vselect
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
 
-/**
- * Next, we will create a fresh Vue application instance. You may then begin
- * registering components with the application instance so they are ready
- * to use in your application's views. An example is included for you.
- */
+window.Vue = require('vue').default;
 
-const app = createApp({
-    components: {
-        'vuetable': Vuetable,
+// Components
+Vue.component('v-select', vSelect)
+Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('sidebar', require('./components/workshop/Sidebar.vue').default);
+Vue.component('header-nav', require('./components/workshop/Header.vue').default);
+Vue.component('dashboard', require('./components/workshop/Dashboard.vue').default);
+Vue.component('card', require('./assets/cards/Card').default);
+Vue.component('support', require('./components/Support').default);
+Vue.component('clients', require('./components/workshop/Clients').default);
+Vue.component('clients-list', require('./components/workshop/Clients/List').default);
+Vue.component('car-list', require('./components/workshop/Clients/Cars').default);
+Vue.component('cars', require('./components/workshop/Clients/Cars').default);
+Vue.component('documents', require('./components/workshop/Documents').default);
+Vue.component('repairs', require('./components/workshop/Repairs').default);
+Vue.component('messages', require('./components/Messages').default);
+Vue.component('calendar', require('./components/Calendar').default);
+Vue.component('error-report', require('./components/ErrorReport').default);
+Vue.component('information', require('./components/workshop/Information').default);
+Vue.component('settings', require('./components/workshop/Settings').default);
+Vue.component('users', require('./components/workshop/Users').default);
+Vue.component('v-input', require('./assets/form/error').default);
+
+Vue.use(VueResource);
+Vue.use(Router);
+Vue.use(Ziggy)
+// Make BootstrapVue available throughout your project
+Vue.use(BootstrapVue)
+// Optionally install the BootstrapVue icon components plugin
+Vue.use(IconsPlugin)
+Vue.http.interceptors.push((request, next) => {
+    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+
+    if (token) {
+        request.headers.set('X-CSRF-TOKEN', token)
     }
+
+    next()
+})
+
+const app = new Vue({
+    router,
+    el: '#app',
 });
-app.use(Ziggy)
-app.use(router);
-app.use(Vuetable)
-
-import ExampleComponent from './components/ExampleComponent.vue';
-app.component('example-component', ExampleComponent);
-
-import Sidebar from './components/workshop/Sidebar.vue';
-app.component('sidebar', Sidebar);
-
-import HeaderNav from './components/workshop/Header.vue';
-app.component('header-nav', HeaderNav);
-
-import Dashboard from './components/workshop/Dashboard.vue';
-app.component('dashboard', Dashboard);
-
-import Card from './assets/cards/Card';
-app.component('card', Card);
-
-import Support from './components/Support';
-app.component('support', Support);
-
-import Clients from './components/workshop/Clients';
-app.component('clients', Clients);
-
-import ClientList from './components/workshop/Clients/List';
-app.component('clients-list', ClientList);
-
-import CarList from './components/workshop/Clients/Cars';
-app.component('car-list', CarList);
-
-import Cars from './components/workshop/Clients/Cars';
-app.component('cars', Cars);
-
-import Documents from './components/workshop/Documents';
-app.component('documents', Documents);
-
-import Repairs from './components/workshop/Repairs';
-app.component('repairs', Repairs);
-
-import Messages from './components/Messages';
-app.component('messages', Messages);
-
-import Calendar from './components/Calendar'
-import {createRouter, createWebHistory} from "vue-router";
-app.component('calendar', Calendar);
-
-import ErrorReport from "./components/ErrorReport";
-app.component('error-report', ErrorReport);
-
-import Information from "./components/workshop/Information";
-app.component('information', Information);
-
-import Settings from "./components/workshop/Settings";
-app.component('settings', Settings);
-
-import Users from "./components/workshop/Users";
-app.component('users', Users);
-
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
-
-// Object.entries(import.meta.globEager('./**/*.vue')).forEach(([path, definition]) => {
-//     app.component(path.split('/').pop().replace(/\.\w+$/, ''), definition.default);
-// });
-
-/**
- * Finally, we will attach the application instance to a HTML element with
- * an "id" attribute of "app". This element is included with the "auth"
- * scaffolding. Otherwise, you will need to add an element yourself.
- */
-
-app.mount('#app');

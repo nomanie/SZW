@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::group(['as' => 'api.'], function() {
+    Route::get('/enums/{enum}', [App\Http\Controllers\api\v1\Enums\EnumsController::class, 'getOptions'])->name('get.options');
     Route::apiResource('workers', App\Http\Controllers\api\v1\Workshop\Workers\WorkerController::class);
 
 });
