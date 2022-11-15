@@ -1,27 +1,36 @@
 <template>
     <div class="container mt-3">
-        <div class="d-flex justify-content-end">
-            <modal @save="getData"></modal>
-        </div>
-        <vuetable ref="vuetable"
-                  :key="rerenderTable"
-                  :api-mode="false"
-                  :fields="fields"
-                  :data="table"
-                  :css="style.table"
-        >
-            <div slot="actions" slot-scope="props">
-                <button @click="remove(props.rowData.id)" class="btn btn-danger" v-b-tooltip.hover title="Usuń">
-                    <i class="fa fa-trash"></i>
-                </button>
-                <button class="btn btn-success" v-b-tooltip.hover title="Edytuj">
-                    <i class="fa fa-pencil"></i>
-                </button>
-                <button class="btn btn-warning" v-b-tooltip.hover title="Archiwizuj">
-                    <i class="fa-solid fa-floppy-disk"></i>
-                </button>
+        <div v-if="!is_edit">
+            <div class="d-flex justify-content-end">
+                <modal @save="getData"></modal>
             </div>
-        </vuetable>
+            <vuetable ref="vuetable"
+                      :api-mode="false"
+                      :fields="fields"
+                      :data="table"
+                      :css="style.table"
+            >
+                <div slot="actions" slot-scope="props">
+                    <button @click="remove(props.rowData.id)" class="btn btn-danger" v-b-tooltip.hover title="Usuń">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                    <button class="btn btn-success" v-b-tooltip.hover title="Edytuj" @click="edit(props.rowData.id)">
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                    <button class="btn btn-warning" v-b-tooltip.hover title="Archiwizuj">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                    </button>
+                </div>
+            </vuetable>
+        </div>
+        <div v-else>
+            <div class="breadcrumbs">
+                <span @click="is_edit = false">Lista pracowników</span>
+                <i class="fa fa-chevron-left"></i>
+                <span class="active">Edycja pracownika</span>
+            </div>
+            <edit :id="id"></edit>
+        </div>
     </div>
 </template>
 <script>
@@ -29,16 +38,19 @@ import Vuetable from 'vuetable-2'
 import vuetableStyle from "../../../../config/styles/vuetable";
 import modal from './modal'
 import TaskList from "../../../../assets/task_list/TaskList";
+import edit from './edit'
 
 export default {
     components: {
         TaskList,
         modal,
-        Vuetable
+        Vuetable,
+        edit
     },
     data() {
         return {
-            rerenderTable: 0,
+            is_edit: false,
+            id: null,
             table: null,
             style: vuetableStyle,
             fields: [
@@ -95,19 +107,24 @@ export default {
         },
         remove(id) {
             this.$http.delete(route('api.workers.destroy', id)).then((response) => {
-                this.rerenderTable++
+                this.getData()
                 this.$bvToast.toast(response.data.message, {
                     title: 'Komunikat',
                     autoHideDelay: 5000,
                     variant: 'success',
                 })
             }).catch((error) => {
+                console.log(error)
                 this.$bvToast.toast(error.data.message, {
                     title: 'Błąd',
                     autoHideDelay: 5000,
                     variant: 'danger',
                 })
             })
+        },
+        edit(id) {
+            this.id = id
+            this.is_edit = true
         }
     }
 }

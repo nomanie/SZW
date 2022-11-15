@@ -38,3 +38,19 @@ a, router-link {
     flex-direction: column;
     align-items: center;
 }
+
+.breadcrumbs {
+    font-size: 12px;
+
+    span {
+        cursor: pointer;
+    }
+
+    i {
+        font-size: 10px;
+    }
+
+    .active {
+        color: #0d6efd;
+    }
+}

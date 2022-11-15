@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('contract_type')->nullable();
             $table->float('salary')->nullable();
             $table->string('info')->nullable();
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
         });
     }
