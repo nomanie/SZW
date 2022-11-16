@@ -1,31 +1,37 @@
-table{
-    &.hover{
+table {
+    &.hover {
         tr {
-            &:hover{
+            &:hover {
                 background: #a2b2ea !important;
             }
         }
     }
+
     &.striped {
-        tr:nth-child(even){
+        tr:nth-child(even) {
             background: #E7E9EB;
         }
     }
+
     &.border-all {
         border-collapse: collapse;
     }
+
     &.border-row {
         tr {
             border-bottom: 1px solid #c0c2c4;
         }
+
         tr:last-of-type {
             border-bottom: none;
         }
     }
+
     &.border-col {
         td, th {
             border-right: 1px solid #c0c2c4;
         }
+
         td:last-of-type, th:last-of-type {
             border-right: none;
         }
@@ -33,14 +39,43 @@ table{
 }
 
 .vuetable {
-    margin-top: 20px;
-    box-shadow: 1px 1px 2px 2px rgb(0 0 0 / 30%);
-   th {
-       position: relative;
-       i {
-           position: absolute;
-           right: 2%;
-           line-height: 170%;
-       }
-   }
+    border-spacing: 0 1rem;
+    border-collapse: unset;
+
+    thead {
+        th {
+            position: relative;
+
+            i {
+                position: absolute;
+                right: 2%;
+                line-height: 170%;
+            }
+
+        }
+
+        tr {
+            box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.3);
+            background: inherit;
+        }
+    }
+
+    tr {
+
+        background: white;
+    }
+
+    th, td {
+        border: none;
+    }
+    td:first-of-type {
+        border-radius: 10px 0 0 10px;
+    }
+    td:last-of-type {
+        border-radius: 0 10px 10px 0;
+    }
+    .btn {
+        padding: 2px 5px;
+        font-size: 12px;
+    }
 }

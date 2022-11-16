@@ -1,11 +1,11 @@
 <template>
     <div>
-        <div class="btn-add" @click="$bvModal.show('worker-modal')">
-            <i class="fa fa-plus"></i>
-            <div class="cut"></div>
-            <div class="text">
+        <div class="btn btn-primary" @click="$bvModal.show('worker-modal')">
+            <i class="fa fa-plus me-2"></i>
+<!--            <div class="cut"></div>-->
+<!--            <div class="text">-->
                 Pracownika
-            </div>
+<!--            </div>-->
         </div>
         <b-modal id="worker-modal" title="Dodaj nowego pracownika" size="lg" @shown="defaultForm(); getOptions()">
             <form>
@@ -214,18 +214,20 @@
                     </div>
                 </div>
             </form>
-            <template #modal-footer class="justify-content-between">
-                <button type="button" class="btn btn-warning" @click="defaultForm"><i class="fa fa-eraser pe-3"></i>
-                    Wyczyść
-                </button>
-                <div>
-                    <button type="button" class="btn btn-success me-4" @click="save"><i class="fa fa-save pe-3"></i>
-                        Zapisz
+            <template #modal-footer>
+                <div class="w-100 justify-content-between d-flex">
+                    <button type="button" class="btn btn-warning me-4" @click="defaultForm"><i class="fa fa-eraser pe-3"></i>
+                        Wyczyść
                     </button>
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-                        <i class="fa-solid fa-xmark pe-3"></i>
-                        Anuluj
-                    </button>
+                    <div>
+                        <button type="button" class="btn btn-success" @click="save"><i class="fa fa-save pe-3"></i>
+                            Zapisz
+                        </button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                            <i class="fa-solid fa-xmark pe-3"></i>
+                            Anuluj
+                        </button>
+                    </div>
                 </div>
             </template>
         </b-modal>

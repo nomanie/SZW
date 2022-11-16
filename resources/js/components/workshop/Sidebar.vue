@@ -123,19 +123,6 @@
 <script>
 export default {
     name: 'Sidebar',
-    data() {
-        return {
-            links: {
-                dashboard: route('dashboard'),
-                clients: route('clients'),
-                documents: route('documents'),
-                repairs: route('repairs'),
-                messages: route('messages'),
-                calendar: route('calendar'),
-                support: route('support')
-            }
-        }
-    },
     methods: {
         change(){
             document.querySelector('div#content').innerHTML = 'test'

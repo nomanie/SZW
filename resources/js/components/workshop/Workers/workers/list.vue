@@ -10,6 +10,9 @@
                       :data="table"
                       :css="style.table"
             >
+                <div slot="checkboxes" slot-scope="props">
+                    <b-form-checkbox v-model="selected" :value="props.rowData.id"></b-form-checkbox>
+                </div>
                 <div slot="actions" slot-scope="props">
                     <button @click="remove(props.rowData.id)" class="btn btn-danger" v-b-tooltip.hover title="Usuń">
                         <i class="fa fa-trash"></i>
@@ -29,7 +32,7 @@
                 <i class="fa fa-chevron-left"></i>
                 <span class="active">Edycja pracownika</span>
             </div>
-            <edit :id="id"></edit>
+            <edit :id="id" @close="is_edit = false"></edit>
         </div>
     </div>
 </template>
@@ -49,11 +52,16 @@ export default {
     },
     data() {
         return {
+            selected: [],
             is_edit: false,
             id: null,
             table: null,
             style: vuetableStyle,
             fields: [
+                {
+                  name: 'checkboxes',
+                  title: ''
+                },
                 {
                     name: 'id',
                     sortField: 'id',
@@ -130,8 +138,4 @@ export default {
 }
 </script>
 <style type="scss">
-.vuetable-slot {
-    width: 150px !important;
-    max-width: 150px !important;
-}
 </style>

@@ -12280,6 +12280,7 @@ textarea.form-control-lg {
 
 body {
   background-color: #F1F4F9;
+  overflow: hidden;
 }
 
 .btn-no-style {
@@ -12325,6 +12326,28 @@ a:hover, router-link:hover {
 }
 .breadcrumbs .active {
   color: #0d6efd;
+}
+
+#content {
+  overflow: scroll;
+}
+#content::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #F5F5F5;
+}
+#content::-webkit-scrollbar {
+  width: 5px;
+  background-color: #F5F5F5;
+}
+#content::-webkit-scrollbar-thumb {
+  background-color: #0d6efd;
+}
+#content::-webkit-scrollbar-button {
+  height: 12px;
+}
+
+.checkbox-group input[type=checkbox] {
+  margin-right: 5px;
 }
 
 .card {
@@ -12492,7 +12515,7 @@ a:hover, router-link:hover {
   border: solid 2px rgba(0, 0, 0, 0.2);
   box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
-  margin-top: 1rem;
+  margin: 1rem 0;
 }
 .card-edit .avatar {
   padding: 0;
@@ -12612,16 +12635,36 @@ table.border-col td:last-of-type, table.border-col th:last-of-type {
 }
 
 .vuetable {
-  margin-top: 20px;
-  box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.3);
+  border-spacing: 0 1rem;
+  border-collapse: unset;
 }
-.vuetable th {
+.vuetable thead th {
   position: relative;
 }
-.vuetable th i {
+.vuetable thead th i {
   position: absolute;
   right: 2%;
   line-height: 170%;
+}
+.vuetable thead tr {
+  box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.3);
+  background: inherit;
+}
+.vuetable tr {
+  background: white;
+}
+.vuetable th, .vuetable td {
+  border: none;
+}
+.vuetable td:first-of-type {
+  border-radius: 10px 0 0 10px;
+}
+.vuetable td:last-of-type {
+  border-radius: 0 10px 10px 0;
+}
+.vuetable .btn {
+  padding: 2px 5px;
+  font-size: 12px;
 }
 
 ul li {
@@ -12912,4 +12955,39 @@ input.invalid, .v-select.invalid {
   background: none;
   font-size: 20px;
   font-weight: 700;
+}
+
+.login .text {
+  font-size: 30px;
+}
+
+.wiki__header {
+  box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.85);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  width: 100%;
+  padding: 10px 20px;
+}
+.wiki__header i {
+  font-size: 10px;
+}
+.wiki__header #global-search-input {
+  border: solid 1px rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+}
+.wiki__header .profile {
+  overflow: hidden;
+  border-radius: 50%;
+}
+.wiki__sidebar {
+  border-right: solid 2px rgba(0, 0, 0, 0.3);
+  height: 100vh;
+}
+.wiki__sidebar ul {
+  padding: 0;
+}
+.wiki__content {
+  background: rgba(255, 255, 255, 0.85);
+  width: 100%;
+  height: 100%;
 }

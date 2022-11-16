@@ -5,7 +5,7 @@ namespace App\Http\Controllers\api\v1\Workshop\Workers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateWorkerRequest;
 use App\Models\Workers\Worker;
-use App\Services\Workers\WorkerService;
+use App\Services\Workshop\Workers\WorkerService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;

@@ -9,7 +9,6 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 //Vselect
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
-
 window.Vue = require('vue').default;
 
 // Components
@@ -33,6 +32,8 @@ Vue.component('information', require('./components/workshop/Information').defaul
 Vue.component('settings', require('./components/workshop/Settings').default);
 Vue.component('users', require('./components/workshop/Users').default);
 Vue.component('v-input', require('./assets/form/error').default);
+// Components for wiki.
+Vue.component('wiki-header', require('../views/wiki/components/header.vue').default);
 
 Vue.use(VueResource);
 Vue.use(Router);

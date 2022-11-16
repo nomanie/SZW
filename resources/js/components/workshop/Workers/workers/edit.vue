@@ -49,24 +49,60 @@
                         <div class="row">
                             <div class="col-12 col-lg-6 px-3">
                                 <b-form-group label="Imię">
-                                    <input v-model="form.first_name" type="text" class="form-control" placeholder="Imię pracownika">
+                                    <input v-model="form.first_name" type="text" class="form-control"
+                                           placeholder="Imię pracownika">
                                 </b-form-group>
                             </div>
                             <div class="col-12 col-lg-6 px-3">
                                 <b-form-group label="Nazwisko">
-                                    <input v-model="form.last_name" type="text" class="form-control" placeholder="Nazwisko pracownika">
+                                    <input v-model="form.last_name" type="text" class="form-control"
+                                           placeholder="Nazwisko pracownika">
                                 </b-form-group>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-12 col-lg-6 px-3">
                                 <b-form-group label="Adres e-mail">
-                                    <input v-model="form.email" type="text" class="form-control" placeholder="Adres e-mail pracownika">
+                                    <input v-model="form.email" type="text" class="form-control"
+                                           placeholder="Adres e-mail pracownika">
                                 </b-form-group>
                             </div>
                             <div class="col-12 col-lg-6 px-3">
                                 <b-form-group label="Numer telefonu">
-                                    <input v-model="form.phone" type="text" class="form-control" placeholder="Numer telefonu pracownika">
+                                    <input v-model="form.phone" type="text" class="form-control"
+                                           placeholder="Numer telefonu pracownika">
+                                </b-form-group>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-12 col-lg-6 px-3">
+                                <b-form-group label="Miasto">
+                                    <input v-model="form.city" type="text" class="form-control" placeholder="Miasto">
+                                </b-form-group>
+                            </div>
+                            <div class="col-12 col-lg-6 px-3">
+                                <b-form-group label="Ulica">
+                                    <input v-model="form.street" type="text" class="form-control" placeholder="Ulica">
+                                </b-form-group>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-12 col-lg-4 px-3">
+                                <b-form-group label="Kod pocztowy">
+                                    <input v-model="form.zip" type="text" class="form-control"
+                                           placeholder="Kod pocztowy">
+                                </b-form-group>
+                            </div>
+                            <div class="col-12 col-lg-4 px-3">
+                                <b-form-group label="Numer Budynku">
+                                    <input v-model="form.building_number" type="text" class="form-control"
+                                           placeholder="Numer Budynku">
+                                </b-form-group>
+                            </div>
+                            <div class="col-12 col-lg-4 px-3">
+                                <b-form-group label="Numer mieszkania">
+                                    <input v-model="form.flat_number" type="text" class="form-control"
+                                           placeholder="Numer mieszkania">
                                 </b-form-group>
                             </div>
                         </div>
@@ -77,6 +113,45 @@
                         <i class="fa-solid fa-file-signature"></i>
                         Umowa
                     </template>
+                    <form class="mt-2">
+                        <div class="row">
+                            <div class="col-12 col-lg-6 px-3">
+                                <b-form-group label="Umowa od">
+                                    <input v-model="form.contract_from" type="date" class="form-control">
+                                </b-form-group>
+                            </div>
+                            <div class="col-12 col-lg-6 px-3">
+                                <b-form-group label="Umowa do">
+                                    <input v-model="form.contract_to" type="date" class="form-control">
+                                </b-form-group>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-12 col-lg-6 px-3">
+                                <b-form-group label="Rodzaj umowy">
+                                    <v-select
+                                        v-model="form.contract_type"
+                                        :options="options"
+                                        placeholder="Wybierz rodzaj umowy"
+                                        :clearable="false"
+                                    >
+                                    </v-select>
+                                </b-form-group>
+                            </div>
+                            <div class="col-12 col-lg-6 px-3">
+                                <b-form-group label="Stanowisko">
+                                    <input v-model="form.position" type="text" class="form-control" placeholder="Stanowisko pracownika">
+                                </b-form-group>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-12 col-lg-6 px-3">
+                                <b-form-group label="Stawka">
+                                    <b-input v-model="form.salary" type="text" placeholder="Stawka pracownika"></b-input>
+                                </b-form-group>
+                            </div>
+                        </div>
+                    </form>
                 </b-tab>
                 <b-tab>
                     <template #title>
@@ -90,7 +165,53 @@
                         Kalendarz
                     </template>
                 </b-tab>
+                <b-tab>
+                    <template #title>
+                        <i class="fa-solid fa-lock"></i>
+                        Permisje
+                    </template>
+                    <div class="row">
+                        <div class="col">
+                            <b-form-checkbox-group
+                                class="checkbox-group"
+                                v-model="form.permissions"
+                            >
+                                <div class="row">
+                                    <div
+                                        class="col-12 col-lg-6"
+                                         v-for="(permission, index) in permissions"
+                                         :key="index"
+                                    >
+                                        <b-form-checkbox :value="index" class="me-1">
+                                            {{ permission }}
+                                        </b-form-checkbox>
+                                    </div>
+                                </div>
+                            </b-form-checkbox-group>
+
+                        </div>
+                    </div>
+                </b-tab>
             </b-tabs>
+            <hr class="mt-3">
+            <div class="row mt-3">
+                <div class="col-12 col-lg-6 d-flex px-3">
+                    <b-button variant="danger" @click="$emit('close')" class="me-2">
+                        <i class="fa fa-xmark"></i>
+                        Zamknij edycje
+                    </b-button>
+                </div>
+                <div class="col-12 col-lg-6 d-flex justify-content-end px-3">
+                    <b-button variant="warning" @click="getData()" class="me-2">
+                        <i class="fa fa-eraser"></i>
+                        Cofnij zmiany
+                    </b-button>
+                    <b-button variant="success" @click="save()">
+                        <i class="fa fa-floppy-disk"></i>
+                        Zapisz
+                    </b-button>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -105,7 +226,9 @@ export default {
     },
     data() {
         return {
-            form: {}
+            form: {},
+            options: [],
+            permissions: {}
         }
     },
     watch: {
@@ -117,7 +240,9 @@ export default {
         }
     },
     mounted() {
-      this.getData()
+        this.getData()
+        this.getOptions()
+        this.getPermissionList()
     },
     methods: {
         getData() {
@@ -125,6 +250,29 @@ export default {
                 this.form = response.data
             }).catch((error) => {
                 console.log(error)
+            })
+        },
+        getOptions() {
+            this.$http.get(route('api.get.options', {enum: 'App\\Enums\\Workshop\\ContractTypeEnum'})).then((response) => {
+                this.options = response.data
+            }).catch((error) => {
+                this.$bvToast.toast('Nie udało się pobrać opcji', {
+                    title: 'Błąd',
+                    autoHideDelay: 5000,
+                    variant: 'danger',
+                })
+            })
+        },
+        getPermissionList() {
+            this.$http.get(route('api.get.options', {enum: 'App\\Enums\\Workshop\\PermissionEnum'})).then((response) => {
+                this.permissions = response.data
+                console.log(this.permissions)
+            }).catch((error) => {
+                this.$bvToast.toast('Nie udało się pobrać opcji', {
+                    title: 'Błąd',
+                    autoHideDelay: 5000,
+                    variant: 'danger',
+                })
             })
         }
     }

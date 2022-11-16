@@ -90,9 +90,6 @@
                         <span>Wyloguj</span>
                     </b-dropdown-item>
                 </b-dropdown>
-                <div class="dropdown">
-                </div>
-
             </div>
         </div>
     </div>
