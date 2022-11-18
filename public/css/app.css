@@ -12350,6 +12350,23 @@ a:hover, router-link:hover {
   margin-right: 5px;
 }
 
+.social_media_container {
+  position: relative;
+}
+.social_media_container i {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  color: black;
+  font-size: 20px;
+  position: absolute;
+}
+.social_media_container input {
+  padding-left: 40px;
+}
+
 .card {
   margin: 0 20px;
 }

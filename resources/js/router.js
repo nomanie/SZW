@@ -44,7 +44,7 @@ const routes = [
     {
         path: "/informations",
         name: "informations",
-        component: () => import('./components/workshop/Information'),
+        component: () => import('./components/workshop/Workshop/Information'),
     },
     {
         path: "/settings",

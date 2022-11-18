@@ -28,7 +28,7 @@ Vue.component('repairs', require('./components/workshop/Repairs').default);
 Vue.component('messages', require('./components/Messages').default);
 Vue.component('calendar', require('./components/Calendar').default);
 Vue.component('error-report', require('./components/ErrorReport').default);
-Vue.component('information', require('./components/workshop/Information').default);
+Vue.component('information', require('./components/workshop/Workshop/Information').default);
 Vue.component('settings', require('./components/workshop/Settings').default);
 Vue.component('users', require('./components/workshop/Users').default);
 Vue.component('v-input', require('./assets/form/error').default);
