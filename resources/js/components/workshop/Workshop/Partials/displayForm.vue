@@ -1,40 +1,25 @@
 <template>
     <div class="mt-3">
-        <b-modal id="worker-modal" title="Dodaj nowego pracownika" size="lg" @shown="defaultForm(); getOptions()">
+        <b-modal id="display_form_modal" title="Podgląd formularza" size="lg" @shown="getFieldTypes">
             <div class="row">
                 <div class="col-12 col-md-6">
-                    <div class="row">
+                    <div class="row mt-3" v-for="item in form">
                         <div class="col item">
-                            Imię pracownika:
+                            {{ item.name }}
                             <div>
                                 <div class="input__wrapper mt-1">
                                     <input
-                                        v-model="form.first_name"
-                                        type="text"
-                                        placeholder="Imię pracownika"
+                                        :type="fieldTypes[item.type]"
+                                        :placeholder="item.name"
                                         class="form-control"
-                                        :class="{invalid : errors.first_name}"
+                                        v-if="item.type !== 3"
                                     >
-                                    <error :errors="errors.first_name"></error>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-6">
-                    <div class="row">
-                        <div class="col item">
-                            Nazwisko pracownika:
-                            <div>
-                                <div class="input__wrapper mt-1">
-                                    <input
-                                        v-model="form.last_name"
-                                        type="text"
-                                        placeholder="Nazwisko pracownika"
+                                    <textarea
+                                        v-else
+                                        :placeholder="item.name"
                                         class="form-control"
-                                        :class="{invalid : errors.last_name}"
                                     >
-                                    <error :errors="errors.last_name"></error>
+                                    </textarea>
                                 </div>
                             </div>
                         </div>
@@ -43,19 +28,10 @@
             </div>
             <template #modal-footer>
                 <div class="w-100 justify-content-between d-flex">
-                    <button type="button" class="btn btn-warning me-4" @click="defaultForm"><i
-                        class="fa fa-eraser pe-3"></i>
-                        Wyczyść
+                    <button type="button" class="btn btn-danger" @click="hide">
+                        <i class="fa-solid fa-xmark pe-3"></i>
+                        Zamknij
                     </button>
-                    <div>
-                        <button type="button" class="btn btn-success" @click="save"><i class="fa fa-save pe-3"></i>
-                            Zapisz
-                        </button>
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-                            <i class="fa-solid fa-xmark pe-3"></i>
-                            Anuluj
-                        </button>
-                    </div>
                 </div>
             </template>
         </b-modal>
@@ -63,9 +39,26 @@
 </template>
 <script>
 export default {
-    name: 'customForm',
+    name: 'displayForm',
     props: {
-        form: {}
+        form: {},
+    },
+    data() {
+        return {
+            fieldTypes: [],
+            fields: this.form
+        }
+    },
+    methods: {
+        hide() {
+            this.$bvModal.hide('display_form_modal');
+        },
+        getFieldTypes() {
+            this.$http.get(route('api.get.options', {enum: 'App\\Enums\\Workshop\\FieldTypeEnum', function: 'getType'})).then((response) => {
+                this.fieldTypes = response.data
+                console.log(this.form)
+            })
+        }
     }
 }
 </script>

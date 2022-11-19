@@ -1,16 +1,20 @@
-
 import Vue from "vue";
-import { Ziggy } from './ziggy';
+import {Ziggy} from './ziggy';
 import router from './router';
 import VueResource from "vue-resource"
 import Router from 'vue-router'
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 //Vselect
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
+
 window.Vue = require('vue').default;
 
+// auth components
+Vue.component('register-client', require('../views/auth/components/client').default);
+Vue.component('register-workshop', require('../views/auth/components/workshop').default);
+Vue.component('login', require('../views/auth/components/login').default);
 // Components
 Vue.component('v-select', vSelect)
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
@@ -52,7 +56,21 @@ Vue.http.interceptors.push((request, next) => {
     next()
 })
 
+Vue.http.interceptors.push(function (request) {
+    return function (response) {
+        console.log(response)
+        if (response.status >= 300) {
+            this.$bvToast.toast(response.body.errors ? "Wystąpił błąd w formuląrzu" : response.data.message, {
+                title: 'Błąd', variant: 'danger',
+            })
+        } else {
+            this.$bvToast.toast(response.data.message, {
+                title: 'Komunikat', variant: 'success',
+            })
+        }
+    }
+})
+
 const app = new Vue({
-    router,
-    el: '#app',
+    router, el: '#app',
 });

@@ -14,8 +14,9 @@
                 <b-form-group label="Rodzaj pola">
                     <v-select
                         v-model="field.type"
-                    placeholder="Wybierz rodzaj pola"
+                        placeholder="Wybierz rodzaj pola"
                         :options="fieldTypes"
+                        :reduce="field => field.index"
                     >
 
                     </v-select>
@@ -62,6 +63,15 @@ export default {
                         value: null
                     }
                 ]
+            }
+        }
+    },
+    watch: {
+        form: {
+            deep: true,
+            immediate: true,
+            handler(value) {
+                this.$emit('update', this.form)
             }
         }
     },

@@ -2,6 +2,13 @@
     <div class="mt-3">
         <h5>Formularz kontaktowy</h5>
         <hr>
+        <v-select
+            v-model="form.view"
+            placeholder="Wybierz Wygląd formularza"
+            :options="view_templates"
+            :reduce="view => view.index"
+        ></v-select>
+        <hr>
         <div class="row mt-3 align-items-baseline" v-for="(field, index) in form.form_fields">
             <div class="row">
                 <div class="col-12 col-lg-4 px-3">
@@ -17,8 +24,8 @@
                             v-model="field.type"
                             placeholder="Wybierz rodzaj pola"
                             :options="fieldTypes"
+                            :reduce="field => field.index"
                         >
-
                         </v-select>
                     </b-form-group>
                 </div>
@@ -68,11 +75,16 @@
                 <hr>
             </div>
         </div>
+        <display-form :form="form.form_fields"></display-form>
     </div>
 </template>
 <script>
+import displayForm from "./displayForm"
 export default {
     name: 'customForm',
+    components: {
+        displayForm
+    },
     props: {
         fieldTypes: {
             type: [Object, Array],
@@ -91,7 +103,22 @@ export default {
                         min: 0,
                         max: 0
                     }
-                ]
+                ],
+                view: null,
+            },
+            view_templates: [
+                {index: 0, label: 'Klasyczne'},
+                {index: 1, label: 'Nowoczesne'},
+                {index: 2, label: 'Wymyślne'},
+            ]
+        }
+    },
+    watch: {
+        form: {
+            deep: true,
+            immediate: true,
+            handler(value) {
+                this.$emit('update', this.form)
             }
         }
     },
@@ -134,8 +161,9 @@ export default {
             ]
         },
         display() {
-
+            this.$bvModal.show('display_form_modal')
         }
     }
 }
 </script>
+<!-- @todo dorobić wyglady formularza-->

@@ -84,6 +84,15 @@ export default {
             }
         }
     },
+    watch: {
+        form: {
+            deep: true,
+            immediate: true,
+            handler(value) {
+                this.$emit('update', this.form)
+            }
+        }
+    },
     methods: {
         addPlace() {
             this.form.places.push({

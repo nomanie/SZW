@@ -18,10 +18,10 @@ return new class extends Migration
             $table->foreignId('admin_id')
                 ->references('id')->on('users')
                 ->cascadeOnDelete()->cascadeOnUpdate();
-            $table->json('workshops');
-            $table->json('owners');
+            $table->json('workshops')->nullable();
+            $table->json('owners')->nullable();
             $table->string('name');
-            $table->string('logo');
+            $table->string('logo')->nullable();
             $table->string('nip');
             $table->string('regon');
             $table->date('company_created_at')->nullable();

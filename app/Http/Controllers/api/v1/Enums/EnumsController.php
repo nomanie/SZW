@@ -7,9 +7,9 @@ use Illuminate\Http\JsonResponse;
 class EnumsController extends Controller
 {
     protected $enum;
-    public function getOptions(string $enum): JsonResponse
+    public function getOptions(string $enum, string $function = 'getList'): JsonResponse
     {
-        $options = (new $enum)->getList();
+        $options = (new $enum)->$function();
         return response()->json($options);
     }
 }

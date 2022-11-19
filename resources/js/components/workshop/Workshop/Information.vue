@@ -159,7 +159,7 @@
                         <i class="fa fa-eraser"></i>
                         Cofnij zmiany
                     </b-button>
-                    <b-button variant="success">
+                    <b-button variant="success" @click="save">
                         <i class="fa fa-floppy-disk"></i>
                         Zapisz
                     </b-button>
@@ -186,16 +186,35 @@ export default {
     data() {
         return {
             fieldTypes: [],
-            form: {}
+            form: {},
         }
     },
     mounted() {
-      this.getFieldTypes()
+        this.getFieldTypes()
+        this.getData()
     },
     methods: {
         getFieldTypes() {
             this.$http.get(route('api.get.options', {enum: 'App\\Enums\\Workshop\\FieldTypeEnum'})).then((response) => {
                 this.fieldTypes = response.data
+            })
+        },
+        getData() {
+            this.form.id = 1
+        },
+        save() {
+            this.$http.put(route('api.workshop.update', this.form.id), this.form).then((response) => {
+                this.$bvToast.toast('Pomyślnie zapisano dane', {
+                    title: 'Komunikat',
+                    autoHideDelay: 5000,
+                    variant: 'success',
+                })
+            }).catch((error) => {
+                this.$bvToast.toast('Wystąpił błąd podczas zapisu', {
+                    title: 'Błąd',
+                    autoHideDelay: 5000,
+                    variant: 'danger',
+                })
             })
         }
     }

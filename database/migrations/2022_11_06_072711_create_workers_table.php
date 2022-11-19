@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('workshop_id')->references('id')->on('workshops')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('email');
+            $table->string('login');
             $table->string('password')->nullable();
             $table->string('position')->nullable();
             $table->string('contract_from')->nullable();

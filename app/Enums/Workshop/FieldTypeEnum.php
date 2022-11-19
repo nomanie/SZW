@@ -14,11 +14,28 @@ class FieldTypeEnum implements EnumInterface
     public static function getList($id = null)
     {
         $list = [
-            self::INTEGER => __('Liczba'),
-            self::FLOAT => __('Liczba z przecinkiem'),
-            self::STRING => __('Tekst'),
-            self::TEXTAREA => __('Długi tekst'),
-            self::DATE => __('Data')
+            self::INTEGER => ['label' => __('Liczba'), 'index' => 0],
+            self::FLOAT => ['label' => __('Liczba z przecinkiem'), 'index' => 1],
+            self::STRING => ['label' => __('Tekst'), 'index' => 2],
+            self::TEXTAREA => ['label' => __('Długi tekst'), 'index' => 3],
+            self::DATE => ['label' => __('Data'), 'index' => 4]
+        ];
+
+        if ($id !== null) {
+            return isset($list[$id]) ?: null;
+        }
+
+        return $list;
+    }
+
+    public static function getType($id = null)
+    {
+        $list = [
+            self::INTEGER => 'number',
+            self::FLOAT => 'number',
+            self::STRING => 'text',
+            self::TEXTAREA => 'textarea',
+            self::DATE => 'date'
         ];
 
         if ($id !== null) {

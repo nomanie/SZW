@@ -24,7 +24,7 @@ return new class extends Migration
             $table->date('date_of_birth')->nullable();
             $table->string('city')->nullable();
             $table->string('street')->nullable();
-            $table->string('zip-code')->nullable();
+            $table->string('zip_code')->nullable();
             $table->integer('building_number')->nullable();
             $table->integer('flat_number')->nullable();
             $table->string('avatar')->nullable();

@@ -45,6 +45,15 @@ export default {
             }
         }
     },
+    watch: {
+        form: {
+            deep: true,
+            immediate: true,
+            handler(value) {
+                this.$emit('update', this.form)
+            }
+        }
+    },
     methods: {
         addOwner() {
             this.form.owners.push({first_name: null, last_name: null})
