@@ -10,7 +10,6 @@ import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
 
 window.Vue = require('vue').default;
-
 // auth components
 Vue.component('register-client', require('../views/auth/components/client').default);
 Vue.component('register-workshop', require('../views/auth/components/workshop').default);
