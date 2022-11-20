@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -13,12 +14,12 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('car_model', function (Blueprint $table) {
+        Schema::create('car_models', function (Blueprint $table) {
             $table->id();
             $table->foreignId('brand_id')
                 ->references('id')->on('car_brands')
                 ->cascadeOnDelete()->cascadeOnUpdate();
-            $table->name();
+            $table->string('name');
             $table->timestamps();
         });
         $abarthModels = [
@@ -241,7 +242,7 @@ return new class extends Migration {
             'brand_id' => 55,
             'models' => ['190', 'AMG GT', 'Citan', 'CL', 'CLA', 'CLC', 'CLK', 'CLS', 'EQA', 'EQB', 'EQC', 'EQE', 'EQS', 'EQV', 'GLA', 'GLB', 'GLC', 'GLE', 'GLK', 'GLS', 'Klasa A', 'Klasa B', 'Klasa C', 'Klasa E', 'Klasa G', 'Klasa GL', 'Klasa M', 'Klasa R', 'Klasa S', 'Klasa T', 'Klasa V', 'Klasa X', 'Maybach GLS', 'Maybach S', 'MB-100', 'SL', 'SLC', 'SLK', 'SLR McLaren', 'SLS AMG', 'Sprinter', 'Strich 8', 'Transporter T1', 'Vaneo', 'Viano', 'Vito', 'W108/109', 'W110', 'W111', 'W123', 'W124']
         ];
-        $mclarenModels = [
+         $mclarenModels = [
             'brand_id' => 56,
             'models' => ['F1', 'F1 GTR', 'F1 LM', 'MP4-12C', 'X-1', '12C', 'P1', '650S', 'Speedtail', '570S', 'Sabre', 'Solus', 'Artura', '720S', 'GT', 'Elva', 'Senna']
         ];
@@ -250,124 +251,145 @@ return new class extends Migration {
             'models' => ['6', 'F', 'MG3', 'TF', 'ZR', 'ZS', 'ZT']
         ];
         $miniModels = [
-            'brand_id' => 61,
+            'brand_id' => 58,
             'models' => ['Cabrio', 'Clubman', 'Countryman', 'Coupe', 'Mini', 'One', 'Paceman', 'Roadster']
         ];
         $mitsubishiModels = [
-            'brand_id' => 62,
-            'models' => [ '3000GT', 'ASX', 'Carisma', 'Colt', 'Cordia', 'Diamante', 'Eclipse', 'Eclipse Cross', 'Endeavor', 'FTO', 'Galant', 'Grandis', 'i-MiEV', 'L200', 'L300', 'L400', 'Lancer', 'Lancer Evolution', 'Mirage', 'Montero', 'Outlander', 'Pajero', 'Pajero Sport', 'Santamo', 'Sapporo', 'Sigma', 'Space Gear', 'Space Runner', 'Space Star', 'Space Star (1998)', 'Space Wagon', 'Starion']
+            'brand_id' => 59,
+            'models' => ['3000GT', 'ASX', 'Carisma', 'Colt', 'Cordia', 'Diamante', 'Eclipse', 'Eclipse Cross', 'Endeavor', 'FTO', 'Galant', 'Grandis', 'i-MiEV', 'L200', 'L300', 'L400', 'Lancer', 'Lancer Evolution', 'Mirage', 'Montero', 'Outlander', 'Pajero', 'Pajero Sport', 'Santamo', 'Sapporo', 'Sigma', 'Space Gear', 'Space Runner', 'Space Star', 'Space Star (1998)', 'Space Wagon', 'Starion']
         ];
         $nissanModels = [
-            'brand_id' => 63,
-            'models' => [ '100NX', '200SX', '280ZX', '300ZX', '350Z', '370Z', 'Almera', 'Almera Tino', 'Altima', 'Ariya', 'Bluebird', 'Cherry', 'Cube', 'Evalia', 'GT-R', 'Interstar', 'Juke', 'Kubistar', 'Laurel', 'Leaf', 'Maxima', 'Micra', 'Murano', 'Navara', 'Note', 'NP300', 'NV200', 'Pathfinder', 'Patrol', 'Pick Up', 'Pixo', 'Prairie', 'President', 'Primastar', 'Primera', 'Pulsar', 'Qashqai', 'Quest', 'Sentra', 'Serena', 'Skyline', 'Stanza', 'Sunny', 'Teana', 'Terrano', 'Tiida', 'Titan', 'Townstar', 'Trade', 'Urvan', 'Vanette', 'X-Trail', 'Xterra']
+            'brand_id' => 60,
+            'models' => ['100NX', '200SX', '280ZX', '300ZX', '350Z', '370Z', 'Almera', 'Almera Tino', 'Altima', 'Ariya', 'Bluebird', 'Cherry', 'Cube', 'Evalia', 'GT-R', 'Interstar', 'Juke', 'Kubistar', 'Laurel', 'Leaf', 'Maxima', 'Micra', 'Murano', 'Navara', 'Note', 'NP300', 'NV200', 'Pathfinder', 'Patrol', 'Pick Up', 'Pixo', 'Prairie', 'President', 'Primastar', 'Primera', 'Pulsar', 'Qashqai', 'Quest', 'Sentra', 'Serena', 'Skyline', 'Stanza', 'Sunny', 'Teana', 'Terrano', 'Tiida', 'Titan', 'Townstar', 'Trade', 'Urvan', 'Vanette', 'X-Trail', 'Xterra']
         ];
         $opelModels = [
-            'brand_id' => 64,
-            'models' => []
+            'brand_id' => 61,
+            'models' => ['Adam', 'Agila', 'Ampera', 'Antara', 'Ascona', 'Astra', 'Calibra', 'Campo', 'Cascada', 'Combo', 'Commodore', 'Corsa', 'Crossland/Crossland X', 'Frontera', 'Grandland/Grandland X', 'GT', 'Insignia', 'Kadett', 'Kapitan', 'Karl', 'Manta', 'Meriva', 'Mokka', 'Monterey', 'Monza', 'Movano', 'Omega', 'Rekord', 'Senator', 'Signum', 'Sintra', 'Speedster', 'Tigra', 'Vectra', 'Vivaro', 'Zafira']
         ];
         $peugeotModels = [
-            'brand_id' => 65,
-            'models' => []
+            'brand_id' => 62,
+            'models' => ['1007', '104', '106', '107', '108', '2008', '204', '205', '206', '207', '208', '3008', '301', '304', '305', '306', '307', '308', '309', '4007', '405', '406', '407', '5008', '504', '505', '508', '604', '605', '607', '806', '807', 'Bipper', 'Boxer', 'Expert', 'iOn', 'J 5', 'Partner', 'RCZ', 'Rifter', 'Traveller']
         ];
         $piaggioModels = [
-            'brand_id' => 66,
-            'models' => []
+            'brand_id' => 63,
+            'models' => ['Porter']
         ];
         $pFiatModels = [
+            'brand_id' => 64,
+            'models' => ['125p', '126p']
+        ];
+        $porscheModels = [
+            'brand_id' => 65,
+            'models' => ['356', '550 Spyder', '911', '914', '924', '928', '944', '959', '968', 'Boxster', 'Carrera GT', 'Cayenne', 'Cayman', 'Macan', 'Panamera', 'Taycan']
+        ];
+        $ramModels = [
+            'brand_id' => 66,
+            'models' => ['TRX', '1500', 'Classic']
+        ];
+        $renaultModels = [
             'brand_id' => 67,
             'models' => []
         ];
-        $porscheModels = [
-            'brand_id' => 68,
-            'models' => []
-        ];
-        $ramModels = [
-            'brand_id' => 69,
-            'models' => []
-        ];
-        $renaultModels = [
-            'brand_id' => 70,
-            'models' => []
-        ];
         $renaultTruckModels = [
-            'brand_id' => 71,
-            'models' => []
+            'brand_id' => 68,
+            'models' => ['10', '11', '14', '18', '19', '20', '21', '25', '4', '5', '9', 'Alpine', 'Arkana', 'Avantime', 'Captur', 'Clio', 'Espace', 'Express', 'Fluence', 'Fuego', 'Grand Scenic', 'Kadjar', 'Kangoo', 'Koleos', 'Laguna', 'Latitude', 'Mascott', 'Master', 'Megane', 'Megane E-Tech', 'Modus', 'Safrane', 'Scenic', 'Talisman', 'Thalia', 'Trafic', 'Twingo', 'Twizy', 'Vel Satis', 'Wind', 'ZOE']
         ];
         $rrModels = [
-            'brand_id' => 72,
-            'models' => []
+            'brand_id' => 69,
+            'models' => ['Corniche', 'Ghost', 'Phantom', 'Silver Seraph', 'Wraith']
         ];
         $roverModels = [
-            'brand_id' => 73,
-            'models' => []
+            'brand_id' => 70,
+            'models' => ['100', '200', '25', '400', '45', '600', '75', '800', 'Mini', 'Montego']
         ];
         $saabModels = [
-            'brand_id' => 74,
-            'models' => []
+            'brand_id' => 71,
+            'models' => [ '9-3', '9-5', '9-7X', '900', '9000', '99']
         ];
         $seatModels = [
-            'brand_id' => 75,
-            'models' => []
+            'brand_id' => 72,
+            'models' => ['Alhambra', 'Altea', 'Arona', 'Arosa', 'Ateca', 'Cordoba', 'Exeo', 'Ibiza', 'Inca', 'Leon', 'Malaga', 'Marbella', 'Mii', 'Ronda', 'Tarraco', 'Terra', 'Toledo']
         ];
         $seresModels = [
-            'brand_id' => 76,
-            'models' => []
+            'brand_id' => 73,
+            'models' => ['3', 'SF5']
         ];
         $skodaModels = [
-            'brand_id' => 77,
-            'models' => []
+            'brand_id' => 74,
+            'models' => ['100', '1000MB', '105', '125', '130L', 'Citigo', 'Enyaq iV', 'Fabia', 'Favorit', 'Felicia', 'Kamiq', 'Karoq', 'Kodiaq', 'Octavia', 'Praktik', 'Rapid', 'Roomster', 'Scala', 'Superb', 'Yeti']
         ];
         $skywellModels = [
-            'brand_id' => 78,
-            'models' => []
+            'brand_id' => 75,
+            'models' => ['ET5']
         ];
         $smartModels = [
-            'brand_id' => 79,
-            'models' => []
+            'brand_id' => 76,
+            'models' => ['Forfour', 'Fortwo', 'Roadster']
         ];
         $ssangModels = [
-            'brand_id' => 80,
-            'models' => []
+            'brand_id' => 77,
+            'models' => ['Actyon', 'Actyon Sports', 'Korando', 'Kyron', 'Musso', 'Rexton', 'Rodius', 'Tivoli', 'XLV']
         ];
         $subaruModels = [
-            'brand_id' => 81,
-            'models' => []
+            'brand_id' => 78,
+            'models' => ['Baja', 'BRZ', 'Forester', 'Impreza', 'Justy', 'Legacy', 'Leone', 'Levorg', 'Libero', 'M70', 'Outback', 'Solterra', 'SVX', 'Trezia', 'Tribeca', 'Vivio', 'WRX STI', 'XT', 'XV']
         ];
         $suzukiModels = [
-            'brand_id' => 82,
-            'models' => []
+            'brand_id' => 79,
+            'models' => ['Across', 'Alto', 'Baleno', 'Carry', 'Celerio', 'Grand Vitara', 'Ignis', 'Jimny', 'Kizashi', 'Liana', 'Maruti', 'Reno', 'S-Cross', 'Samurai', 'Splash', 'Swace', 'Swift', 'SX4', 'Vitara', 'Wagon', 'x90', 'XL7']
         ];
         $tataModels = [
-            'brand_id' => 83,
-            'models' => []
+            'brand_id' => 80,
+            'models' => ['Indica', 'Indigo', 'Nano', 'Safari', 'Xenon']
         ];
         $teslaModels = [
-            'brand_id' => 84,
-            'models' => []
+            'brand_id' => 81,
+            'models' => ['Model 3', 'Model S', 'Model X']
         ];
         $toyotaModels = [
-            'brand_id' => 85,
-            'models' => []
+            'brand_id' => 82,
+            'models' => ['4Runner', 'Auris', 'Avalon', 'Avensis', 'Avensis Verso', 'Aygo', 'Aygo X', 'bZ4X', 'C-HR', 'Camry', 'Carina', 'Celica', 'Corolla', 'Corolla Cross', 'Corolla Verso', 'Dyna', 'FJ Cruiser', 'GR86', 'GT86', 'Hiace', 'Highlander', 'Hilux', 'iQ', 'Land Cruiser', 'Land Cruiser V8', 'Matrix', 'Mirai', 'Model F', 'MR2', 'Paseo', 'Picnic', 'Previa', 'Prius', 'Proace', 'Proace City', 'RAV4', 'Sequoia', 'Sienna', 'Soarer', 'Starlet', 'Supra', 'Tacoma', 'Tercel', 'Tundra', 'Urban Cruiser', 'Venza', 'Verso', 'Verso-S', 'Yaris', 'Yaris Hybrid', 'Yaris Verso']
         ];
         $mielecModels = [
-            'brand_id' => 86,
-            'models' => []
+            'brand_id' => 83,
+            'models' => ['Mikrus', 'Meduza']
         ];
-        $VolkswagenModels = [
-            'brand_id' => 87,
-            'models' => []
+        $volkswagenModels = [
+            'brand_id' => 84,
+            'models' => ['215', 'Amarok', 'Arteon', 'Beetle', 'Bora', 'Caddy', 'California', 'Caravelle', 'CC', 'Corrado', 'Crafter', 'Derby', 'EOS', 'Fox', 'Garbus', 'Golf', 'Golf Plus', 'Golf Sportsvan', 'ID. Buzz', 'ID.3', 'ID.4', 'ID.5', 'Jetta', 'LT', 'Lupo', 'Multivan', 'New Beetle', 'Nuevo Vento', 'Passat', 'Passat CC', 'Phaeton', 'Polo', 'Santana', 'Scirocco', 'Sharan', 'T-Cross', 'T-Roc', 'Taigo', 'Taro', 'Tiguan', 'Tiguan Allspace', 'Touareg', 'Touran', 'up!', 'Vento', 'XL1']
         ];
         $volvoModels = [
-            'brand_id' => 88,
-            'models' => []
+            'brand_id' => 85,
+            'models' => ['240', '244', '264', '340', '345', '360', '440', '460', '480', '740', '745', '760', '780', '850', '940', '960', 'C30', 'C40', 'C70', 'S40', 'S60', 'S70', 'S80', 'S90', 'V40', 'V50', 'V60', 'V70', 'V90', 'XC40', 'XC60', 'XC70', 'XC90']
         ];
         $zdModels = [
-            'brand_id' => 89,
-            'models' => []
+            'brand_id' => 86,
+            'models' => ['D2', 'D2S']
         ];
-
-        DB::table('car_model')->insert([
-        ]);
+        $models = [$abarthModels, $acuraModels, $audiModels, $alfaModels, $alpineModels, $andoriaModels, $amModels,
+            $autobianchiModels, $bentleyModels, $bmwModels, $cadillacModels, $chevroletModels, $chryslerModels,
+            $citroenModels, $cupraModels, $daewooModels, $daciaModels, $dmcModels, $dodgeModels, $dsModels, $ferrariModels,
+            $fiatModels, $fordModels, $fsoModels, $fusoModels, $gazModels, $hondaModels, $hummerModels, $hyundaiModels,
+            $ineosModels, $infinitiModels, $instrallModels, $isuzuModels, $ivecoModels, $izeraModels, $jaguarModels,
+            $jeepModels, $kawasakiModels, $kiaModels, $ladaModels, $lamborghiniModels, $lanciaModels, $lrModels, $ldvModels,
+            $levcModels, $lexusModels, $ligierModels, $lotusModels, $ltiModels, $manModels, $maseratiModels, $maybachModels,
+            $mazdaModels, $maxusModels, $mercedesModels, $mclarenModels, $mgModels, $miniModels, $mitsubishiModels, $nissanModels,
+            $opelModels, $peugeotModels, $piaggioModels, $pFiatModels, $porscheModels, $ramModels, $renaultModels, $renaultTruckModels,
+            $rrModels, $roverModels, $saabModels, $seatModels, $seresModels, $skodaModels, $skywellModels, $smartModels,
+            $ssangModels, $subaruModels, $suzukiModels, $tataModels, $teslaModels, $toyotaModels, $mielecModels,
+            $volkswagenModels, $volvoModels, $zdModels];
+        $now = Carbon::now();
+        foreach ($models as $brand) {
+            foreach ($brand['models'] as $model) {
+                DB::table('car_models')->insert(
+                    [
+                        'brand_id' => $brand['brand_id'],
+                        'name' => $model,
+                        'created_at' => $now,
+                        'updated_at' => $now
+                    ]);
+            }
+        }
     }
 
     /**
@@ -377,6 +399,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('car_model');
+        Schema::dropIfExists('car_models');
     }
 };

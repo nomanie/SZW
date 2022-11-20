@@ -1,7 +1,8 @@
 <?php
 namespace App\Traits;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
+
+use Illuminate\Http\JsonResponse;
 
 trait JsonResponseTrait {
     /** Zwraca pozytywną odpowiedź

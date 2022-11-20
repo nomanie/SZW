@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\testController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +12,8 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+include_once('admin.php');
 include_once('wiki.php');
 include_once('auth.php');
 

@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -14,13 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('car_fuel_type', function (Blueprint $table) {
+        Schema::create('car_engine_gear', function (Blueprint $table) {
             $table->id();
-            $table->name();
+            $table->foreignId('engine_id')
+                ->references('id')->on('car_engines')
+                ->cascadeOnDelete()->cascadeOnUpdate();
+            $table->boolean('manual')->default(true);
+            $table->integer('gear_number')->nullable();
             $table->timestamps();
         });
-
-        DB::table('car_fuel_type')->insert(['diesel', 'gasoline', 'lpg']);
     }
 
     /**
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('car_fuel_type');
+        Schema::dropIfExists('car_engine_gear');
     }
 };

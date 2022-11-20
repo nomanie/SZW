@@ -15,8 +15,14 @@ return new class extends Migration
     {
         Schema::create('car_series', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('generation_id')
+            $table->foreignId('generation_id')->nullable()
                 ->references('id')->on('car_generations')
+                ->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('model_id')->nullable()
+                ->references('id')->on('car_models')
+                ->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('type_id')->nullable()
+                ->references('id')->on('car_types')
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('name');
             $table->timestamps();

@@ -8,6 +8,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 //Vselect
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 window.Vue = require('vue').default;
 // auth components
@@ -37,6 +39,8 @@ Vue.component('users', require('./components/workshop/Users').default);
 Vue.component('v-input', require('./assets/form/error').default);
 // Components for wiki.
 Vue.component('wiki-header', require('../views/wiki/components/header.vue').default);
+// Admin component
+Vue.component('car-brands', require('../views/admin/components/cars/brands/brand').default);
 
 Vue.use(VueResource);
 Vue.use(Router);

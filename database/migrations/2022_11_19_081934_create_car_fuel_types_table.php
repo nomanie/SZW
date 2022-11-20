@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -14,14 +15,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('car_type', function (Blueprint $table) {
+        Schema::create('car_fuel_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->timestamps();
         });
-
-        DB::table('car_type')->insert([
-
+        $now = Carbon::now();
+        DB::table('car_fuel_types')->insert([
+            ['name' => 'diesel', 'created_at' => $now, 'updated_at' => $now],
+            ['name' => 'gasoline', 'created_at' => $now, 'updated_at' => $now],
+            ['name' => 'lpg', 'created_at' => $now, 'updated_at' => $now]
         ]);
     }
 
@@ -32,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('car_type');
+        Schema::dropIfExists('car_fuel_types');
     }
 };

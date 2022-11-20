@@ -123,11 +123,5 @@
 <script>
 export default {
     name: 'Sidebar',
-    methods: {
-        change(){
-            document.querySelector('div#content').innerHTML = 'test'
-        }
-    }
-
 }
 </script>
