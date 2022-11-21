@@ -41,6 +41,8 @@ Vue.component('v-input', require('./assets/form/error').default);
 Vue.component('wiki-header', require('../views/wiki/components/header.vue').default);
 // Admin component
 Vue.component('car-brands', require('../views/admin/components/cars/brands/brand').default);
+// Component
+Vue.component('datatable', require('./components/dataTables').default);
 
 Vue.use(VueResource);
 Vue.use(Router);

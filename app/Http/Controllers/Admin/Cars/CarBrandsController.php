@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Cars;
 
+use App\Datatables\Admin\Cars\CarBrandDatatable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\System\Cars\StoreCarBrandRequest;
 use App\Http\Requests\System\Cars\UpdateCarBrandRequest;
@@ -27,7 +28,7 @@ class CarBrandsController extends Controller
      */
     public function index()
     {
-        return CarBrand::paginate(10);
+        return (new CarBrandDatatable)->builder();
     }
 
     /**
