@@ -10,6 +10,7 @@ import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './plugins/datatables';
 
 window.Vue = require('vue').default;
 // auth components

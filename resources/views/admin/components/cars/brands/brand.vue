@@ -30,20 +30,22 @@ export default {
             table: null,
             fields: [
                 {
-                    data: 'checkboxes',
-                    name: ''
-                },
-                {
                     data: 'id',
-                    name: 'ID'
+                    name: 'ID',
+                    title: 'ID',
+                    visible: true
                 },
                 {
                     data: 'name',
-                    name: 'Marka'
+                    name: 'Marka',
+                    title: 'Marka',
+                    visible: true
                 },
                 {
                     data: 'action',
-                    name: 'Akcje'
+                    name: 'Akcje',
+                    title: 'Akcje',
+                    visible: true
                 }
             ]
         }
@@ -53,7 +55,7 @@ export default {
     },
     methods: {
         getData() {
-            this.$http.get(route('Admin.cars.brand.index')).then((response) => {
+            this.$http.get(route('admin.cars.brand.index')).then((response) => {
                 this.table = response.data
                 console.log(this.table)
             }).catch((error) => {

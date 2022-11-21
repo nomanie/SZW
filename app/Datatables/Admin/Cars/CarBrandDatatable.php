@@ -12,7 +12,6 @@ class CarBrandDatatable extends Datatable
     public function builder()
     {
         $this->actionButtons();
-        $this->checkboxes();
         $this->addIndexColumn();
         return $this->display();
     }

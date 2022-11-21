@@ -1460,6 +1460,56 @@ render._withStripped = true;
 
 /***/ }),
 
+/***/ "./resources/js/config/styles/vuetable.js":
+/*!************************************************!*\
+  !*** ./resources/js/config/styles/vuetable.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var vuetableStyle = {
+  table: {
+    tableWrapper: '',
+    tableHeaderClass: 'mb-0',
+    tableBodyClass: 'mb-0',
+    tableClass: 'table table-hover',
+    loadingClass: 'loading',
+    ascendingIcon: 'fa fa-chevron-up',
+    descendingIcon: 'fa fa-chevron-down',
+    ascendingClass: 'sorted-asc',
+    descendingClass: 'sorted-desc',
+    sortableIcon: 'fa fa-sort',
+    detailRowClass: 'vuetable-detail-row',
+    handleIcon: 'fa fa-bars text-secondary',
+    renderIcon: function renderIcon(classes, options) {
+      return "<i class=\"".concat(classes.join(' '), "\"></span>");
+    }
+  },
+  pagination: {
+    wrapperClass: 'pagination float-right',
+    activeClass: 'active',
+    disabledClass: 'disabled',
+    pageClass: 'pages-item',
+    linkClass: 'pages-link',
+    paginationClass: 'pagination',
+    paginationInfoClass: 'float-left',
+    dropdownClass: 'form-control',
+    icons: {
+      first: 'fa fa-chevron-left',
+      prev: 'fa fa-chevron-left',
+      next: 'fa fa-chevron-right',
+      last: 'fa fa-chevron-right'
+    }
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vuetableStyle);
+
+/***/ }),
+
 /***/ "./resources/js/components/workshop/Workers/workers/edit.vue":
 /*!*******************************************************************!*\
   !*** ./resources/js/components/workshop/Workers/workers/edit.vue ***!

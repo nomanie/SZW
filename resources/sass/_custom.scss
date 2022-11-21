@@ -128,3 +128,17 @@ a, router-link {
         transform: scale(1.05);
     }
 }
+
+.fs-10 {
+    font-size: 10px !important;
+}
+//dt
+.dt-button-collection {
+    margin-top: 10px !important;
+}
+.dt-button.buttons-columnVisibility {
+    &.active {
+        background: none;
+    }
+    background: rgba(200,0,0,0.2);
+}
