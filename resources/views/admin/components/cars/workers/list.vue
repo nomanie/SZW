@@ -122,7 +122,6 @@ export default {
                     variant: 'success',
                 })
             }).catch((error) => {
-                console.log(error)
                 this.$bvToast.toast(error.data.message, {
                     title: 'Błąd',
                     autoHideDelay: 5000,

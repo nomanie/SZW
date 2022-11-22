@@ -26,6 +26,8 @@ import "datatables.net-responsive-dt";
 import "datatables.net-scroller-dt";
 import "datatables.net-select-dt";
 import "datatables.net-fixedheader-dt";
+import "datatables.net-datetime";
+import "datatables.net-searchbuilder-dt";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import "jszip";
@@ -80,17 +82,34 @@ export default {
         fixedHeader: {
             Type: Boolean,
             default: true
+        },
+        tableName: {
+            type: String,
+            default: 'Tabela'
+        },
+        deleteUrl: {
+            type: String,
+            default: null
+        },
+        reloadTable: {
+            Type: Number,
+            default: null
         }
     },
     data(){
         return {
             data: this.table,
+            datatable: null
         }
     },
     mounted() {
         this.getData()
-        var table = $("#" + this.tableId).DataTable({
+        var _self = this
+        this.datatable = $("#" + this.tableId).DataTable({
             autoWidth: true,
+            language: {
+                url: 'http://127.0.0.1:8000/lang/pl/datatables.json'
+            },
             data: this.table,
             processing: true,
             serverSide: false,
@@ -105,43 +124,135 @@ export default {
             buttons: [
                 {
                     extend: 'collection',
-                    text: 'Funkcje',
+                    text: 'Export',
                     className: 'action-buttons mb-2',
                     buttons: [
                         {
                             extend: 'copy',
-                            text: 'Skopiuj',
-                            className: 'btn btn-primary fs-10'
+                            text: '<i class="fa-regular fa-copy"></i> Skopiuj',
+                            exportOptions: {
+                                columns: ':visible :not(.not-exportable)'
+                            },
                         },
                         {
-                            extend: 'csv',
-                            text: 'Importuj do CSV',
-                            className: 'btn btn-primary fs-10'
+                            extend: 'csvHtml5',
+                            text: '<i class="fa-solid fa-table-cells-large"></i> CSV',
+                            filename: _self.tableName,
+                            exportOptions: {
+                                columns: ':visible :not(.not-exportable)'
+                            },
                         },
                         {
-                            extend: 'pdf',
-                            text: 'Pobierz jako PDF',
-                            className: 'btn btn-primary fs-10'
+                            extend:'pdfHtml5',
+                            text:'<i class="fa-solid fa-file-pdf"></i> PDF',
+                            filename: _self.tableName,
+                            orientation:'landscape',
+                            exportOptions: {
+                                columns: ':visible :not(.not-exportable)'
+                            },
+                            customize : function(doc){
+                                var colCount = new Array();
+
+                                document.querySelector("#" + _self.tableId).querySelectorAll('thead tr:first-child th').forEach(function(item){
+                                    if(!item.classList.contains("not-exportable")) {
+                                       if(item.getAttribute('colspan')){
+                                           for(var i = 1;i <= item.getAttribute('colspan'); i++){
+                                               colCount.push('*');
+                                           }
+                                       }else{
+                                           colCount.push('*');
+                                       }
+                                   }
+                                });
+                                doc.content[1].table.widths = colCount;
+                            }
                         },
                         {
                             extend: 'print',
-                            text: 'Drukuj',
-                            className: 'btn btn-primary fs-10'
+                            text: '<i class="fa-solid fa-print"></i> Drukuj',
+                            filename: _self.tableName,
+                            exportOptions: {
+                                columns: ':visible :not(.not-exportable)'
+                            },
+                        },
+                    ]
+                },
+                {
+                    extend: 'collection',
+                    text: 'Zaznaczone',
+                    className: 'action-buttons mb-2',
+                    buttons: [
+                        {
+                            extend: 'copy',
+                            text: '<i class="fa-regular fa-copy"></i> Skopiuj',
+                            exportOptions: {
+                                columns: ':visible :not(.not-exportable)',
+                                modifier: {
+                                    selected: true
+                                }
+                            },
+                        },
+                        {
+                            extend: 'csvHtml5',
+                            text: '<i class="fa-solid fa-table-cells-large"></i> CSV',
+                            filename: _self.tableName,
+                            exportOptions: {
+                                columns: ':visible :not(.not-exportable)',
+                                modifier: {
+                                    selected: true
+                                }
+                            },
+                        },
+                        {
+                            extend:'pdfHtml5',
+                            text:'<i class="fa-solid fa-file-pdf"></i> PDF',
+                            filename: _self.tableName,
+                            orientation:'landscape',
+                            exportOptions: {
+                                columns: ':visible :not(.not-exportable)',
+                                modifier: {
+                                    selected: true
+                                }
+                            },
+                            customize : function(doc){
+                                var colCount = new Array();
+                                document.querySelector("#" + _self.tableId).querySelectorAll('thead tr:first-child th').forEach(function(item){
+                                    if(!item.classList.contains("not-exportable")) {
+                                        if(item.getAttribute('colspan')){
+                                            for(var i = 1;i <= item.getAttribute('colspan'); i++){
+                                                colCount.push('*');
+                                            }
+                                        }else{
+                                            colCount.push('*');
+                                        }
+                                    }
+                                });
+                                doc.content[1].table.widths = colCount;
+                            }
+                        },
+                        {
+                            extend: 'print',
+                            text: '<i class="fa-solid fa-print"></i> Drukuj',
+                            filename: _self.tableName,
+                            exportOptions: {
+                                columns: ':visible :not(.not-exportable)',
+                                modifier: {
+                                    selected: true
+                                }
+                            },
                         },
                     ]
                 },
                 {
                     extend: 'colvis',
                     text: 'Kolumny',
-                    className: 'btn btn-warning fs-10',
-                    columns: 'th:nth-child(n+2)'
+                    className: 'btn btn-warning fs-10 ms-1',
                 },
                 {
                     text: 'Usuń zaznaczone',
                     className: 'btn btn-danger fs-10',
                     action: function ( e, dt, node, config ) {
-                        //this.deleteRow()
-                        dt.row('.selected').remove().draw(false)
+                        _self.removeSelected(dt.cells('.selected', 0).data().toArray())
                     }
                 },
                 {
@@ -162,26 +273,14 @@ export default {
             dom: '<"mt-2"B><"dt-toolbar d-flex justify-content-between mt-3"lf>r<t><"d-flex justify-content-between mt-3"ip>',
             colReorder: this.colReorder,
             fixedHeader: this.fixedHeader,
-            select: true
+            select: true,
         })
-        table
-            .on( 'select', function ( e, dt, type, indexes ) {
-                indexes.forEach( function (index) {
-                    let i = index + 1
-                    document.querySelector('[data-id="' + i + '"]').checked = true
-                })
-
-            })
-            .on( 'deselect', function ( e, dt, type, indexes ) {
-                indexes.forEach( function (index) {
-                    let i = index + 1
-                    document.querySelector('[data-id="' + i + '"]').checked = false
-                })
-
-            })
     },
     watch: {
-
+        reloadTable: function() {
+            console.log('test')
+            this.datatable.ajax.reload()
+        }
     },
     methods: {
         getData() {
@@ -191,8 +290,12 @@ export default {
                 })
             }
         },
-        checkAll() {
-            console.log('test')
+        removeSelected(ids) {
+            if (this.deleteUrl) {
+                this.$http.post(route(this.deleteUrl, 0), {_method: 'delete', data: ids}).then((response) => {
+                    this.datatable.ajax.reload();
+                })
+            }
         }
     }
 }

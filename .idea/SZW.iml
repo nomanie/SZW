@@ -121,6 +121,10 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/spatie/backtrace" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/spatie/flare-client-php" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/tightenco/ziggy" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/league/fractal" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/yajra/laravel-datatables" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/yajra/laravel-datatables-editor" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/yajra/laravel-datatables-fractal" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -2,12 +2,17 @@
     <div class="container mt-3">
         <div v-if="!is_edit">
             <div class="d-flex justify-content-end">
-                <modal></modal>
+                <modal
+                @save="getData"
+                ></modal>
             </div>
             <datatable
+                :reload="reload_table"
                 :table-id="`car-brand-table`"
                 :api-url="apiUrl"
                 :columns="fields"
+                table-name="Tabela_marek_samochodów"
+                delete-url="admin.cars.brand.destroy"
             >
 
             </datatable>
@@ -28,24 +33,28 @@ export default {
             is_edit: false,
             id: null,
             table: null,
+            reload_table: 0,
             fields: [
                 {
                     data: 'id',
                     name: 'ID',
                     title: 'ID',
-                    visible: true
+                    visible: true,
+                    className: 'exportable'
                 },
                 {
                     data: 'name',
                     name: 'Marka',
                     title: 'Marka',
-                    visible: true
+                    visible: true,
+                    className: 'exportable'
                 },
                 {
                     data: 'action',
                     name: 'Akcje',
                     title: 'Akcje',
-                    visible: true
+                    visible: true,
+                    className: 'not-exportable'
                 }
             ]
         }
@@ -57,7 +66,7 @@ export default {
         getData() {
             this.$http.get(route('admin.cars.brand.index')).then((response) => {
                 this.table = response.data
-                console.log(this.table)
+                this.reloadTable++
             }).catch((error) => {
 
             })

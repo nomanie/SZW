@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Cars;
 
-use App\Datatables\Admin\Cars\CarBrandDatatable;
+use App\DataTables\Admin\Cars\CarBrandDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\System\Cars\StoreCarBrandRequest;
 use App\Http\Requests\System\Cars\UpdateCarBrandRequest;
@@ -12,7 +12,6 @@ use App\Services\System\LogService;
 use App\Traits\JsonResponseTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Yajra\DataTables\Facades\DataTables;
 
 class CarBrandsController extends Controller
 {
@@ -26,9 +25,10 @@ class CarBrandsController extends Controller
      *
      * @return
      */
-    public function index()
+    public function index(CarBrandDatatable $dataTable)
     {
-        return (new CarBrandDatatable)->builder();
+        return $dataTable->render('admin.pages.cars.brand');
+        //return (new CarBrandDatatable)->builder();
     }
 
     /**
@@ -91,11 +91,22 @@ class CarBrandsController extends Controller
      */
     public function destroy(Request $request, CarBrand $carBrand): JsonResponse
     {
-        //@todo w trakcie dorabiania logów przenieść do Service...
-        $this->logService->add($carBrand, $request, old_data: $carBrand->toArray());
-        if ($carBrand->delete()) {
-            return $this->successJsonResponse(__('Pomyślnie usunięto markę'));
+        if (count($request->all()['data']) > 0) {
+            //usuwanie wielu rekordów
+            $carBrands = CarBrand::whereIn('id', $request->all()['data'])->get();
+            foreach ($carBrands as $brand) {
+                $this->logService->add($brand, $request, old_data: $brand->toArray());
+                $brand->delete();
+            }
+            return $this->successJsonResponse(__('Pomyślnie usunięto :count rekordów', ['count' => count($request->all()['data'])]));
+        } else {
+            //usuwanie jednego rekordu
+            $this->logService->add($carBrand, $request, old_data: $carBrand->toArray());
+            if ($carBrand->delete()) {
+                return $this->successJsonResponse(__('Pomyślnie usunięto markę'));
+            }
+            return $this->errorJsonResponse(__('Nie udało się usunąć marki'));
         }
-        return $this->errorJsonResponse(__('Nie udało się usunąć marki'));
+
     }
 }

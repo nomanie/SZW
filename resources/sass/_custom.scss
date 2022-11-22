@@ -135,10 +135,57 @@ a, router-link {
 //dt
 .dt-button-collection {
     margin-top: 10px !important;
-}
-.dt-button.buttons-columnVisibility {
-    &.active {
-        background: none;
+    position: absolute;
+    background: white;
+    z-index: 1;
+    box-shadow: 1px 1px 2px 2px rgb(0 0 0 / 30%);
+
+    div[role=menu] {
+        display: flex;
+        flex-direction: column;
+
+        .dt-button {
+            border: none;
+            background: none;
+            width: 100%;
+            display: flex;
+            padding: 10px 30px;
+            margin: 5px 0;
+
+            &.buttons-columnVisibility.active::before {
+                font-family: "FontAwesome";
+                content: "\f06e";
+                padding-right: .3rem;
+            }
+            &.buttons-columnVisibility::before {
+                font-family: "FontAwesome";
+                content: "\f070";
+                padding-right: .3rem;
+            }
+
+            &:hover {
+                background: rgba(0,0,0,0.1);
+            }
+        }
     }
-    background: rgba(200,0,0,0.2);
+}
+.dt-button-background {
+    display: none !important;
+}
+.dt-button {
+    &.buttons-columnVisibility {
+        &.active {
+            background: none;
+        }
+
+        background: rgba(200, 0, 0, 0.2);
+    }
+
+    &.action-buttons {
+        border: solid 2px #269cdef5;
+        border-radius: 5px;
+        color: #269cdef5;
+        font-size: 12px;
+        padding: 5px 15px;
+    }
 }

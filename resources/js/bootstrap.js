@@ -9,24 +9,6 @@ window._ = _;
 
 import axios from 'axios';
 window.axios = axios;
-try {
-    window.Popper = require('popper.js').default;
-    window.$ = window.jQuery = require('jquery');
-
-    require('bootstrap');
-    require('datatables.net-bs4');
-    require( 'jszip' );
-    require( 'pdfmake' );
-    require( 'datatables.net-dt' )();
-    require( 'datatables.net-buttons-dt' )();
-    require( 'datatables.net-buttons/js/buttons.colVis.js' )();
-    require( 'datatables.net-buttons/js/buttons.html5.js' )();
-    require( 'datatables.net-buttons/js/buttons.print.js' )();
-    require( 'datatables.net-colreorder-dt' )();
-    require( 'datatables.net-responsive-dt' )();
-    require( 'datatables.net-scroller-dt' )();
-
-} catch (e) {}
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
