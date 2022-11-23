@@ -11,20 +11,20 @@ class UpdateCarBrandRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
-        return false;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
-            //
+            'name' => 'required',
+            'brand_popularity' => 'required|in:0,1,2',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => __('Nazwa marki jest wymagana'),
+            'brand_popularity.required' => __('Popularność marki jest wymagana'),
+            'brand_popularity.in' => __('Popularność marki musi być jedną z opcji')
         ];
     }
 }

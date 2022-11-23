@@ -1,10 +1,10 @@
 <template>
     <div>
-        <div class="btn btn-primary" @click="$bvModal.show('car-brand-modal')">
+        <div class="btn btn-primary" @click="$bvModal.show('car-brand-modal'); defaultForm()">
             <i class="fa fa-plus me-2"></i>
             Markę samochodu
         </div>
-        <b-modal id="car-brand-modal" title="Dodaj Markę samochodu" size="lg" @shown="defaultForm()">
+        <b-modal id="car-brand-modal" title="Dodaj Markę samochodu" size="lg">
             <form>
                 <div class="row">
                     <div class="col-12 col-md-6">
@@ -54,7 +54,7 @@
                         Wyczyść
                     </button>
                     <div>
-                        <button type="button" class="btn btn-success" @click="save"><i class="fa fa-save pe-3"></i>
+                        <button type="button" class="btn btn-success" @click="btnUrl"><i class="fa fa-save pe-3"></i>
                             Zapisz
                         </button>
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
@@ -74,10 +74,17 @@ export default {
     components: {
         error
     },
+    props: {
+        data: {
+            type: [Object, Array],
+            default: () => {}
+        }
+    },
     data() {
         return {
             modalShow: true,
-            form: {},
+            form: this.data,
+            is_edit: false,
             errors: {},
             options: [
                 {
@@ -95,6 +102,18 @@ export default {
             ]
         }
     },
+    watch: {
+      data: function() {
+          this.form = this.data
+          this.is_edit = true
+          this.$bvModal.show('car-brand-modal')
+      }
+    },
+    computed: {
+        btnUrl() {
+            return this.is_edit ? this.edit : this.save
+        }
+    },
     methods: {
         defaultForm() {
             this.form = {
@@ -106,10 +125,15 @@ export default {
             this.$http.post(route('admin.cars.brand.store'), this.form).then((response) => {
                 this.$bvModal.hide('car-brand-modal')
                 this.$nextTick(function() {
-                    this.$emit('save')
+                    this.$emit('reload')
                 })
-            }).catch((error) => {
-                this.errors = error.data.errors
+            })
+        },
+        edit() {
+            this.$http.put(route('admin.cars.brand.update', this.data.id), this.form).then((response) => {
+                this.$bvModal.hide('car-brand-modal')
+                this.is_edit = false
+                this.$emit('reload')
             })
         }
     }

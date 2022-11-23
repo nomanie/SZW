@@ -2,7 +2,7 @@
     <table class="table table-bordered yajra-datatable" :id="tableId">
         <thead>
         <tr>
-            <th v-for="column in columns">
+            <th v-for="column in cols">
                 {{ column.title }}
             </th>
         </tr>
@@ -99,23 +99,22 @@ export default {
     data(){
         return {
             data: this.table,
-            datatable: null
+            datatable: null,
+            cols: this.columns
         }
     },
     mounted() {
-        this.getData()
         var _self = this
         this.datatable = $("#" + this.tableId).DataTable({
             autoWidth: true,
             language: {
                 url: 'http://127.0.0.1:8000/lang/pl/datatables.json'
             },
-            data: this.table,
             processing: true,
             serverSide: false,
-            ajax: this.apiUrl,
+            ajax: route(this.apiUrl),
             pageLength: this.perPage,
-            columns: this.columns,
+            columns: this.cols,
             scrollY: '60vh',
             scrollX: this.scrollX,
             scrollCollapse: true,
@@ -125,7 +124,7 @@ export default {
                 {
                     extend: 'collection',
                     text: 'Export',
-                    className: 'action-buttons mb-2',
+                    className: 'action-buttons mb-2 fs-10',
                     buttons: [
                         {
                             extend: 'copy',
@@ -180,7 +179,7 @@ export default {
                 {
                     extend: 'collection',
                     text: 'Zaznaczone',
-                    className: 'action-buttons mb-2',
+                    className: 'action-buttons mb-2 fs-10',
                     buttons: [
                         {
                             extend: 'copy',
@@ -246,23 +245,23 @@ export default {
                 {
                     extend: 'colvis',
                     text: 'Kolumny',
-                    className: 'btn btn-warning fs-10 ms-1',
+                    className: 'btn fs-10 ms-1 mb-2',
                 },
                 {
                     text: 'Usuń zaznaczone',
-                    className: 'btn btn-danger fs-10',
+                    className: 'btn btn-danger fs-10 mb-2',
                     action: function ( e, dt, node, config ) {
                         _self.removeSelected(dt.cells('.selected', 0).data().toArray())
                     }
                 },
                 {
                     text: 'Zaznacz wszystko',
-                    className: 'btn btn-success fs-10',
+                    className: 'btn btn-success fs-10 mb-2',
                     extend: 'selectAll'
                 },
                 {
                     text: 'Odznacz wszystko',
-                    className: 'btn btn-success fs-10',
+                    className: 'btn btn-success fs-10 mb-2',
                     extend: 'selectNone'
                 },
 
@@ -273,30 +272,41 @@ export default {
             dom: '<"mt-2"B><"dt-toolbar d-flex justify-content-between mt-3"lf>r<t><"d-flex justify-content-between mt-3"ip>',
             colReorder: this.colReorder,
             fixedHeader: this.fixedHeader,
-            select: true,
+            select: {
+                style: 'multi',
+                selector: ':not(.not-selectable > *, .not-selectable)'
+            },
         })
+        $('#' + this.tableId).on('click', '.btn-delete', function (e) {
+            _self.remove(this.dataset.row_id)
+        } );
+        $('#' + this.tableId).on('click', '.btn-edit', function (e) {
+            _self.edit(this.dataset.row_id)
+        } );
     },
     watch: {
         reloadTable: function() {
-            console.log('test')
             this.datatable.ajax.reload()
-        }
+        },
     },
     methods: {
-        getData() {
-            if (this.apiUrl !== null) {
-                this.$http.get(this.apiUrl).then((response) => {
-                    this.data = response.data
-                })
-            }
-        },
         removeSelected(ids) {
             if (this.deleteUrl) {
                 this.$http.post(route(this.deleteUrl, 0), {_method: 'delete', data: ids}).then((response) => {
                     this.datatable.ajax.reload();
                 })
             }
-        }
+        },
+        remove(id) {
+            if (this.deleteUrl) {
+                this.$http.delete(route(this.deleteUrl, id)).then((response) => {
+                    this.datatable.ajax.reload();
+                })
+            }
+        },
+        edit(id) {
+            this.$emit('update', id)
+        },
     }
 }
 </script>

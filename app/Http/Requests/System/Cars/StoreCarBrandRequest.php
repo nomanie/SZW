@@ -21,7 +21,7 @@ class StoreCarBrandRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => 'required',
@@ -29,7 +29,7 @@ class StoreCarBrandRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'name.required' => __('Nazwa marki jest wymagana'),

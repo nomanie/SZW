@@ -5,11 +5,7 @@
             @include('admin.global.sidebar')
         </div>
         <div class="col-lg-10" style="background: #ececec;">
-{{--            <car-brands></car-brands>--}}
-            {{$dataTable->table()}}
-            @push('scripts')
-                {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
-            @endpush
+            <car-brands></car-brands>
         </div>
     </div>
 @endsection

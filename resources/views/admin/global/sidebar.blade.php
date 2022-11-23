@@ -18,7 +18,7 @@
                         Samochody
                 </div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-field @if($route === 'admin.cars.brands.index') active @endif" href="{{route('admin.cars.brands.index')}}">Marki</a>
+                    <a class="dropdown-field @if($route === 'admin.cars.brands.list') active @endif" href="{{route('admin.cars.brands.list')}}">Marki</a>
                     <a class="dropdown-field @if($route === 'admin.cars.models.list') active @endif" href="{{route('admin.cars.models.list')}}">Modele</a>
                     <a class="dropdown-field @if($route === 'admin.cars.series.list') active @endif" href="{{route('admin.cars.series.list')}}">Serie</a>
                     <a class="dropdown-field @if($route === 'admin.cars.generations.list') active @endif" href="{{route('admin.cars.generations.list')}}">Generacje</a>

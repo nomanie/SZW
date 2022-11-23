@@ -11777,6 +11777,10 @@ a:hover, router-link:hover {
   font-size: 10px !important;
 }
 
+.fs-12 {
+  font-size: 12px !important;
+}
+
 .dt-button-collection {
   margin-top: 10px !important;
   position: absolute;

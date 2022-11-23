@@ -14,8 +14,11 @@ class CarBrandService
     {
     }
 
-    public function save(array $data): ?CarBrand
+    public function saveOrUpdate(array $data, CarBrand $brand = null): ?CarBrand
     {
+        if ($brand) {
+            $this->brand = $brand;
+        }
         DB::beginTransaction();
         try {
             $this->brand->name = $data['name'];

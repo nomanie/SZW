@@ -1,20 +1,21 @@
 <template>
     <div class="container mt-3">
-        <div v-if="!is_edit">
+        <div>
             <div class="d-flex justify-content-end">
                 <modal
-                @save="getData"
+                    :data="data"
+                    @reload="reload_table++"
                 ></modal>
             </div>
             <datatable
-                :reload="reload_table"
-                :table-id="`car-brand-table`"
-                :api-url="apiUrl"
+                :reload-table="reload_table"
                 :columns="fields"
+                table-id="car-brand-table"
+                api-url="admin.cars.brand.index"
                 table-name="Tabela_marek_samochodów"
                 delete-url="admin.cars.brand.destroy"
+                @update="edit"
             >
-
             </datatable>
         </div>
     </div>
@@ -28,11 +29,7 @@ export default {
     },
     data() {
         return {
-            apiUrl: route('admin.cars.brand.index'),
-            selected: [],
-            is_edit: false,
-            id: null,
-            table: null,
+            data: {},
             reload_table: 0,
             fields: [
                 {
@@ -54,48 +51,27 @@ export default {
                     name: 'Akcje',
                     title: 'Akcje',
                     visible: true,
-                    className: 'not-exportable'
+                    className: 'not-exportable not-selectable',
+                    render: function(data, type, row, meta) {
+                        return '<button data-row_id="' + row.id + '" class="btn btn-success btn-edit mx-1 fs-12">Edytuj</button>' +
+                            '<button data-row_id="' + row.id + '" class="btn btn-danger btn-delete mx-1 fs-12">Usuń</button>';
+                    }
                 }
             ]
         }
     },
-    mounted() {
-        this.getData()
-    },
     methods: {
-        getData() {
-            this.$http.get(route('admin.cars.brand.index')).then((response) => {
-                this.table = response.data
-                this.reloadTable++
-            }).catch((error) => {
-
-            })
-        },
         remove(id) {
-            this.$http.delete(route('Admin.cars.brand.destroy', id)).then((response) => {
-                this.getData()
+            this.$http.delete(route('admin.cars.brand.destroy', id)).then((response) => {
             }).catch((error) => {
             })
         },
-        edit(id) {
-            this.id = id
-            this.is_edit = true
-        },
-        //zrobić mixina do vueTable
-        // setPage(page = 1)
-        // {
-        //     this.table.current_page = page
-        // },
-        // nextPage() {
-        //     if(this.table.current_page < this.table.last_page) {
-        //         this.table.current_page++
-        //     }
-        // },
-        // prevPage() {
-        //     if(this.table.current_page > this.table.from) {
-        //         this.table.current_page--
-        //     }
-        // }
+        edit($event) {
+            this.$http.get(route('admin.cars.brand.edit', $event)).then((response) => {
+                this.data = response.data.data;
+                this.isEdit = true
+            })
+        }
     }
 }
 </script>

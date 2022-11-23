@@ -20,23 +20,23 @@ Vue.component('login', require('../views/auth/components/login').default);
 // Components
 Vue.component('v-select', vSelect)
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('sidebar', require('./components/workshop/Sidebar.vue').default);
-Vue.component('header-nav', require('./components/workshop/Header.vue').default);
-Vue.component('dashboard', require('./components/workshop/Dashboard.vue').default);
+Vue.component('sidebar', require('../views/workshop/components/Sidebar.vue').default);
+Vue.component('header-nav', require('../views/workshop/components/Header.vue').default);
+Vue.component('dashboard', require('../views/workshop/components/Dashboard.vue').default);
 Vue.component('card', require('./assets/cards/Card').default);
 Vue.component('support', require('./components/Support').default);
-Vue.component('clients', require('./components/workshop/Clients').default);
-Vue.component('clients-list', require('./components/workshop/Clients/List').default);
-Vue.component('car-list', require('./components/workshop/Clients/Cars').default);
-Vue.component('cars', require('./components/workshop/Clients/Cars').default);
-Vue.component('documents', require('./components/workshop/Documents').default);
-Vue.component('repairs', require('./components/workshop/Repairs').default);
+Vue.component('clients', require('../views/workshop/components/Clients').default);
+Vue.component('clients-list', require('../views/workshop/components/Clients/List').default);
+Vue.component('car-list', require('../views/workshop/components/Clients/Cars').default);
+Vue.component('cars', require('../views/workshop/components/Clients/Cars').default);
+Vue.component('documents', require('../views/workshop/components/Documents').default);
+Vue.component('repairs', require('../views/workshop/components/Repairs').default);
 Vue.component('messages', require('./components/Messages').default);
 Vue.component('calendar', require('./components/Calendar').default);
 Vue.component('error-report', require('./components/ErrorReport').default);
-Vue.component('information', require('./components/workshop/Workshop/Information').default);
-Vue.component('settings', require('./components/workshop/Settings').default);
-Vue.component('users', require('./components/workshop/Users').default);
+Vue.component('information', require('../views/workshop/components/Workshop/Information').default);
+Vue.component('settings', require('../views/workshop/components/Settings').default);
+Vue.component('users', require('../views/workshop/components/Users').default);
 Vue.component('v-input', require('./assets/form/error').default);
 // Components for wiki.
 Vue.component('wiki-header', require('../views/wiki/components/header.vue').default);
@@ -46,13 +46,7 @@ Vue.component('car-brands', require('../views/admin/components/cars/brands/brand
 Vue.component('datatable', require('./components/dataTables').default);
 
 try {
-    window.Popper = require('popper.js').default;
-    window.$ = window.jQuery = require('jquery');
-    require('bootstrap');
-    require('datatables.net-bs4');
     require('datatables.net-buttons-bs4');
-
-
 } catch (e) {}
 
 Vue.use(VueResource);

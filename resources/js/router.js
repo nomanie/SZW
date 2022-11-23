@@ -4,12 +4,12 @@ const routes = [
     {
         path: "/dashboard",
         name: "dashboard",
-        component: () => import('./components/workshop/Dashboard'),
+        component: () => import('../views/workshop/components/Dashboard'),
     },
     {
         path: "/clients",
         name: "clients",
-        component: () => import('./components/workshop/Clients'),
+        component: () => import('../views/workshop/components/Clients'),
     },
     {
         path: "/support",
@@ -19,12 +19,12 @@ const routes = [
     {
         path: "/documents",
         name: "documents",
-        component: () => import('./components/workshop/Documents'),
+        component: () => import('../views/workshop/components/Documents'),
     },
     {
         path: "/repairs",
         name: "repairs",
-        component: () => import('./components/workshop/Repairs'),
+        component: () => import('../views/workshop/components/Repairs'),
     },
     {
         path: "/messages",
@@ -44,17 +44,17 @@ const routes = [
     {
         path: "/informations",
         name: "informations",
-        component: () => import('./components/workshop/Workshop/Information'),
+        component: () => import('../views/workshop/components/Workshop/Information'),
     },
     {
         path: "/settings",
         name: "settings",
-        component: () => import('./components/workshop/Settings'),
+        component: () => import('../views/workshop/components/Settings'),
     },
     {
         path: "/workers",
         name: "workers",
-        component: () => import('./components/workshop/Workers/workers/list'),
+        component: () => import('../views/workshop/components/Workers/workers/list'),
     },
 ]
 
