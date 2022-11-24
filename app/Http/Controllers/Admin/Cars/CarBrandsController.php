@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Cars;
 
 use App\Http\Controllers\Controller;
+use App\DataTables\Admin\Cars\CarBrandDataTable;
 use App\Http\Requests\System\Cars\StoreCarBrandRequest;
 use App\Http\Requests\System\Cars\UpdateCarBrandRequest;
 use App\Http\Resources\Admin\Cars\BrandResource;
@@ -13,8 +14,6 @@ use App\Traits\JsonResponseTrait;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Yajra\DataTables\DataTables;
 
 class CarBrandsController extends Controller
 {
@@ -31,12 +30,13 @@ class CarBrandsController extends Controller
      * @return JsonResponse
      * @throws Exception
      */
-    public function index(): JsonResponse
+    public function index(CarBrandDataTable $dataTable)
     {
-        return DataTables::of(CarBrand::all())
-            ->addColumn('action', '')
-            ->addIndexColumn()
-            ->rawColumns(['action'])->make();
+        return $dataTable->render('admin.pages.cars.brand');
+//        return DataTables::of(CarBrand::all())
+//            ->addColumn('action', '')
+//            ->addIndexColumn()
+//            ->rawColumns(['action'])->make();
     }
 
     /**

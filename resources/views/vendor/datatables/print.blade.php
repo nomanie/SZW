@@ -6,32 +6,32 @@
         <meta name=description content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap CSS -->
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
         <style>
             body {margin: 20px}
         </style>
     </head>
-    <body>
-        <table class="table table-bordered table-condensed table-striped">
+    <body class="w-100">
+            <div class="container w-100">
             @foreach($data as $row)
                 @if ($loop->first)
-                    <tr>
+                    <div class="row" style="background-color: #1a202c; color:white;">
                         @foreach($row as $key => $value)
-                            <th>{!! $key !!}</th>
+                            <div class="col" style="font-size:18px;">{!! $key !!}</div>
                         @endforeach
-                    </tr>
+                    </div>
                 @endif
-                <tr>
+                <div class="row">
                     @foreach($row as $key => $value)
                         @if(is_string($value) || is_numeric($value))
-                            <td>{!! $value !!}</td>
+                            <div class="col">{!! $value !!}</div>
                         @else
-                            <td></td>
+                            <div class="col"></div>
                         @endif
                     @endforeach
-                </tr>
+                </div>
             @endforeach
-        </table>
+        </div>
     </body>
 </html>

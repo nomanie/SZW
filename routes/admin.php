@@ -29,3 +29,10 @@ Route::prefix('/admin')->name('admin.')->group(function () {
     });
 });
 
+Route::prefix('/admin')->name('admin.')->group(function () {
+    Route::prefix('/cars')->name('cars.')->group(function () {
+        Route::resource('/brands', CarBrandsController::class);
+    });
+});
+
+

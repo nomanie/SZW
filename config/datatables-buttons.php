@@ -49,6 +49,8 @@ return [
             'margin-right' => '0',
             'margin-top' => '10mm',
             'margin-bottom' => '10mm',
+            'enable-javascript' => true,
+            'no-background' => false
         ],
         'orientation' => 'landscape',
     ],
