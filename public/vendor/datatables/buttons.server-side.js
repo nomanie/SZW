@@ -77,19 +77,22 @@
         xhr.send($.param(params));
     };
 
+    var _getSeletedRows = function(config) {
+        var ids = []
+        if (config && config.exportOptions.modifier && config.exportOptions.modifier.selected) {
+            document.querySelectorAll('.selected').forEach(function(el) {
+                ids.push($(el).attr('id'))
+            })
+        }
+        return ids
+    }
+
     var _buildUrl = function(dt, action, config = null) {
         var url = dt.ajax.url() || '';
         var params = dt.ajax.params();
         params.action = action;
-        if (config.exportOptions.modifier.selected) {
-            console.log($('.selected'))
-            var ids = []
-            document.querySelectorAll('.selected').forEach(function(el) {
-                ids.push($(el).attr('id'))
-            })
-            params.data = ids
-        }
-
+        // obsługa selected rows
+        params.data = _getSeletedRows(config)
 
         if (url.indexOf('?') > -1) {
             return url + '&' + $.param(params);
@@ -161,7 +164,7 @@
         },
 
         action: function (e, dt, button, config) {
-            var url = _buildUrl(dt, 'csv');
+            var url = _buildUrl(dt, 'csv', config);
             window.location = url;
         }
     };
@@ -232,8 +235,8 @@
         },
 
         action: function (e, dt, button, config) {
-            var url = _buildUrl(dt, 'print');
-            window.location = url;
+            var url = _buildUrl(dt, 'print', config);
+            window.open(url)
         }
     };
 
@@ -272,6 +275,20 @@
 
         action: function (e, dt, button, config) {
             window.location = window.location.href.replace(/\/+$/, "") + '/create';
+        }
+    };
+
+    DataTable.ext.buttons.deleteSelectedRows = {
+        className: 'buttons-delete-selected',
+
+        text: function (dt) {
+            return dt.i18n('buttons.deleteSelectedRows', 'DeleteSelected');
+        },
+        action: function (e, dt, button, config){
+            var ids = _getSeletedRows(config)
+            this.axios('delete', route(config.delete_route, 0)).then((response) => {
+
+            })
         }
     };
 

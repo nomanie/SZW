@@ -32,7 +32,7 @@ class CarBrandsController extends Controller
      */
     public function index(CarBrandDataTable $dataTable)
     {
-        return $dataTable->render('admin.pages.cars.brand');
+        return $dataTable->setFilename('Marki_samochodów')->render('admin.pages.cars.brand');
 //        return DataTables::of(CarBrand::all())
 //            ->addColumn('action', '')
 //            ->addIndexColumn()

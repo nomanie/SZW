@@ -4,20 +4,31 @@ namespace App\DataTables\Admin\Cars;
 
 use App\DataTables\DataTableExpander;
 use App\Models\System\Cars\CarBrand;
+use App\Traits\JsonResponseTrait;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Illuminate\Support\Collection;
+use Maatwebsite\Excel\ExcelServiceProvider;
 use Yajra\DataTables\EloquentDataTable;
+use Yajra\DataTables\Exceptions\Exception;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
+use Yajra\DataTables\Services\DataTablesExportHandler;
 
 class CarBrandDataTable extends DataTable
 {
-    use DataTableExpander;
+    use DataTableExpander, JsonResponseTrait;
+
     protected string $printPreview = 'vendor.datatables.print';
     protected string $model = CarBrand::class;
+    protected $allowCSVExport = true;
+    protected $allowPDFExport = true;
+    protected array $actions = ['print', 'csv', 'excel', 'pdf', 'deleteSelectedRows'];
+
     /**
      * Build DataTable class.
      *
@@ -72,29 +83,29 @@ class CarBrandDataTable extends DataTable
                             'extend' => 'copy',
                             'text' => '<i class="fa-regular fa-copy"></i> Skopiuj',
                             'exportOptions' => [
-                            'columns' => ':visible :not(.not-exportable)'
+                                'columns' => ':visible :not(.not-exportable)'
                             ],
                         ],
                         [
                             'extend' => 'csv',
                             'text' => '<i class="fa-solid fa-table-cells-large"></i> CSV',
                             'exportOptions' => [
-                            'columns' => ':visible :not(.not-exportable)'
+                                'columns' => ':visible :not(.not-exportable)'
                             ],
                         ],
                         [
-                            'extend' =>'pdf',
-                            'text' =>'<i class="fa-solid fa-file-pdf"></i> PDF',
-                            'orientation' =>'landscape',
+                            'extend' => 'pdf',
+                            'text' => '<i class="fa-solid fa-file-pdf"></i> PDF',
+                            'orientation' => 'landscape',
                             'exportOptions' => [
-                            'columns' => ':visible :not(.not-exportable)'
+                                'columns' => ':visible :not(.not-exportable)'
                             ],
                         ],
                         [
                             'extend' => 'print',
                             'text' => '<i class="fa-solid fa-print"></i> Drukuj',
                             'exportOptions' => [
-                            'columns' => ':visible :not(.not-exportable)'
+                                'columns' => ':visible :not(.not-exportable)'
                             ],
                         ],
                     ]
@@ -108,19 +119,19 @@ class CarBrandDataTable extends DataTable
                             'extend' => 'copy',
                             'text' => '<i class="fa-regular fa-copy"></i> Skopiuj',
                             'exportOptions' => [
-                            'columns' => ':visible :not(.not-exportable)',
+                                'columns' => ':visible :not(.not-exportable)',
                                 'modifier' => [
-                                'selected' => true
+                                    'selected' => true
                                 ]
                             ],
                         ],
                         [
-                            'extend' => 'csvHtml5',
+                            'extend' => 'csv',
                             'text' => '<i class="fa-solid fa-table-cells-large"></i> CSV',
                             'exportOptions' => [
-                            'columns' => ':visible :not(.not-exportable)',
+                                'columns' => ':visible :not(.not-exportable)',
                                 'modifier' => [
-                                'selected' => true
+                                    'selected' => true
                                 ]
                             ],
                         ],
@@ -128,10 +139,10 @@ class CarBrandDataTable extends DataTable
                             'extend' => 'pdf',
                             'text' => '<i class="fa-solid fa-file-pdf"></i> PDF',
                             'orientation' => 'landscape',
-                            'exportOptions' =>  [
-                            'columns' =>  ':visible :not(.not-exportable)',
-                                'modifier' =>  [
-                                'selected' =>  true
+                            'exportOptions' => [
+                                'columns' => ':visible :not(.not-exportable)',
+                                'modifier' => [
+                                    'selected' => true
                                 ]
                             ],
                         ],
@@ -139,9 +150,9 @@ class CarBrandDataTable extends DataTable
                             'extend' => 'print',
                             'text' => '<i class="fa-solid fa-print"></i> Drukuj',
                             'exportOptions' => [
-                            'columns' => ':visible :not(.not-exportable)',
+                                'columns' => ':visible :not(.not-exportable)',
                                 'modifier' => [
-                                'selected' => true
+                                    'selected' => true
                                 ]
                             ],
                         ],
@@ -155,6 +166,8 @@ class CarBrandDataTable extends DataTable
                 [
                     'text' => 'Usuń zaznaczone',
                     'className' => 'btn btn-danger fs-10 mb-2',
+                    'extend' => 'deleteSelectedRows',
+                    'delete_route' =>'admin.cars.brand.destroy'
                 ],
                 [
                     'text' => 'Zaznacz wszystko',
@@ -194,12 +207,73 @@ class CarBrandDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Marki_samochodów' . date('YmdHis');
+        return $this->filename . date('YmdHis');
     }
 
     public function pdf()
     {
         $snappy = app('snappy.pdf.wrapper');
+
+        $data = $this->getSelectedRows() ?? null;
+        if ($data) {
+            $view = view($this->printPreview, compact('data'));
+            return $snappy->loadHTML()->download($this->getFilename() . '.pdf');
+        }
+        return $snappy->loadHTML($this->printPreview())->download($this->getFilename() . '.pdf');
+    }
+
+    /** Ustawia nazwę generowanego pliku
+     * @param string $filename
+     * @return static
+     */
+    public function setFilename(string $filename): static
+    {
+        $this->filename = $filename;
+
+        return $this;
+    }
+
+    /**
+     * Eksport danych do CSV, obsługuje eksport tylko wybranych wierszy
+     *
+     * @return string|\Symfony\Component\HttpFoundation\StreamedResponse
+     *
+     * @throws \Exception
+     */
+    public function csv()
+    {
+        set_time_limit(3600);
+
+        $path = $this->getFilename() . '.' . strtolower($this->csvWriter);
+
+        $excelFile = $this->buildExcelFile();
+
+        // @phpstan-ignore-next-line
+        return $this->buildExcelFile()->download($path, $this->csvWriter);
+    }
+
+    /**
+     * Budowa pliku CSV i przygotowanie do eksportu.
+     *
+     * @return mixed
+     *
+     * @throws \Exception
+     */
+    protected function buildExcelFile()
+    {
+        $collection = $this->getSelectedRows() ?? $this->getDataForExport();
+
+        return new $this->exportClass($this->convertToLazyCollection($collection));
+    }
+
+    /**
+     * Pobranie zaznaczonych wierszy
+     *
+     * @return collection|null
+     *
+     */
+    protected function getSelectedRows(): collection|null
+    {
         if (isset($this->request()->all()['data'])) {
             $ids = $this->request()->all()['data'];
             $cols = [];
@@ -208,12 +282,20 @@ class CarBrandDataTable extends DataTable
                     $cols[] = $col['name'];
                 }
             }
-
-            $data = (new $this->model)->whereIn('id', $ids)->get($cols)->toArray();
-            $view =  view($this->printPreview, compact('data'));
-            return $snappy->loadHTML($view)->download($this->getFilename().'.pdf');
+            $collection = collect((new $this->model)->whereIn('id', $ids)->orderByRaw("FIELD(id, " . implode(',', $ids) . ")")->get($cols)->toArray());
         }
+        return $collection ?? null;
+    }
 
-        return $snappy->loadHTML($this->printPreview())->download($this->getFilename().'.pdf');
+    /**
+     * Display printable view of datatables.
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function printPreview(): Renderable
+    {
+        $data = $this->getSelectedRows() ?? $this->getDataForPrint();
+
+        return view($this->printPreview, compact('data'));
     }
 }
