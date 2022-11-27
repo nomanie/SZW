@@ -79,7 +79,7 @@
 
     var _getSeletedRows = function(config) {
         var ids = []
-        if (config && config.exportOptions.modifier && config.exportOptions.modifier.selected) {
+        if (config && config.selected) {
             document.querySelectorAll('.selected').forEach(function(el) {
                 ids.push($(el).attr('id'))
             })
@@ -286,9 +286,25 @@
         },
         action: function (e, dt, button, config){
             var ids = _getSeletedRows(config)
-            this.axios('delete', route(config.delete_route, 0)).then((response) => {
-
-            })
+            let toast = $('#car-brand-toast')
+            let toastHeader = $('#car-brand-toast .toast-header')
+                $.ajax({
+                    method: 'DELETE',
+                    url: route(config.delete_route, 0),
+                    data: {data: ids}
+                }).done((res) => {
+                    toast.css('background', '#e6f5e9')
+                    toast.css('color', '#155724')
+                    toastHeader.css('color', '#155724')
+                    toastHeader.css('background', 'rgba(212,237,218,.85)')
+                    toast.toast('show');
+                }).fail((err) => {
+                    toast.css('background', '#fcedee')
+                    toast.css('color', '#721c24')
+                    toastHeader.css('color', '#721c24')
+                    toastHeader.css('background', 'rgba(248,215,218,.85)')
+                    toast.toast('show');
+                })
         }
     };
 

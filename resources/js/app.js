@@ -11,6 +11,8 @@ import 'vue-select/dist/vue-select.css';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './plugins/datatables';
+import Ajax from "vue-select/src/mixins/ajax";
+import {Axios} from "axios";
 
 window.Vue = require('vue').default;
 // auth components
@@ -73,7 +75,6 @@ Vue.http.interceptors.push((request, next) => {
 
 Vue.http.interceptors.push(function (request) {
     return function (response) {
-        console.log(response)
         if (response.status >= 300) {
             this.$bvToast.toast(response.body.errors ? "Wystąpił błąd w formuląrzu" : response.data.message, {
                 title: 'Błąd', variant: 'danger',

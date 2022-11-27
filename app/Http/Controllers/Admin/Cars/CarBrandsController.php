@@ -14,6 +14,7 @@ use App\Traits\JsonResponseTrait;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\MessageBag;
 
 class CarBrandsController extends Controller
 {
@@ -94,8 +95,9 @@ class CarBrandsController extends Controller
      * @param CarBrand $brand
      * @return JsonResponse
      */
-    public function destroy(Request $request, CarBrand $brand): JsonResponse
+    public function destroy(Request $request, int|CarBrand $brand): JsonResponse
     {
+        dd('test');
         if (isset($request->all()['data'])) {
             $carBrands = CarBrand::whereIn('id', $request->all()['data'])->get();
             foreach ($carBrands as $br) {

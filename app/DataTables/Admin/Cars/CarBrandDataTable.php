@@ -120,20 +120,16 @@ class CarBrandDataTable extends DataTable
                             'text' => '<i class="fa-regular fa-copy"></i> Skopiuj',
                             'exportOptions' => [
                                 'columns' => ':visible :not(.not-exportable)',
-                                'modifier' => [
-                                    'selected' => true
-                                ]
                             ],
+                            'selected' => true
                         ],
                         [
                             'extend' => 'csv',
                             'text' => '<i class="fa-solid fa-table-cells-large"></i> CSV',
                             'exportOptions' => [
                                 'columns' => ':visible :not(.not-exportable)',
-                                'modifier' => [
-                                    'selected' => true
-                                ]
                             ],
+                            'selected' => true
                         ],
                         [
                             'extend' => 'pdf',
@@ -141,20 +137,16 @@ class CarBrandDataTable extends DataTable
                             'orientation' => 'landscape',
                             'exportOptions' => [
                                 'columns' => ':visible :not(.not-exportable)',
-                                'modifier' => [
-                                    'selected' => true
-                                ]
                             ],
+                            'selected' => true
                         ],
                         [
                             'extend' => 'print',
                             'text' => '<i class="fa-solid fa-print"></i> Drukuj',
                             'exportOptions' => [
                                 'columns' => ':visible :not(.not-exportable)',
-                                'modifier' => [
-                                    'selected' => true
-                                ]
                             ],
+                            'selected' => true
                         ],
                     ]
                 ],
@@ -167,7 +159,8 @@ class CarBrandDataTable extends DataTable
                     'text' => 'Usuń zaznaczone',
                     'className' => 'btn btn-danger fs-10 mb-2',
                     'extend' => 'deleteSelectedRows',
-                    'delete_route' =>'admin.cars.brand.destroy'
+                    'delete_route' =>'admin.cars.brand.destroy',
+                    'selected' => true
                 ],
                 [
                     'text' => 'Zaznacz wszystko',
