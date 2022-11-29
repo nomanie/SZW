@@ -286,8 +286,9 @@
         },
         action: function (e, dt, button, config){
             var ids = _getSeletedRows(config)
-            let toast = $('#car-brand-toast')
-            let toastHeader = $('#car-brand-toast .toast-header')
+            let toast = $('#dt-toast')
+            let toastHeader = $('#dt-toast .toast-header')
+            let toastBody = $('#dt-toast .toast-body')
                 $.ajax({
                     method: 'DELETE',
                     url: route(config.delete_route, 0),
@@ -297,12 +298,17 @@
                     toast.css('color', '#155724')
                     toastHeader.css('color', '#155724')
                     toastHeader.css('background', 'rgba(212,237,218,.85)')
+                    toastHeader.find('strong').text('Komunikat')
+                    toastBody.text('Pomyślnie usunięto (' + ids.length + ') rekordy')
                     toast.toast('show');
+                    dt.draw(false);
                 }).fail((err) => {
                     toast.css('background', '#fcedee')
                     toast.css('color', '#721c24')
                     toastHeader.css('color', '#721c24')
                     toastHeader.css('background', 'rgba(248,215,218,.85)')
+                    $(toastHeader).find('strong').text('Błąd')
+                    toastBody.text('Nie udało się usunąć zaznaczonych rekordów')
                     toast.toast('show');
                 })
         }

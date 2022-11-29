@@ -9,10 +9,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
 import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import './plugins/datatables';
-import Ajax from "vue-select/src/mixins/ajax";
-import {Axios} from "axios";
 
 window.Vue = require('vue').default;
 // auth components
@@ -50,7 +47,6 @@ Vue.component('datatable', require('./components/dataTables').default);
 try {
     window.Popper = require('popper.js').default;
     window.$ = window.jQuery = require('jquery');
-    require('bootstrap');
     require('datatables.net-bs4');
     require('datatables.net-buttons-bs4');
 

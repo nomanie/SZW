@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="btn btn-primary" @click="$bvModal.show('car-brand-modal'); defaultForm()">
+        <div class="btn btn-primary fs-10" @click="$bvModal.show('car-brand-modal'); defaultForm()">
             <i class="fa fa-plus me-2"></i>
             Markę samochodu
         </div>

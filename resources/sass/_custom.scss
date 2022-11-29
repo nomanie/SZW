@@ -192,3 +192,26 @@ a, router-link {
         padding: 5px 15px;
     }
 }
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.dropdown-action {
+    .dropdown-menu {
+        li {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            flex-direction: row;
+            padding: 8px 20px;
+            i {
+                padding-right: 10px;
+            }
+
+            &:hover {
+                background: rgba(0, 0, 0, 0.1);
+            }
+        }
+    }
+}

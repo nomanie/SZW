@@ -4,6 +4,7 @@
             <div class="d-flex justify-content-end">
                 <modal
                     :data="data"
+                    @reload="reloadDT()"
                 ></modal>
             </div>
         </div>
@@ -11,23 +12,21 @@
 </template>
 <script>
 import modal from './modal'
-
+import dtMixin from '@js/mixins/dtMixin'
 export default {
     components: {
         modal,
     },
-    data() {
-        return {
-            data: {},
+    props: {
+        tableId: {
+            type: String,
+            default: () => null
+        },
+        modalId: {
+            type: String,
+            default: () => null
         }
     },
-    methods: {
-        edit($event) {
-            this.$http.get(route('admin.cars.brand.edit', $event)).then((response) => {
-                this.data = response.data.data;
-                this.isEdit = true
-            })
-        }
-    }
+    mixins: [dtMixin],
 }
 </script>

@@ -11832,6 +11832,24 @@ a:hover, router-link:hover {
   padding: 5px 15px;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.dropdown-action .dropdown-menu li {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: row;
+  padding: 8px 20px;
+}
+.dropdown-action .dropdown-menu li i {
+  padding-right: 10px;
+}
+.dropdown-action .dropdown-menu li:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
 .card {
   margin: 0 20px;
 }
@@ -12147,6 +12165,11 @@ table.border-col td:last-of-type, table.border-col th:last-of-type {
 .vuetable .btn {
   padding: 2px 5px;
   font-size: 12px;
+}
+
+.table--scrollable {
+  height: 70vh;
+  overflow-y: scroll;
 }
 
 ul li {

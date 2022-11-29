@@ -5,19 +5,13 @@ namespace App\DataTables\Admin\Cars;
 use App\DataTables\DataTableExpander;
 use App\Models\System\Cars\CarBrand;
 use App\Traits\JsonResponseTrait;
-use Dompdf\Dompdf;
-use Dompdf\Options;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Support\Collection;
-use Maatwebsite\Excel\ExcelServiceProvider;
 use Yajra\DataTables\EloquentDataTable;
-use Yajra\DataTables\Exceptions\Exception;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
-use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
-use Yajra\DataTables\Services\DataTablesExportHandler;
 
 class CarBrandDataTable extends DataTable
 {
@@ -28,6 +22,9 @@ class CarBrandDataTable extends DataTable
     protected $allowCSVExport = true;
     protected $allowPDFExport = true;
     protected array $actions = ['print', 'csv', 'excel', 'pdf', 'deleteSelectedRows'];
+    protected array $dropdownActions = ['edit', 'show', 'delete'];
+    protected string $route = 'admin.cars.brand';
+    protected string $id = 'carbrand-table';
 
     /**
      * Build DataTable class.
@@ -39,7 +36,27 @@ class CarBrandDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             // ->addColumn('action', 'path.to.action.view')
-            ->addColumn('action', 'carbrand.action')
+            ->addColumn('action', function($row){
+                return '<div class="w-100 cursor-pointer dropdown-action">
+                                    <div class="w-100" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                       <i class="fa-solid fa-ellipsis-vertical"></i>
+                                    </div>
+                                    <ul class="dropdown-menu">
+                                        <li data-href="'.route($this->route.'.show' , $row->id).'" class="dt-ajax" data-type="show">
+                                        <i class="fa fa-circle-info"></i>
+                                            Szczegóły
+                                        </li>
+                                        <li data-href="'.route($this->route.'.edit' , $row->id).'" class="dt-ajax" data-type="edit">
+                                            <i class="fa fa-pencil"></i>
+                                            Edytuj
+                                        </li>
+                                        <li data-href="'.route($this->route.'.destroy' , $row->id).'" class="dt-ajax" data-type="delete">
+                                            <i class="fa fa-trash"></i>
+                                            Usuń
+                                        </li>
+                                    </ul>
+                                </div>';
+            })
             ->setRowId('id');
     }
 
@@ -62,17 +79,18 @@ class CarBrandDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('carbrand-table')
+            ->setTableId($this->id)
             ->autoWidth(true)
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->lengthMenu([[10, 25, 50, 75, 100, -1], [10, 25, 50, 75, 100, "Wszystkie"]])
             ->pageLength(10)
             ->pagingType('simple_numbers')
-            ->dom("<'mt-2'B><'dt-toolbar d-flex justify-content-between mt-3'lf>r<t><'d-flex justify-content-between mt-3'ip>")
+            ->dom("<'mt-2'B><'dt-toolbar d-flex justify-content-between mt-3'lf>r<'table--scrollable't><'d-flex justify-content-between mt-3'ip>")
             ->orderBy(1)
             ->language($this->getLanguageByName('pl'))
             ->selectStyleMultiShift()
+            ->selectSelector('td:not(.no-select)')
             ->stateSave(true)
             ->buttons([
                 ['extend' => 'collection',
@@ -171,7 +189,7 @@ class CarBrandDataTable extends DataTable
                     'text' => 'Odznacz wszystko',
                     'className' => 'btn btn-success fs-10 mb-2',
                     'extend' => 'selectNone'
-                ],
+                ]
             ]);
     }
 
@@ -189,7 +207,7 @@ class CarBrandDataTable extends DataTable
                 ->exportable(false)
                 ->printable(false)
                 ->width(60)
-                ->addClass('text-center'),
+                ->addClass('text-center no-select'),
         ];
     }
 

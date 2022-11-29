@@ -34,10 +34,6 @@ class CarBrandsController extends Controller
     public function index(CarBrandDataTable $dataTable)
     {
         return $dataTable->setFilename('Marki_samochodów')->render('admin.pages.cars.brand');
-//        return DataTables::of(CarBrand::all())
-//            ->addColumn('action', '')
-//            ->addIndexColumn()
-//            ->rawColumns(['action'])->make();
     }
 
     /**
@@ -95,9 +91,8 @@ class CarBrandsController extends Controller
      * @param CarBrand $brand
      * @return JsonResponse
      */
-    public function destroy(Request $request, int|CarBrand $brand): JsonResponse
+    public function destroy(Request $request, int $brand): JsonResponse
     {
-        dd('test');
         if (isset($request->all()['data'])) {
             $carBrands = CarBrand::whereIn('id', $request->all()['data'])->get();
             foreach ($carBrands as $br) {
@@ -106,6 +101,7 @@ class CarBrandsController extends Controller
             }
             return $this->successJsonResponse(__('Pomyślnie usunięto :count rekordów', ['count' => count($request->all()['data'])]));
         } else {
+            $brand = CarBrand::find($brand);
             $this->logService->add($brand, $request, old_data: $brand->toArray());
             if ($brand->delete()) {
                 return $this->successJsonResponse(__('Pomyślnie usunięto markę'));
@@ -114,4 +110,5 @@ class CarBrandsController extends Controller
         }
 
     }
+
 }

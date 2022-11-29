@@ -5,6 +5,7 @@ mix.webpackConfig({
     resolve: {
         alias: {
             ziggy: path.resolve('vendor/tighten/ziggy/dist/js/route.js'),
+            '@js': path.resolve(__dirname, 'resources/js'),
         },
     },
 });
