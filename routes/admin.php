@@ -31,8 +31,15 @@ Route::prefix('/admin')->name('admin.')->group(function () {
 
 Route::prefix('/admin')->name('admin.')->group(function () {
     Route::prefix('/cars')->name('cars.')->group(function () {
+        Route::post('/brands/export', [CarBrandsController::class, 'export'])->name('brand.export');
+        Route::get('/brands/download', [CarBrandsController::class, 'download'])->name('brand.download');
         Route::resource('/brands', CarBrandsController::class);
     });
 });
 
+Route::prefix('/admin')->name('admin.')->group(function () {
+    Route::prefix('/datatables')->name('datatables.')->group(function () {
+        Route::post('/reorder/{id}', [\App\Http\Controllers\Admin\Datatables\DatatableStateController::class, 'reorder'])->name('reorder');
+    });
+});
 

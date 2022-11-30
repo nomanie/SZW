@@ -6,10 +6,10 @@
         </div>
         <div class="col-lg-10" style="background: #ececec;">
             <car-brands table-id="carbrand-table" modal-id="car-brand-modal"></car-brands>
-            {{$dataTable->table()}}
-            @push('scripts')
-                {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
-            @endpush
+{{--            {{$dataTable->table()}}--}}
+{{--            @push('scripts')--}}
+{{--                {{ $dataTable->scripts(attributes: ['type' => 'module']) }}--}}
+{{--            @endpush--}}
         </div>
     </div>
     <div id='dt-toast' class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000" style="position: absolute; top: 0; right: 0;">

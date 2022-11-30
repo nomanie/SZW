@@ -3,37 +3,45 @@
 namespace App\Http\Controllers\Admin\Cars;
 
 use App\Http\Controllers\Controller;
-use App\DataTables\Admin\Cars\CarBrandDataTable;
 use App\Http\Requests\System\Cars\StoreCarBrandRequest;
 use App\Http\Requests\System\Cars\UpdateCarBrandRequest;
 use App\Http\Resources\Admin\Cars\BrandResource;
 use App\Models\System\Cars\CarBrand;
 use App\Services\System\Cars\CarBrandService;
+use App\Generators\PDF\PdfGenerator;
 use App\Services\System\LogService;
 use App\Traits\JsonResponseTrait;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\MessageBag;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
+use Yajra\DataTables\Facades\DataTables;
 
 class CarBrandsController extends Controller
 {
     use JsonResponseTrait;
 
-    public function __construct(protected CarBrandService $service, protected LogService $logService)
+    public function __construct(
+        protected CarBrandService $service,
+        protected LogService $logService,
+        protected PdfGenerator $pdfGenerator
+    )
     {
         //@todo dodać permisje
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return JsonResponse
-     * @throws Exception
-     */
-    public function index(CarBrandDataTable $dataTable)
+    public function index(Request $request)
     {
-        return $dataTable->setFilename('Marki_samochodów')->render('admin.pages.cars.brand');
+        if ($request->ajax()) {
+            return DataTables::of(CarBrand::all())
+                ->addColumn('action', function($row){
+                    $actionBtn = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm">Edit</a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm">Delete</a>';
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('admin.pages.cars.brand');
     }
 
     /**
@@ -78,7 +86,7 @@ class CarBrandsController extends Controller
         $newBrand = $this->service->saveOrUpdate($input, $brand);
 
         if ($newBrand) {
-            $this->logService->add($brand, $request, old_data: $brand->toArray() ,new_data: $input);
+            $this->logService->add($brand, $request, old_data: $brand->toArray(), new_data: $input);
             return $this->successJsonResponse(__('Pomyślnie Edytowano markę'));
         }
         return $this->errorJsonResponse(__('Edycja marki nie powiodła się'));
@@ -109,6 +117,26 @@ class CarBrandsController extends Controller
             return $this->errorJsonResponse(__('Nie udało się usunąć marki'));
         }
 
+    }
+
+    public function export(Request $request)
+    {
+        $data = $request->all();
+        if ($request->type === 'pdf') {
+            $this->pdfGenerator
+                ->setView('vendor.datatables.print')
+                ->setModel('App\Models\System\Cars\CarBrand')
+                ->getDataFromAjaxRequest($data)
+                ->setFilename('Marki_samochodow')
+                ->generate();
+        }
+
+        return $this->pdfGenerator->getFile();
+    }
+
+    public function download()
+    {
+        return $this->pdfGenerator->download();
     }
 
 }

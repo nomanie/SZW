@@ -3,6 +3,7 @@
 namespace App\DataTables\Admin\Cars;
 
 use App\DataTables\DataTableExpander;
+use App\Models\DatatableState;
 use App\Models\System\Cars\CarBrand;
 use App\Traits\JsonResponseTrait;
 use Illuminate\Contracts\Support\Renderable;
@@ -26,6 +27,12 @@ class CarBrandDataTable extends DataTable
     protected string $route = 'admin.cars.brand';
     protected string $id = 'carbrand-table';
 
+    public function __construct(protected DatatableState $dtState)
+    {
+        parent::__construct();
+        $this->dtState = DatatableState::where('table_id', $this->id)->first();
+    }
+
     /**
      * Build DataTable class.
      *
@@ -36,21 +43,21 @@ class CarBrandDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             // ->addColumn('action', 'path.to.action.view')
-            ->addColumn('action', function($row){
+            ->addColumn('action', function ($row) {
                 return '<div class="w-100 cursor-pointer dropdown-action">
                                     <div class="w-100" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                        <i class="fa-solid fa-ellipsis-vertical"></i>
                                     </div>
                                     <ul class="dropdown-menu">
-                                        <li data-href="'.route($this->route.'.show' , $row->id).'" class="dt-ajax" data-type="show">
+                                        <li data-href="' . route($this->route . '.show', $row->id) . '" class="dt-ajax" data-type="show">
                                         <i class="fa fa-circle-info"></i>
                                             Szczegóły
                                         </li>
-                                        <li data-href="'.route($this->route.'.edit' , $row->id).'" class="dt-ajax" data-type="edit">
+                                        <li data-href="' . route($this->route . '.edit', $row->id) . '" class="dt-ajax" data-type="edit">
                                             <i class="fa fa-pencil"></i>
                                             Edytuj
                                         </li>
-                                        <li data-href="'.route($this->route.'.destroy' , $row->id).'" class="dt-ajax" data-type="delete">
+                                        <li data-href="' . route($this->route . '.destroy', $row->id) . '" class="dt-ajax" data-type="delete">
                                             <i class="fa fa-trash"></i>
                                             Usuń
                                         </li>
@@ -177,7 +184,7 @@ class CarBrandDataTable extends DataTable
                     'text' => 'Usuń zaznaczone',
                     'className' => 'btn btn-danger fs-10 mb-2',
                     'extend' => 'deleteSelectedRows',
-                    'delete_route' =>'admin.cars.brand.destroy',
+                    'delete_route' => 'admin.cars.brand.destroy',
                     'selected' => true
                 ],
                 [
@@ -200,15 +207,26 @@ class CarBrandDataTable extends DataTable
      */
     public function getColumns(): array
     {
-        return [
-            Column::make('id'),
-            Column::make('name'),
-            Column::computed('action')
-                ->exportable(false)
-                ->printable(false)
-                ->width(60)
-                ->addClass('text-center no-select'),
-        ];
+        $columns = [];
+        foreach ($this->getColumnsOrder() as $state) {
+            if ($state['col'] !== 'action') {
+                if ($state['col'] === 'id') {
+                    $columns[] = Column::make($state['col'])
+                        ->width(50);
+                } else {
+                    $columns[] = Column::make($state['col']);
+                }
+            } else {
+                $columns[] = Column::computed($state['col'])
+                    ->exportable(false)
+                    ->printable(false)
+                    ->width(60)
+                    ->addClass('text-center no-select');
+            }
+
+        }
+
+        return $columns;
     }
 
     /**
@@ -308,5 +326,17 @@ class CarBrandDataTable extends DataTable
         $data = $this->getSelectedRows() ?? $this->getDataForPrint();
 
         return view($this->printPreview, compact('data'));
+    }
+
+    protected function getColumnsOrder()
+    {
+        $columns = $this->dtState->column_order;
+        array_multisort(
+            array_column($columns, "index"),
+            SORT_ASC,
+            $columns
+        );
+
+        return $columns;
     }
 }

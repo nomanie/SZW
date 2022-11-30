@@ -203,7 +203,6 @@ export default {
                             },
                         },
                         {
-                            extend:'pdfHtml5',
                             text:'<i class="fa-solid fa-file-pdf"></i> PDF',
                             filename: _self.tableName,
                             orientation:'landscape',
@@ -213,20 +212,18 @@ export default {
                                     selected: true
                                 }
                             },
-                            customize : function(doc){
-                                var colCount = new Array();
-                                document.querySelector("#" + _self.tableId).querySelectorAll('thead tr:first-child th').forEach(function(item){
-                                    if(!item.classList.contains("not-exportable")) {
-                                        if(item.getAttribute('colspan')){
-                                            for(var i = 1;i <= item.getAttribute('colspan'); i++){
-                                                colCount.push('*');
-                                            }
-                                        }else{
-                                            colCount.push('*');
-                                        }
-                                    }
-                                });
-                                doc.content[1].table.widths = colCount;
+                            action: function ( e, dt, node, config ) {
+                                let columns = _self.columns.filter(column => column.exportable !== false)
+                                let rows = (dt.rows( { selected: true } ).data())
+                                let ids = rows.map(row => row.id).toArray()
+                                let data = {
+                                    type: 'pdf',
+                                    columns: columns.map(column => column.data),
+                                    ids: ids
+                                }
+                                _self.$http.post(route('admin.cars.brand.export'), data).then((response) => {
+                                    window.location = route('admin.cars.brand.download')
+                                })
                             }
                         },
                         {
@@ -263,6 +260,13 @@ export default {
                     text: 'Odznacz wszystko',
                     className: 'btn btn-success fs-10 mb-2',
                     extend: 'selectNone'
+                },
+                {
+                    text: 'Dodaj rekord',
+                    className: 'btn btn-primary fs-10 mb-2',
+                    init: function(api, node, config) {
+                        $(node).removeClass('btn-secondary')
+                    }
                 },
 
             ],
