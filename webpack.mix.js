@@ -5,6 +5,7 @@ mix.webpackConfig({
     resolve: {
         alias: {
             ziggy: path.resolve('vendor/tighten/ziggy/dist/js/route.js'),
+            '@js': path.resolve(__dirname, 'resources/js'),
         },
     },
 });
@@ -22,4 +23,5 @@ mix.webpackConfig({
 
 mix.js('resources/js/app.js', 'public/js')
     .vue()
-    .sass('resources/sass/app.scss', 'public/css');
+    .sass('resources/sass/main.scss', 'public/css')
+    .sass('resources/sass/admin.scss', 'public/css/admin');

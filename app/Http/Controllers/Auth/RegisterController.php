@@ -10,7 +10,7 @@ use App\Services\Auth\RegisterService;
 use App\Services\System\LogService;
 use App\Traits\EmailExistsInAccountTypeTrait;
 use App\Traits\JsonResponseTrait;
-use \Symfony\Component\HttpFoundation\JsonResponse;
+use Illuminate\Http\JsonResponse;
 
 class RegisterController extends Controller
 {
