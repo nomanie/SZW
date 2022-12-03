@@ -33,6 +33,8 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import "jszip";
 import $ from "jquery";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+import dtMixin from '../mixins/dtMixin';
 export default {
     name: 'dataTables',
     components: {
@@ -92,201 +94,29 @@ export default {
             default: null
         },
         reloadTable: {
-            Type: Number,
+            type: Number,
             default: null
+        },
+        modalId: {
+            type: String,
+            default: 'false'
+        },
+        reloadDT: {
+            type: Number,
+            default: 0
         }
     },
+    mixins: [dtMixin],
     data(){
         return {
-            data: this.table,
             datatable: null,
-            cols: this.columns
+            cols: this.columns,
+            options: [],
+            data: null
         }
     },
     mounted() {
-        var _self = this
-        this.datatable = $("#" + this.tableId).DataTable({
-            autoWidth: true,
-            language: {
-                url: 'http://127.0.0.1:8000/lang/pl/datatables.json'
-            },
-            processing: true,
-            serverSide: false,
-            ajax: route(this.apiUrl),
-            pageLength: this.perPage,
-            columns: this.cols,
-            scrollY: '60vh',
-            scrollX: this.scrollX,
-            scrollCollapse: true,
-            searching: this.searching,
-            stateSave: this.stateSave,
-            buttons: [
-                {
-                    extend: 'collection',
-                    text: 'Export',
-                    className: 'action-buttons mb-2 fs-10',
-                    buttons: [
-                        {
-                            extend: 'copy',
-                            text: '<i class="fa-regular fa-copy"></i> Skopiuj',
-                            exportOptions: {
-                                columns: ':visible :not(.not-exportable)'
-                            },
-                        },
-                        {
-                            extend: 'csvHtml5',
-                            text: '<i class="fa-solid fa-table-cells-large"></i> CSV',
-                            filename: _self.tableName,
-                            exportOptions: {
-                                columns: ':visible :not(.not-exportable)'
-                            },
-                        },
-                        {
-                            extend:'pdfHtml5',
-                            text:'<i class="fa-solid fa-file-pdf"></i> PDF',
-                            filename: _self.tableName,
-                            orientation:'landscape',
-                            exportOptions: {
-                                columns: ':visible :not(.not-exportable)'
-                            },
-                            customize : function(doc){
-                                var colCount = new Array();
-
-                                document.querySelector("#" + _self.tableId).querySelectorAll('thead tr:first-child th').forEach(function(item){
-                                    if(!item.classList.contains("not-exportable")) {
-                                       if(item.getAttribute('colspan')){
-                                           for(var i = 1;i <= item.getAttribute('colspan'); i++){
-                                               colCount.push('*');
-                                           }
-                                       }else{
-                                           colCount.push('*');
-                                       }
-                                   }
-                                });
-                                doc.content[1].table.widths = colCount;
-                            }
-                        },
-                        {
-                            extend: 'print',
-                            text: '<i class="fa-solid fa-print"></i> Drukuj',
-                            filename: _self.tableName,
-                            exportOptions: {
-                                columns: ':visible :not(.not-exportable)'
-                            },
-                        },
-                    ]
-                },
-                {
-                    extend: 'collection',
-                    text: 'Zaznaczone',
-                    className: 'action-buttons mb-2 fs-10',
-                    buttons: [
-                        {
-                            extend: 'copy',
-                            text: '<i class="fa-regular fa-copy"></i> Skopiuj',
-                            exportOptions: {
-                                columns: ':visible :not(.not-exportable)',
-                                modifier: {
-                                    selected: true
-                                }
-                            },
-                        },
-                        {
-                            extend: 'csvHtml5',
-                            text: '<i class="fa-solid fa-table-cells-large"></i> CSV',
-                            filename: _self.tableName,
-                            exportOptions: {
-                                columns: ':visible :not(.not-exportable)',
-                                modifier: {
-                                    selected: true
-                                }
-                            },
-                        },
-                        {
-                            text:'<i class="fa-solid fa-file-pdf"></i> PDF',
-                            filename: _self.tableName,
-                            orientation:'landscape',
-                            exportOptions: {
-                                columns: ':visible :not(.not-exportable)',
-                                modifier: {
-                                    selected: true
-                                }
-                            },
-                            action: function ( e, dt, node, config ) {
-                                let columns = _self.columns.filter(column => column.exportable !== false)
-                                let rows = (dt.rows( { selected: true } ).data())
-                                let ids = rows.map(row => row.id).toArray()
-                                let data = {
-                                    type: 'pdf',
-                                    columns: columns.map(column => column.data),
-                                    ids: ids
-                                }
-                                _self.$http.post(route('admin.cars.brand.export'), data).then((response) => {
-                                    window.location = route('admin.cars.brand.download')
-                                })
-                            }
-                        },
-                        {
-                            extend: 'print',
-                            text: '<i class="fa-solid fa-print"></i> Drukuj',
-                            filename: _self.tableName,
-                            exportOptions: {
-                                columns: ':visible :not(.not-exportable)',
-                                modifier: {
-                                    selected: true
-                                }
-                            },
-                        },
-                    ]
-                },
-                {
-                    extend: 'colvis',
-                    text: 'Kolumny',
-                    className: 'btn fs-10 ms-1 mb-2',
-                },
-                {
-                    text: 'Usuń zaznaczone',
-                    className: 'btn btn-danger fs-10 mb-2',
-                    action: function ( e, dt, node, config ) {
-                        _self.removeSelected(dt.cells('.selected', 0).data().toArray())
-                    }
-                },
-                {
-                    text: 'Zaznacz wszystko',
-                    className: 'btn btn-success fs-10 mb-2',
-                    extend: 'selectAll'
-                },
-                {
-                    text: 'Odznacz wszystko',
-                    className: 'btn btn-success fs-10 mb-2',
-                    extend: 'selectNone'
-                },
-                {
-                    text: 'Dodaj rekord',
-                    className: 'btn btn-primary fs-10 mb-2',
-                    init: function(api, node, config) {
-                        $(node).removeClass('btn-secondary')
-                    }
-                },
-
-            ],
-            lengthMenu: [ [10, 25, 50, 75, 100, -1], [10, 25, 50, 75, 100, "Wszystkie"] ],
-            // B - buttons | l -length changing | f - filtering inputs | r - processing | t - table | i - table information
-            // p - pagination control | R - col reorder | P - search panes
-            dom: '<"mt-2"B><"dt-toolbar d-flex justify-content-between mt-3"lf>r<t><"d-flex justify-content-between mt-3"ip>',
-            colReorder: this.colReorder,
-            fixedHeader: this.fixedHeader,
-            select: {
-                style: 'multi',
-                selector: ':not(.not-selectable > *, .not-selectable)'
-            },
-        })
-        $('#' + this.tableId).on('click', '.btn-delete', function (e) {
-            _self.remove(this.dataset.row_id)
-        } );
-        $('#' + this.tableId).on('click', '.btn-edit', function (e) {
-            _self.edit(this.dataset.row_id)
-        } );
+        this.render()
     },
     watch: {
         reloadTable: function() {
@@ -301,16 +131,191 @@ export default {
                 })
             }
         },
-        remove(id) {
-            if (this.deleteUrl) {
-                this.$http.delete(route(this.deleteUrl, id)).then((response) => {
-                    this.datatable.ajax.reload();
-                })
-            }
-        },
-        edit(id) {
-            this.$emit('update', id)
-        },
+        render() {
+            var _self = this
+            this.datatable = $("#" + this.tableId).DataTable({
+                autoWidth: true,
+                language: {
+                    url: 'http://127.0.0.1:8000/lang/pl/datatables.json'
+                },
+                processing: true,
+                serverSide: true,
+                ajax: route(this.apiUrl),
+                pageLength: this.perPage,
+                columns: this.cols,
+                scrollY: '60vh',
+                scrollX: this.scrollX,
+                scrollCollapse: true,
+                searching: this.searching,
+                stateSave: this.stateSave,
+                buttons: [
+                    {
+                        extend: 'collection',
+                        text: 'Export',
+                        className: 'action-buttons mb-2 fs-10',
+                        buttons: [
+                            {
+                                extend: 'copy',
+                                text: '<i class="fa-regular fa-copy"></i> Skopiuj',
+                                exportOptions: {
+                                    columns: ':visible :not(.not-exportable)'
+                                },
+                            },
+                            {
+                                extend: 'csvHtml5',
+                                text: '<i class="fa-solid fa-table-cells-large"></i> CSV',
+                                filename: _self.tableName,
+                                exportOptions: {
+                                    columns: ':visible :not(.not-exportable)'
+                                },
+                            },
+                            {
+                                extend:'pdfHtml5',
+                                text:'<i class="fa-solid fa-file-pdf"></i> PDF',
+                                filename: _self.tableName,
+                                orientation:'landscape',
+                                exportOptions: {
+                                    columns: ':visible :not(.not-exportable)'
+                                },
+                                customize : function(doc){
+                                    var colCount = new Array();
+
+                                    document.querySelector("#" + _self.tableId).querySelectorAll('thead tr:first-child th').forEach(function(item){
+                                        if(!item.classList.contains("not-exportable")) {
+                                            if(item.getAttribute('colspan')){
+                                                for(var i = 1;i <= item.getAttribute('colspan'); i++){
+                                                    colCount.push('*');
+                                                }
+                                            }else{
+                                                colCount.push('*');
+                                            }
+                                        }
+                                    });
+                                    doc.content[1].table.widths = colCount;
+                                }
+                            },
+                            {
+                                extend: 'print',
+                                text: '<i class="fa-solid fa-print"></i> Drukuj',
+                                filename: _self.tableName,
+                                exportOptions: {
+                                    columns: ':visible :not(.not-exportable)'
+                                },
+                            },
+                        ]
+                    },
+                    {
+                        extend: 'collection',
+                        text: 'Zaznaczone',
+                        className: 'action-buttons mb-2 fs-10',
+                        buttons: [
+                            {
+                                extend: 'copy',
+                                text: '<i class="fa-regular fa-copy"></i> Skopiuj',
+                                exportOptions: {
+                                    columns: ':visible :not(.not-exportable)',
+                                    modifier: {
+                                        selected: true
+                                    }
+                                },
+                            },
+                            {
+                                extend: 'csvHtml5',
+                                text: '<i class="fa-solid fa-table-cells-large"></i> CSV',
+                                filename: _self.tableName,
+                                exportOptions: {
+                                    columns: ':visible :not(.not-exportable)',
+                                    modifier: {
+                                        selected: true
+                                    }
+                                },
+                            },
+                            {
+                                text:'<i class="fa-solid fa-file-pdf"></i> PDF',
+                                filename: _self.tableName,
+                                orientation:'landscape',
+                                exportOptions: {
+                                    columns: ':visible :not(.not-exportable)',
+                                    modifier: {
+                                        selected: true
+                                    }
+                                },
+                                action: function ( e, dt, node, config ) {
+                                    let columns = _self.columns.filter(column => column.exportable !== false)
+                                    let rows = (dt.rows( { selected: true } ).data())
+                                    let ids = rows.map(row => row.id).toArray()
+                                    let data = {
+                                        type: 'pdf',
+                                        columns: columns.map(column => column.data),
+                                        ids: ids
+                                    }
+                                    _self.$http.post(route('admin.cars.brand.export'), data).then((response) => {
+                                        window.location = route('admin.cars.brand.download', response.data)
+                                    })
+                                }
+                            },
+                            {
+                                extend: 'print',
+                                text: '<i class="fa-solid fa-print"></i> Drukuj',
+                                filename: _self.tableName,
+                                exportOptions: {
+                                    columns: ':visible :not(.not-exportable)',
+                                    modifier: {
+                                        selected: true
+                                    }
+                                },
+                            },
+                        ]
+                    },
+                    {
+                        extend: 'colvis',
+                        text: 'Kolumny',
+                        className: 'btn fs-10 ms-1 mb-2',
+                        columnText: function(dt, idx, title){
+                            return title !== '' ? title : 'Akcje'
+                        }
+                    },
+                    {
+                        text: 'Usuń zaznaczone',
+                        className: 'btn btn-danger fs-10 mb-2',
+                        action: function ( e, dt, node, config ) {
+                            _self.removeSelected(dt.cells('.selected', 0).data().toArray())
+                        }
+                    },
+                    {
+                        text: 'Zaznacz wszystko',
+                        className: 'btn btn-success fs-10 mb-2',
+                        extend: 'selectAll'
+                    },
+                    {
+                        text: 'Odznacz wszystko',
+                        className: 'btn btn-success fs-10 mb-2',
+                        extend: 'selectNone'
+                    },
+                    {
+                        text: 'Dodaj rekord',
+                        className: 'btn btn-primary fs-10 mb-2',
+                        init: function(api, node, config) {
+                            $(node).removeClass('btn-secondary')
+                        },
+                        action: function ( e, dt, node, config ){
+                           _self.$emit('add')
+                        }
+                    },
+
+                ],
+                lengthMenu: [ [10, 25, 50, 75, 100, -1], [10, 25, 50, 75, 100, "Wszystkie"] ],
+                // B - buttons | l -length changing | f - filtering inputs | r - processing | t - table | i - table information
+                // p - pagination control | R - col reorder | P - search panes
+                dom: '<"mt-2"B><"dt-toolbar d-flex justify-content-between mt-3"lf>r<t><"d-flex justify-content-between mt-3"ip>',
+                colReorder: this.colReorder,
+                fixedHeader: this.fixedHeader,
+                select: {
+                    style: 'multi',
+                    selector: ':not(.not-selectable, .not-selectable *)'
+                },
+            })
+        }
     }
 }
 </script>

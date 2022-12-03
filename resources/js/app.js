@@ -9,7 +9,6 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
 import 'bootstrap';
-import './plugins/datatables';
 
 window.Vue = require('vue').default;
 // auth components

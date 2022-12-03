@@ -13,8 +13,6 @@ use App\Services\System\LogService;
 use App\Traits\JsonResponseTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
 class CarBrandsController extends Controller
@@ -35,8 +33,26 @@ class CarBrandsController extends Controller
         if ($request->ajax()) {
             return DataTables::of(CarBrand::all())
                 ->addColumn('action', function($row){
-                    $actionBtn = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm">Edit</a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm">Delete</a>';
-                    return $actionBtn;
+                    $route = 'admin.cars.brand';
+                    return '<div class="w-100 cursor-pointer dropdown-action">
+                                    <div class="w-100" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                       <i class="fa-solid fa-ellipsis-vertical"></i>
+                                    </div>
+                                    <ul class="dropdown-menu">
+                                        <li class="dt-ajax" data-type="show" data-id="' . $row->id . '">
+                                        <i class="fa fa-circle-info"></i>
+                                            Szczegóły
+                                        </li>
+                                        <li class="dt-ajax" data-type="edit" data-id="' . $row->id . '">
+                                            <i class="fa fa-pencil"></i>
+                                            Edytuj
+                                        </li>
+                                        <li class="dt-ajax" data-type="delete" data-id="' . $row->id . '">
+                                            <i class="fa fa-trash"></i>
+                                            Usuń
+                                        </li>
+                                    </ul>
+                                </div>';
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -130,11 +146,11 @@ class CarBrandsController extends Controller
                 ->setFilename('Marki_samochodow')
                 ->generate();
         }
-
+        //@todo zrobić zapis do bazy i zwracanie id, przenieść folder głębiej
         return $this->pdfGenerator->getFile();
     }
 
-    public function download()
+    public function download(string $path)
     {
         return $this->pdfGenerator->download();
     }
