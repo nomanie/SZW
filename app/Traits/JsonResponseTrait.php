@@ -1,7 +1,8 @@
 <?php
 namespace App\Traits;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
+
+use Illuminate\Http\JsonResponse;
 
 trait JsonResponseTrait {
     /** Zwraca pozytywną odpowiedź
@@ -10,7 +11,7 @@ trait JsonResponseTrait {
      * @param array|null $data - dane
      * @return JsonResponse
      */
-    public function successJsonResponse(string $message, int $status = 200, ?array $data = null): JsonResponse
+    public function successJsonResponse(string $message = '', int $status = 200, ?array $data = null): JsonResponse
     {
         return new JsonResponse(['message' => $message, 'data' => $data], $status);
     }
@@ -21,7 +22,7 @@ trait JsonResponseTrait {
      * @param array|null $data - dane
      * @return JsonResponse
      */
-    public function errorJsonResponse(string $message, int $status = 400, ?array $data = null): JsonResponse
+    public function errorJsonResponse(string $message = '', int $status = 400, ?array $data = null): JsonResponse
     {
         return new JsonResponse(['message' => $message, 'data' => $data], $status);
     }

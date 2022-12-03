@@ -13,7 +13,7 @@
             crossorigin="anonymous"></script>
         <script src="https://kit.fontawesome.com/6e38d77999.js" crossorigin="anonymous"></script>
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="{{mix('css/app.css')}}">
+        <link rel="stylesheet" href="{{mix('css/main.css')}}">
         <meta name="csrf-token" content="{{ csrf_token() }}" />
     </head>
     <body class="antialiased">
@@ -42,4 +42,6 @@
        </div>
     </body>
     <script src="{{mix('js/app.js')}}"></script>
+    <script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
+    @stack('scripts')
 </html>

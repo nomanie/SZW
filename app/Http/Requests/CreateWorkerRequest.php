@@ -31,7 +31,7 @@ class CreateWorkerRequest extends FormRequest
             'last_name' => 'required|string|min:3',
             'contract_from' => 'required|date',
             'contract_to' => 'required|date',
-            'email' => 'email',
+            'login' => 'required',
             'phone' => 'string|min:9',
             'contract_type' => Rule::in(ContractTypeEnum::getList()),
             'position' => 'sometimes',
@@ -55,7 +55,7 @@ class CreateWorkerRequest extends FormRequest
             'contract_to.date' => 'To pole musi być datą',
             'phone.string' => 'Numer telefonu musi być ciągiem znaków',
             'phone.min' => 'Numer telefonu jest błędny',
-            'email.email' => 'Adres e-mail jest błędny',
+            'login.required' => 'Login jest wymagany',
             'contract_type.in' => 'Rodzaj umowy jest zły',
         ];
     }
