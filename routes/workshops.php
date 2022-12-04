@@ -22,7 +22,7 @@ use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 Route::group([
     'prefix' => '/{tenant}',
     'as' => 'workshop.',
-    'middleware' => [InitializeTenancyByPath::class, \App\Http\Middleware\WorkshopMiddleware::class],
+    'middleware' => [\App\Http\Middleware\WorkshopMiddleware::class, InitializeTenancyByPath::class],
 ], function () {
     Route::get('/dashboard', function () {
         return view('workshop.pages.dashboard');

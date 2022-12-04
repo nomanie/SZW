@@ -12,48 +12,63 @@
                         Zaloguj się
                     </div>
                 </div>
-                <div class="row mt-3">
-                    <div class="col-12 d-flex justify-content-center">
-                        <div>
-                            <label for="login">Adres e-mail</label>
-                            <input v-model="form.email" type="email" class="form-control" placeholder="Adres e-mail">
-                        </div>
+                <div class="row mt-3 justify-content-center">
+                    <div class="col-12 col-md-4">
+                        <label for="login">Adres e-mail</label>
+                        <input
+                            v-model="form.email"
+                            type="email"
+                            class="form-control"
+                            placeholder="Adres e-mail"
+                            :class="{invalid : errors.email}"
+                        >
+                        <error :errors="errors.email"></error>
                     </div>
                 </div>
-                <div class="row mt-3">
-                    <div class="col-12 d-flex justify-content-center">
-                        <div>
-                            <label for="password">Hasło</label>
-                            <input v-model="form.password" type="password" class="form-control" placeholder="Hasło">
-                        </div>
+                <div class="row mt-3 justify-content-center">
+                    <div class="col-12 col-md-4">
+                        <label for="password">Hasło</label>
+                        <input
+                            v-model="form.password"
+                            type="password"
+                            class="form-control"
+                            placeholder="Hasło"
+                            :class="{invalid : errors.password}"
+                        >
+                        <error :errors="errors.password"></error>
                     </div>
                 </div>
-                <div class="row mt-3">
-                    <div class="col-12 d-flex justify-content-center">
-                        <div>
-                            <button class="btn btn-primary" @click="login()">Zaloguj się</button>
-                        </div>
+                <div class="row mt-3 justify-content-center">
+                    <div class="col-12 col-md-4 d-flex justify-content-center">
+                        <button class="btn btn-primary w-50" @click="login()">Zaloguj się</button>
                     </div>
                 </div>
                 <div class="row mt-5">
                     <div class="col-12 d-flex justify-content-center">
-                        <p>Nie masz jeszcze konta?</p>
+                        <h5>Nie masz jeszcze konta?</h5>
                     </div>
                 </div>
-                <div class="row mt-2">
-                    <div class="col-12 d-flex justify-content-center">
-                        <a href="">
-                            <button class="btn btn-warning">Zarejestruj się</button>
+                <div class="row mt-2 justify-content-center">
+                    <div class="col-12 col-md-4 d-flex justify-content-center">
+                        <a href="/register" class="w-50">
+                            <button class="btn btn-warning w-100">Zarejestruj się</button>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
+        <loader :loading="loading"></loader>
     </div>
 </template>
 <script>
+import error from "@js/assets/form/error";
+import loader from "@js/components/Loader";
 export default {
     name: 'login',
+    components: {
+        error,
+        loader
+    },
     props: {
         img: {
             type: String,
@@ -69,7 +84,9 @@ export default {
             form: {
                 email: null,
                 password: null
-            }
+            },
+            loading: false,
+            errors: {}
         }
     },
     mounted() {
@@ -82,8 +99,10 @@ export default {
     methods: {
         login() {
             this.$http.post(route('login'), this.form).then((response) => {
-                console.log(response.data)
-                window.location = response.data
+                localStorage.setItem('id', response.data.id)
+                window.location = response.data.route
+            }).catch((error) => {
+                this.errors = error.data.errors
             })
         }
     }

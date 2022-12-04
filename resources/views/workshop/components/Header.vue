@@ -63,29 +63,29 @@
                     <b-dropdown-divider></b-dropdown-divider>
                     <b-dropdown-item>
                         <i class="fa-regular fa-id-card"></i>
-                        <router-link to="/informations">
+                        <router-link :to="{name: 'informations'}">
                             <span>Informacje</span>
                         </router-link>
                     </b-dropdown-item>
                     <b-dropdown-item>
                         <i class="fa-solid fa-cogs"></i>
-                        <router-link to="/settings">
+                        <router-link :to="{name: 'settings'}">
                             <span>Ustawienia</span>
                         </router-link>
                     </b-dropdown-item>
                     <b-dropdown-item>
                         <i class="fa-solid fa-users"></i>
-                        <router-link to="/workers">
+                        <router-link :to="{name: 'workers'}">
                             <span>Użytkownicy</span>
                         </router-link>
                     </b-dropdown-item>
                     <b-dropdown-item>
                         <i class="fa-solid fa-bug"></i>
-                        <router-link to="/error-report">
+                        <router-link :to="{name: 'error-report'}">
                             <span>Zgłoś błąd</span>
                         </router-link>
                     </b-dropdown-item>
-                    <b-dropdown-item>
+                    <b-dropdown-item @click="logout()">
                         <i class="fa-solid fa-door-open"></i>
                         <span>Wyloguj</span>
                     </b-dropdown-item>
@@ -100,6 +100,15 @@ import NotificationList from "../../../js/components/NotificationList";
 
 export default {
     name: 'HeaderNav',
-    components: {NotificationList}
+    components: {NotificationList},
+    methods: {
+        logout() {
+            console.log('test')
+            this.$http.post(route('logout')).then((response) => {
+                localStorage.removeItem('id');
+                window.location = '/login'
+            })
+        }
+    }
 }
 </script>

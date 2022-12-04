@@ -1,7 +1,7 @@
 <template>
     <div class="sidebar">
         <div class="logo">
-            <router-link to="/dashboard">
+            <router-link :to="{name: 'dashboard'}">
                 <div class="img">
                     <img src="../../../../public/images/logoSZW.png" width="50">
                 </div>
@@ -16,7 +16,7 @@
         <div class="sidebar__list">
             <ul>
                 <li class="sidebar__list--item active">
-                    <router-link to="/dashboard">
+                    <router-link :to="{name: 'dashboard'}">
                         <div>
                             <i class="fa-solid fa-house"></i>
                             <p>
@@ -26,7 +26,7 @@
                     </router-link>
                 </li>
                 <li class="sidebar__list--item">
-                    <router-link to="/clients">
+                    <router-link :to="{name: 'clients'}">
                         <div>
                             <i class="fa-solid fa-users"></i>
                             <p>
@@ -46,7 +46,7 @@
 <!--                    </a>-->
 <!--                </li>-->
                 <li class="sidebar__list--item">
-                    <router-link to="/documents">
+                    <router-link :to="{name: 'documents'}">
                         <div>
                             <i class="fa-solid fa-file-lines"></i>
                             <p>
@@ -56,7 +56,7 @@
                     </router-link>
                 </li>
                 <li class="sidebar__list--item">
-                    <router-link to="/repairs">
+                    <router-link :to="{name: 'repairs'}">
                         <div>
                             <i class="fa-solid fa-wrench"></i>
                             <p>
@@ -66,7 +66,7 @@
                     </router-link>
                 </li>
                 <li class="sidebar__list--item">
-                    <router-link to="/messages">
+                    <router-link :to="{name: 'messages'}">
                         <div>
                             <i class="fa-solid fa-envelope"></i>
                             <p>
@@ -76,7 +76,7 @@
                     </router-link>
                 </li>
                 <li class="sidebar__list--item">
-                    <router-link to="/calendar">
+                    <router-link :to="{name: 'calendar'}">
                         <div>
                             <i class="fa-solid fa-calendar"></i>
                             <p>
@@ -106,7 +106,7 @@
                     </a>
                 </li>
                 <li class="sidebar__list--item">
-                    <router-link to="/support">
+                    <router-link :to="{name: 'support'}">
                         <div>
                             <i class="fa-solid fa-info-circle"></i>
                             <p>

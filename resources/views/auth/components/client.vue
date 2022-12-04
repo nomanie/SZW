@@ -1,6 +1,6 @@
 <template>
-    <div class="container mt-5 login">
-        <form>
+    <div class="container mt-5 login position-relative">
+        <div v-if="!created">
             <div class="row">
                 <div class="col-12 text-center">
                     <h4>Tworzenie standardowego konta</h4>
@@ -80,24 +80,44 @@
             </div>
             <div class="row justify-content-center mt-4">
                 <div class="col-12 col-lg-4">
-                    <a href="">Masz już konto?</a>
+                    <a href="/login">Masz już konto?</a>
                 </div>
             </div>
-        </form>
+        </div>
+        <div v-else>
+            <div class="row justify-content-center mt-5 mb-3">
+                <div class="col-12 col-lg-4 text-center">
+                    <h3>Konto zostało założone!</h3>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-4 d-flex justify-content-center">
+                    <a href="/login" class="w-100">
+                        <button class="btn btn-primary w-100 fs-20">
+                            Zaloguj się
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <loader :loading="loading"></loader>
     </div>
 </template>
 <script>
-import error from "../../../js/assets/form/error";
-
+import error from "@js/assets/form/error";
+import loader from "@js/components/Loader";
 export default {
     name: 'client',
     components: {
-        error
+        error,
+        loader
     },
     data() {
         return {
             form: {},
-            errors: {}
+            errors: {},
+            loading: false,
+            created: false
         }
     },
     mounted() {
@@ -115,6 +135,7 @@ export default {
         },
         save() {
             this.$http.post(route('register.client.post'), this.form).then((response) => {
+                this.created = true
             }).catch((error) => {
                 this.errors = error.data.errors
             })

@@ -6,13 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\System\Identity;
 use App\Models\User;
-use App\Services\Auth\RegisterService;
+use App\Services\Auth\AuthService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
-    public function __construct(protected RegisterService $service){}
+    public function __construct(protected AuthService $service){}
 
     public function login(LoginRequest $request)
     {
@@ -23,14 +24,13 @@ class LoginController extends Controller
         }
 
         $this->service->setIdentity(auth()->user()->id)->addTypesToSession();
-        return $this->service->getRoute();
+        return response()->json(['route' => $this->service->getRoute(), 'id' => auth()->user()->id]);
     }
 
     public function logout(Request $request)
     {
-        $user = User::find(auth()->user())->first();
-        $user->setRememberToken();
+        Auth::logout();
 
-        return redirect('/');
+        return redirect('/login');
     }
 }

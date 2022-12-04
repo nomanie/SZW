@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->string('tenancy_db_name')->nullable()->unique();
+            $table->boolean('is_admin')->default(false);
             $table->timestamps();
         });
     }

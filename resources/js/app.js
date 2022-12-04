@@ -1,6 +1,7 @@
 import Vue from "vue";
 import {Ziggy} from './ziggy';
 import router from './router';
+import workshopRouter from './workshop/router'
 import VueResource from "vue-resource"
 import Router from 'vue-router'
 import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
@@ -67,9 +68,10 @@ Vue.http.interceptors.push((request, next) => {
 
     next()
 })
-
 Vue.http.interceptors.push(function (request) {
+    this.loading = true
     return function (response) {
+        this.loading = false
         if (response.status >= 300) {
             this.$bvToast.toast(response.body.errors ? "Wystąpił błąd w formuląrzu" : response.data.message, {
                 title: 'Błąd', variant: 'danger',
@@ -83,5 +85,6 @@ Vue.http.interceptors.push(function (request) {
 })
 
 const app = new Vue({
-    router, el: '#app',
+    router: workshopRouter,
+    el: '#app',
 });

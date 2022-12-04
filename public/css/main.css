@@ -11768,9 +11768,14 @@ a:hover, router-link:hover {
   font-size: 20px;
   text-align: center;
 }
-.account-type:hover {
+.account-type:not(.disabled):hover {
   box-shadow: 1px 1px 2px 2px rgba(13, 110, 253, 0.6);
   transform: scale(1.05);
+}
+.account-type.disabled:hover {
+  color: inherit;
+  text-decoration: none;
+  cursor: default;
 }
 
 .fs-10 {
@@ -11779,6 +11784,10 @@ a:hover, router-link:hover {
 
 .fs-12 {
   font-size: 12px !important;
+}
+
+.fs-20 {
+  font-size: 20px !important;
 }
 
 .dt-button-collection {

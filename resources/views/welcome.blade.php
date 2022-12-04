@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="{{mix('css/main.css')}}">
         <meta name="csrf-token" content="{{ csrf_token() }}" />
     </head>
-    <body class="antialiased">
+    <body class="antialiased overflow-auto">
        <div id="app">
            @if (isset($content))
                @yield('content')
@@ -42,6 +42,5 @@
        </div>
     </body>
     <script src="{{mix('js/app.js')}}"></script>
-    <script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
     @stack('scripts')
 </html>

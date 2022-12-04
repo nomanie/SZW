@@ -19,6 +19,18 @@ return new class extends Migration
             $table->foreignId('identity_id')
                 ->references('id')->on('identities')
                 ->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('phone')->nullable();
+            $table->date('date_of_birth')->nullable();
+            $table->string('city')->nullable();
+            $table->string('street')->nullable();
+            $table->string('zip_code')->nullable();
+            $table->integer('building_number')->nullable();
+            $table->integer('flat_number')->nullable();
+            $table->string('avatar')->nullable();
+            $table->boolean('consent_sms_notification')->nullable();
+            $table->boolean('consent_marketing_notification')->nullable();
             $table->timestamps();
         });
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Auth;
 
 use App\Enums\AccountTypeEnum;
+use App\Rules\OneAccountTypeForIdentity;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterWorkshopRequest extends FormRequest
@@ -25,7 +26,7 @@ class RegisterWorkshopRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => ['required','email'],
+            'email' => ['required','email',new OneAccountTypeForIdentity(AccountTypeEnum::WORKSHOP)],
             'name' => 'required|string|min:2',
             'password' => 'required|string|confirmed|min:8',
             'nip' => 'required',
