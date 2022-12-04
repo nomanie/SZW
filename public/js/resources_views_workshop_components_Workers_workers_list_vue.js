@@ -55,7 +55,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.$http.get(route('api.get.options', {
-        "enum": 'App\\Enums\\Workshop\\ContractTypeEnum'
+        "enum": 'App\\Enums\\WorkshopMiddleware\\ContractTypeEnum'
       })).then(function (response) {
         _this2.options = response.data;
       })["catch"](function (error) {
@@ -70,7 +70,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       this.$http.get(route('api.get.options', {
-        "enum": 'App\\Enums\\Workshop\\PermissionEnum'
+        "enum": 'App\\Enums\\WorkshopMiddleware\\PermissionEnum'
       })).then(function (response) {
         _this3.permissions = response.data;
         console.log(_this3.permissions);
@@ -287,7 +287,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       this.$http.get(route('api.get.options', {
-        "enum": 'App\\Enums\\Workshop\\ContractTypeEnum'
+        "enum": 'App\\Enums\\WorkshopMiddleware\\ContractTypeEnum'
       })).then(function (response) {
         _this3.options = response.data;
       });

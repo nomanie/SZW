@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('workshops', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('admin_id')
-                ->references('id')->on('users')
+            $table->foreignId('identity_id')
+                ->references('id')->on('identities')
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->json('workshops')->nullable();
             $table->json('owners')->nullable();

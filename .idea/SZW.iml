@@ -133,6 +133,9 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/phenx/php-font-lib" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/knplabs/knp-snappy" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/barryvdh/laravel-snappy" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/stancl/jobpipeline" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/stancl/virtualcolumn" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/stancl/tenancy" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

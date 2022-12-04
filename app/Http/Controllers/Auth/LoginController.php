@@ -4,17 +4,17 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\System\Identity;
 use App\Models\User;
-use Illuminate\Auth\AuthenticationException;
+use App\Services\Auth\RegisterService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
-
 
 class LoginController extends Controller
 {
-    public function login(Request $request)
+    public function __construct(protected RegisterService $service){}
+
+    public function login(LoginRequest $request)
     {
         $data = $request->validated();
 
@@ -22,6 +22,8 @@ class LoginController extends Controller
             return response()->json(['errors' => ['password' => [0 => 'Hasło jest niepoprawne']]], 422);
         }
 
+        $this->service->setIdentity(auth()->user()->id)->addTypesToSession();
+        return $this->service->getRoute();
     }
 
     public function logout(Request $request)

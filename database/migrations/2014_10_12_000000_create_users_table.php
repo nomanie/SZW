@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
+    /** Ta migracja przechowuje instancje kont typu klient -> wszystkie
+     *  operacje są wykonywane na głównej domenie
      * Run the migrations.
      *
      * @return void
@@ -15,13 +16,9 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->foreignId('account_type')
-                ->references('id')->on('account_types')
-                ->cascadeOnUpdate()->cascadeOnDelete();
-            $table->rememberToken();
+            $table->foreignId('identity_id')
+                ->references('id')->on('identities')
+                ->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }
