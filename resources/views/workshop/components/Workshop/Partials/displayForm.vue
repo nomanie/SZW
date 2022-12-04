@@ -54,7 +54,7 @@ export default {
             this.$bvModal.hide('display_form_modal');
         },
         getFieldTypes() {
-            this.$http.get(route('api.get.options', {enum: 'App\\Enums\\Workshop\\FieldTypeEnum', function: 'getType'})).then((response) => {
+            this.$http.get(route('api.get.options', {enum: 'App\\Enums\\WorkshopMiddleware\\FieldTypeEnum', function: 'getType'})).then((response) => {
                 this.fieldTypes = response.data
             })
         }

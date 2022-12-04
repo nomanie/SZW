@@ -180,6 +180,7 @@ return [
         Yajra\DataTables\HtmlServiceProvider::class,
         Yajra\DataTables\ButtonsServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
+        App\Providers\TenancyServiceProvider::class,
     ],
 
     /*

@@ -379,17 +379,17 @@ return new class extends Migration {
             $ssangModels, $subaruModels, $suzukiModels, $tataModels, $teslaModels, $toyotaModels, $mielecModels,
             $volkswagenModels, $volvoModels, $zdModels];
         $now = Carbon::now();
-        foreach ($models as $brand) {
-            foreach ($brand['models'] as $model) {
-                DB::table('car_models')->insert(
-                    [
-                        'brand_id' => $brand['brand_id'],
-                        'name' => $model,
-                        'created_at' => $now,
-                        'updated_at' => $now
-                    ]);
-            }
-        }
+//        foreach ($models as $brand) {
+//            foreach ($brand['models'] as $model) {
+//                DB::table('car_models')->insert(
+//                    [
+//                        'brand_id' => $brand['brand_id'],
+//                        'name' => $model,
+//                        'created_at' => $now,
+//                        'updated_at' => $now
+//                    ]);
+//            }
+//        }
     }
 
     /**

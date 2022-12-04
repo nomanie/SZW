@@ -195,7 +195,7 @@ export default {
     },
     methods: {
         getFieldTypes() {
-            this.$http.get(route('api.get.options', {enum: 'App\\Enums\\Workshop\\FieldTypeEnum'})).then((response) => {
+            this.$http.get(route('api.get.options', {enum: 'App\\Enums\\WorkshopMiddleware\\FieldTypeEnum'})).then((response) => {
                 this.fieldTypes = response.data
             })
         },

@@ -298,7 +298,7 @@ export default {
             })
         },
         getOptions() {
-            this.$http.get(route('api.get.options', {enum: 'App\\Enums\\Workshop\\ContractTypeEnum'})).then((response) => {
+            this.$http.get(route('api.get.options', {enum: 'App\\Enums\\WorkshopMiddleware\\ContractTypeEnum'})).then((response) => {
                 this.options = response.data
             })
         }

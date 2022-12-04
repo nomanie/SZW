@@ -253,7 +253,7 @@ export default {
             })
         },
         getOptions() {
-            this.$http.get(route('api.get.options', {enum: 'App\\Enums\\Workshop\\ContractTypeEnum'})).then((response) => {
+            this.$http.get(route('api.get.options', {enum: 'App\\Enums\\WorkshopMiddleware\\ContractTypeEnum'})).then((response) => {
                 this.options = response.data
             }).catch((error) => {
                 this.$bvToast.toast('Nie udało się pobrać opcji', {
@@ -264,7 +264,7 @@ export default {
             })
         },
         getPermissionList() {
-            this.$http.get(route('api.get.options', {enum: 'App\\Enums\\Workshop\\PermissionEnum'})).then((response) => {
+            this.$http.get(route('api.get.options', {enum: 'App\\Enums\\WorkshopMiddleware\\PermissionEnum'})).then((response) => {
                 this.permissions = response.data
                 console.log(this.permissions)
             }).catch((error) => {

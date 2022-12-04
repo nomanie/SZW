@@ -3,11 +3,7 @@
 namespace App\Http\Requests\Auth;
 
 use App\Enums\AccountTypeEnum;
-use App\Enums\Workshop\ContractTypeEnum;
-use App\Rules\uniqueForAccountType;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Enum;
 
 class RegisterClientRequest extends FormRequest
 {
@@ -29,7 +25,7 @@ class RegisterClientRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' =>  ['required','email', new uniqueForAccountType(AccountTypeEnum::CLIENT)],
+            'email' =>  ['required','email'],
             'first_name' => 'required|string|min:2',
             'last_name' => 'required|string|min:2',
             'password' => 'required|string|confirmed|min:8'

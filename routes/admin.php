@@ -37,9 +37,3 @@ Route::prefix('/admin')->name('admin.')->group(function () {
     });
 });
 
-Route::prefix('/admin')->name('admin.')->group(function () {
-    Route::prefix('/datatables')->name('datatables.')->group(function () {
-        Route::post('/reorder/{id}', [\App\Http\Controllers\Admin\Datatables\DatatableStateController::class, 'reorder'])->name('reorder');
-    });
-});
-
