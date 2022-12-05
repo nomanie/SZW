@@ -19,9 +19,7 @@ class WorkshopMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        dd('test');
         if (auth()->user() !== null && Workshop::where('identity_id', auth()->user()->id)->first()) {
-
             return $next($request);
         }
         return redirect('login');

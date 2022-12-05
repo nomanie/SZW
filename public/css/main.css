@@ -11321,10 +11321,6 @@ h3 {
 }
 .sidebar {
   transition: all 0.3s linear;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
   z-index: 1;
   box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.42), 0 4px 25px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
   background: rgba(0, 0, 0, 0.6);
@@ -11711,21 +11707,25 @@ a:hover, router-link:hover {
   color: #0d6efd;
 }
 
-#content {
-  overflow: scroll;
+.pager {
+  overflow-y: auto;
+  height: 80vh;
 }
-#content::-webkit-scrollbar-track {
+.pager > * {
+  margin: 1rem;
+}
+.pager::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #F5F5F5;
 }
-#content::-webkit-scrollbar {
+.pager::-webkit-scrollbar {
   width: 5px;
   background-color: #F5F5F5;
 }
-#content::-webkit-scrollbar-thumb {
+.pager::-webkit-scrollbar-thumb {
   background-color: #0d6efd;
 }
-#content::-webkit-scrollbar-button {
+.pager::-webkit-scrollbar-button {
   height: 12px;
 }
 
@@ -11857,6 +11857,15 @@ a:hover, router-link:hover {
 }
 .dropdown-action .dropdown-menu li:hover {
   background: rgba(0, 0, 0, 0.1);
+}
+
+.content {
+  width: calc(100% - 275px);
+}
+
+.pager {
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .card {

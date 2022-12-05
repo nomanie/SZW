@@ -13,6 +13,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 
 class AuthService
 {
@@ -35,6 +36,7 @@ class AuthService
         try{
             if (!$this->checkIfUserExists($data)) {
                 // Zapis podstawowego usera
+                $this->identity->uuid = $this->generateUuid();
                 $this->identity->email = $data['email'];
                 $this->identity->password = bcrypt($data['password']);
                 $this->identity->save();
@@ -188,12 +190,22 @@ class AuthService
         if(count(Session::get('account_type')) > 1) {
             return route('changeType');
         }
-        return route(Session::get('account_type')[0] . '.dashboard', $this->identity->id);
+        return route(Session::get('account_type')[0] . '.dashboard', $this->identity->uuid);
     }
 
     public function getHomeRoute(): string
     {
         $this->identity = auth()->user();
         return $this->getRoute();
+    }
+
+    public function generateUuid(int $length = 10): string
+    {
+        while(true) {
+            $uuid = Str::random($length);
+            if (Identity::where('uuid', $uuid)->count() === 0) {
+                return $uuid;
+            }
+        }
     }
 }

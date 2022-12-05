@@ -2,7 +2,7 @@
 
 namespace App\Services\Workshop;
 
-use App\Models\User;
+use App\Models\System\User;
 use App\Models\Workers\Worker;
 
 class WorkshopService

@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-3">
+    <div class="mt-3 px-3">
         <h5>Dodatkowe pola</h5>
         <hr>
         <div class="row mt-3 align-items-baseline" v-for="(field, index) in form.fields">

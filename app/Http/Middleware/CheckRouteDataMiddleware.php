@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class CheckRouteDataMiddleware
 {
@@ -16,11 +17,11 @@ class CheckRouteDataMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if(auth()->user()){
-            //@todo tutaj zaimplementować sprawdzanie czy id w linku jest zalogowanego usera,
-            // jak nie wrzucić go na logowanie lub na jego id
-            dd($request);
+        if(auth()->user()->uuid == Route::current()->originalParameter('tenant')){;
             return $next($request);
+        } else if (auth()->user()) {
+
+            return redirect()->to(route($request->session()->get('account_type')[0] . '.dashboard', ['tenant' => auth()->user()->uuid]));
         }
        return redirect('login');
     }

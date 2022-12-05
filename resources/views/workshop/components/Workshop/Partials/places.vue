@@ -1,7 +1,7 @@
 <template>
-    <div class="mt-3">
+    <div class="mt-3 px-3">
 
-        <div class="row mt-3 align-items-baseline" v-for="(place, index) in form.places">
+        <div class="mt-3 align-items-baseline" v-for="(place, index) in form.places">
             <h5>Placówka {{index + 1}}</h5>
             <hr>
             <div class="row">

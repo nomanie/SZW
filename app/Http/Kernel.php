@@ -73,7 +73,8 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\AdminMiddleware::class,
         \App\Http\Middleware\WorkshopMiddleware::class,
         \App\Http\Middleware\ClientMiddleware::class,
+        \App\Http\Middleware\CheckRouteDataMiddleware::class,
         \App\Http\Middleware\Authenticate::class,
-        InitializeTenancyByPath::class
+        \App\Http\Middleware\InitializeTenancyByPath::class
     ];
 }
