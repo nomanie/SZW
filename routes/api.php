@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,7 +17,7 @@ Route::group(['as' => 'api.'], function() {
 
     Route::prefix('workshop')->name('workshop.')->group(function() {
        Route::apiResource('workers', App\Http\Controllers\api\v1\Workshop\Workers\WorkerController::class);
-       Route::apiResource('workshop', App\Http\Controllers\api\v1\Workshop\WorkshopController::class);
+       Route::apiResource('workshop', \App\Http\Controllers\api\v1\Workshop\WorkshopInformations\WorkshopController::class);
    });
 });
 

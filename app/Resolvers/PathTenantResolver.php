@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Resolvers;
 
 use App\Models\System\Identity;
+use App\Models\System\Workshop;
 use Illuminate\Routing\Route;
 use Stancl\Tenancy\Contracts\Tenant;
 use Stancl\Tenancy\Exceptions\TenantCouldNotBeIdentifiedByPathException;
@@ -30,8 +31,10 @@ class PathTenantResolver extends CachedTenantResolver
 
         if ($id = $route->parameter(static::$tenantParameterName)) {
             $route->forgetParameter(static::$tenantParameterName);
-
-            if ($tenant = Identity::where('uuid', $id)->first()) {
+            $workshop = Workshop::with('identity')->whereHas('identity', function ($query) use($id) {
+               $query->where('uuid', $id);
+            })->first();
+            if ($tenant = $workshop) {
                 return $tenant;
             }
         }

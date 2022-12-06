@@ -22,7 +22,6 @@ class RegisterController extends Controller
     )
     {
         //@todo odpalać rejestrację w tle jako joba
-        //@todo dodać logi
     }
 
     public function registerWorkshop(RegisterWorkshopRequest $request): JsonResponse

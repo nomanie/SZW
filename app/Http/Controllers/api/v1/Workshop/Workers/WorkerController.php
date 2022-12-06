@@ -4,18 +4,16 @@ namespace App\Http\Controllers\api\v1\Workshop\Workers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateWorkerRequest;
-use App\Http\Requests\System\Cars\UpdateCarBrandRequest;
 use App\Http\Requests\UpdateWorkerRequest;
 use App\Http\Resources\Workshop\Workers\WorkerResource;
 use App\Models\System\Cars\CarBrand;
-use App\Models\Workers\Worker;
+use App\Models\Workshop\Workers\Worker;
 use App\Services\System\LogService;
 use App\Services\Workshop\Workers\WorkerService;
 use App\Traits\JsonResponseTrait;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Yajra\DataTables\Facades\DataTables;
 
 class WorkerController extends Controller

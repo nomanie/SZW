@@ -9,6 +9,7 @@ Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logo
 Route::middleware('guest')->group(function(){
 
     Route::get('/login', function () {
+        Auth::viaRemember();
         return view('auth.login');
     })->name('login');
 

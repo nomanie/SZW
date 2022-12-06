@@ -5,8 +5,7 @@ namespace App\Rules;
 use App\Enums\AccountTypeEnum;
 use App\Models\System\Identity;
 use App\Models\System\User;
-use App\Models\Workers\Worker;
-use App\Models\Workshop;
+use App\Models\System\Workshop;
 use Illuminate\Contracts\Validation\InvokableRule;
 
 class OneAccountTypeForIdentity implements InvokableRule

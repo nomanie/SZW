@@ -1,7 +1,7 @@
 <?php
 namespace App\Services\Workshop\Workers;
 
-use App\Models\Workers\Worker;
+use App\Models\Workshop\Workers\Worker;
 
 class WorkerService
 {

@@ -3,9 +3,9 @@
 namespace App\Services\Auth;
 
 use App\Enums\AccountTypeEnum;
-use App\Models\System\User;
 use App\Models\System\Identity;
-use App\Models\Workshop;
+use App\Models\System\User;
+use App\Models\System\Workshop;
 use App\Notifications\VerifyEmail;
 use Carbon\Carbon;
 use Exception;
@@ -33,7 +33,7 @@ class AuthService
      */
     public function save(array $data, int $account_type): ?Identity
     {
-        try{
+//        try{
             if (!$this->checkIfUserExists($data)) {
                 // Zapis podstawowego usera
                 $this->identity->uuid = $this->generateUuid();
@@ -48,9 +48,9 @@ class AuthService
                 // Zapis konta typu warsztat
                 $this->saveWorkshop($data);
             }
-        } catch(\Exception $e) {
-            return null;
-        }
+//        } catch(\Exception $e) {
+//            return null;
+//        }
         $this->sendVerificationEmail();
         return $this->identity;
     }
@@ -115,11 +115,6 @@ class AuthService
      */
     public function saveWorkshop(array $data): ?Workshop
     {
-            //Tworzenie subdomeny
-            $this->identity->domains()->create(['domain' => 'Warsztat_' . $this->identity->id, 'tenant_id' => $this->identity->id]);
-            Artisan::call('tenants:migrate', [
-                '--tenants' => [$this->identity->id]
-            ]);
             // Tworzenie warsztatu
             $workshop = new Workshop();
             $workshop->identity_id = $this->identity->id;
@@ -133,9 +128,13 @@ class AuthService
 //            $workshop->website = $data['website'] ?? null;
 //            $workshop->social_media = $data['social_media'] ?? null;
 //            $workshop->additional_data = $data['additional_data'] ?? null;
-            if (!$workshop->save()) {
-                throw new Exception;
-            }
+            //Tworzenie subdomeny
+            $workshop->save();
+//            $workshop->domains()->create(['domain' => 'Warsztat_' . $workshop->id, 'tenant_id' => $workshop->id]);
+            Artisan::call('tenants:migrate', [
+                '--tenants' => [$workshop->id]
+            ]);
+
             return $workshop;
     }
 
@@ -166,6 +165,13 @@ class AuthService
         if ($this->identity->user) {
             Session::push('account_type','client');
         }
+        if($this->identity->is_admin) {
+            // jeśli admin to loguje na /admin, a tam może przelogować się na inny typ konta
+            //@todo zrobić jedno konto warsztat i klient dla wszystkich adminów
+            Session::forget('account_type');
+            Session::push('account_type', 'admin');
+            //@todo dodać do sesji random string i zrobić w db tabele admin_access, tam kolumny id:uuid:ip:datetime
+        }
 
         return $this;
     }
@@ -179,6 +185,9 @@ class AuthService
 
     public function getView(): string
     {
+        if (Session::get('account_type')[0] === 'admin') {
+            return view('admin.pages.dashboard');
+        }
         if(count(Session::get('account_type')) > 1) {
             return view('changeType');
         }
@@ -187,6 +196,9 @@ class AuthService
 
     public function getRoute(): string
     {
+        if (Session::get('account_type')[0] === 'admin') {
+            return route('admin.dashboard');
+        }
         if(count(Session::get('account_type')) > 1) {
             return route('changeType');
         }

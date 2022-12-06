@@ -62,6 +62,23 @@
                    </b-button>
                </div>
            </div>
+            <div class="row">
+                <div class="col-12">
+                    <hr class="mt-3">
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12 d-flex justify-content-end px-3">
+                    <b-button variant="warning" class="mr-2">
+                        <i class="fa fa-eraser"></i>
+                        Cofnij zmiany
+                    </b-button>
+                    <b-button variant="success" @click="">
+                        <i class="fa fa-floppy-disk"></i>
+                        Zapisz
+                    </b-button>
+                </div>
+            </div>
         </div>
     </div>
 </template>

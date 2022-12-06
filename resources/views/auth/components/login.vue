@@ -38,6 +38,17 @@
                         <error :errors="errors.password"></error>
                     </div>
                 </div>
+                <div class="row mt-2 justify-content-center">
+                    <div class="col-12 col-md-4">
+                        <b-form-checkbox
+                            v-model="form.remember_me"
+                            :class="{invalid : errors.remember_me}"
+                        >
+                            Zapamiętaj mnie
+                        </b-form-checkbox>
+                        <error :errors="errors.remember_me"></error>
+                    </div>
+                </div>
                 <div class="row mt-3 justify-content-center">
                     <div class="col-12 col-md-4 d-flex justify-content-center">
                         <button class="btn btn-primary w-50" @click="login()">Zaloguj się</button>
@@ -83,7 +94,8 @@ export default {
         return {
             form: {
                 email: null,
-                password: null
+                password: null,
+                remember_me: false
             },
             loading: false,
             errors: {}

@@ -3,13 +3,14 @@
 declare(strict_types=1);
 
 
+use App\Models\System\Workshop;
 use Stancl\Tenancy\Database\Models\Domain;
 
 return [
-    'tenant_model' => \App\Models\System\Identity::class,
+    'tenant_model' => Workshop::class,
     'id_generator' => null,
 
-    'domain_model' => Domain::class,
+    'domain_model' => null,
 
     /**
      * The list of domains hosting your central app.

@@ -2,11 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\System\Identity;
-use App\Models\Workshop;
+use App\Models\System\Workshop;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class WorkshopMiddleware
 {

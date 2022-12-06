@@ -4,10 +4,8 @@ namespace App\Traits;
 
 use App\Enums\AccountTypeEnum;
 use App\Models\System\Identity;
-use App\Models\System\Log;
 use App\Models\System\User;
-use App\Models\Workshop;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use App\Models\System\Workshop;
 
 trait OneAccountTypeForIdentityTrait
 {
