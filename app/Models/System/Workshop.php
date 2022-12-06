@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Stancl\Tenancy\Contracts\TenantWithDatabase;
 use Stancl\Tenancy\Database\Concerns;
+use Stancl\Tenancy\Database\Concerns\CentralConnection;
+use Stancl\Tenancy\Database\Concerns\ResourceSyncing;
 use Stancl\Tenancy\Database\TenantCollection;
 use Stancl\Tenancy\Events;
 
@@ -29,7 +31,7 @@ class Workshop extends Model implements TenantWithDatabase
         Concerns\TenantRun,
         Concerns\InvalidatesResolverCache,
         Concerns\HasDatabase,
-        LogTrait;
+        LogTrait, ResourceSyncing, CentralConnection;
 
     protected $table = 'system.workshops';
     protected $casts = [

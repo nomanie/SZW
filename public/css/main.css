@@ -11709,7 +11709,7 @@ a:hover, router-link:hover {
 
 .pager {
   overflow-y: auto;
-  height: 80vh;
+  height: 90vh;
 }
 .pager > * {
   margin: 1rem;

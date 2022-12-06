@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\api\v1\Workshop\WorkshopInformations\WorkshopController;
 use App\Http\Middleware\InitializeTenancyByPath;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,7 @@ Route::group([
     'as' => 'workshop.',
     'middleware' => [\App\Http\Middleware\WorkshopMiddleware::class, InitializeTenancyByPath::class, \App\Http\Middleware\CheckRouteDataMiddleware::class],
 ], function () {
+    //@todo przenieść widoki do controllera
     Route::get('/dashboard', function () {
         return view('workshop.pages.dashboard');
     })->name('dashboard');
@@ -58,4 +60,6 @@ Route::group([
     Route::get('/workers', function () {
         return view('workshop.pages.errorReport');
     })->name('error-report');
+
+    Route::resource('informations', WorkshopController::class)->only('index', 'update');
 });

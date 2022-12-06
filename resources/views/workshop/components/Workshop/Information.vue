@@ -1,5 +1,5 @@
 <template>
-    <div class="card-edit">
+    <div class="card-edit m-3">
         <div class="row">
             <div class="col-12 col-lg-3">
                 <div class="row">

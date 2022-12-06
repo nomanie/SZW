@@ -68,5 +68,18 @@ export default {
             form: {},
         }
     },
+    mounted() {
+      this.get()
+    },
+    methods: {
+        get() {
+            this.$http.get(route('workshop.informations.index')).then((response) => {
+                this.form = response.data
+            })
+        },
+        save() {
+
+        }
+    }
 }
 </script>

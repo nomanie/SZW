@@ -14,6 +14,7 @@ class WorkshopResource extends JsonResource
      */
     public function toArray($request)
     {
+        dd($this);
         return [
             'id' => $this->id,
             'workshops' => $this->places,
