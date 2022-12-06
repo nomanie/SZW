@@ -28,9 +28,6 @@
 .admin-sidebar .nav-item i {
   margin-right: 10px;
 }
-.admin-sidebar .nav-item.active {
-  margin-left: 10px;
-}
 .admin-sidebar .nav-item.active .dropdown-toggle, .admin-sidebar .nav-item.active .nav-link {
   border-left: 2px solid #0d6efd;
 }
@@ -82,4 +79,9 @@
 a {
   color: inherit !important;
   text-decoration: none !important;
+}
+
+.content {
+  width: calc(100% - 200px) !important;
+  background: #ececec !important;
 }

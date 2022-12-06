@@ -67,6 +67,11 @@
     <div class="footer">
         <i class="fa fa-envelope"></i>
         <i class="fa fa-bell"></i>
-        <i class="fa-solid fa-right-from-bracket"></i>
+        <form action="{{route('logout')}}" method="post">
+            @csrf
+            <button type="submit" class="btn-no-style text-white">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+        </form>
     </div>
 </div>

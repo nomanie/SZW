@@ -6,7 +6,7 @@ use App\Enums\AccountTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterClientRequest;
 use App\Http\Requests\Auth\RegisterWorkshopRequest;
-use App\Services\Auth\RegisterService;
+use App\Services\Auth\AuthService;
 use App\Services\System\LogService;
 use App\Traits\EmailExistsInAccountTypeTrait;
 use App\Traits\JsonResponseTrait;
@@ -14,15 +14,14 @@ use Illuminate\Http\JsonResponse;
 
 class RegisterController extends Controller
 {
-    use JsonResponseTrait, EmailExistsInAccountTypeTrait;
+    use JsonResponseTrait;
 
     public function __construct(
-        protected RegisterService $service,
-        protected LogService      $logService
+        protected AuthService $service,
+        protected LogService  $logService
     )
     {
         //@todo odpalać rejestrację w tle jako joba
-        //@todo dodać logi
     }
 
     public function registerWorkshop(RegisterWorkshopRequest $request): JsonResponse

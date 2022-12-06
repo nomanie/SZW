@@ -2,8 +2,8 @@
 
 namespace App\Services\Workshop;
 
-use App\Models\User;
-use App\Models\Workers\Worker;
+use App\Models\System\User;
+use App\Models\Workshop\Workers\Worker;
 
 class WorkshopService
 {

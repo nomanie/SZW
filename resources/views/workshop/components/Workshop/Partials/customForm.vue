@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-3">
+    <div class="mt-3 px-3">
         <h5>Formularz kontaktowy</h5>
         <hr>
         <v-select
@@ -9,7 +9,7 @@
             :reduce="view => view.index"
         ></v-select>
         <hr>
-        <div class="row mt-3 align-items-baseline" v-for="(field, index) in form.form_fields">
+        <div class="mt-3 align-items-baseline" v-for="(field, index) in form.form_fields">
             <div class="row">
                 <div class="col-12 col-lg-4 px-3">
                     <b-form-group label="Nazwa pola">

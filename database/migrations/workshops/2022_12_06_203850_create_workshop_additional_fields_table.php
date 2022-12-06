@@ -6,19 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /** Ta migracja przechowuje instancje kont typu klient -> wszystkie
-     *  operacje są wykonywane na głównej domenie
+    /**
      * Run the migrations.
      *
      * @return void
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('workshop_additional_fields', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('identity_id')
-                ->references('id')->on('identities')
+            $table->foreignId('workshop_id')
+                ->references('id')->on('system.workshops')
                 ->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('name');
+            $table->integer('type');
+            $table->string('value');
             $table->timestamps();
         });
     }
@@ -30,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('workshop_additional_fields');
     }
 };

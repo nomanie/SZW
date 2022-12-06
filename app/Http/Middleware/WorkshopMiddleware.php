@@ -2,11 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\System\Identity;
-use App\Models\Workshop;
+use App\Models\System\Workshop;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class WorkshopMiddleware
 {
@@ -19,7 +17,7 @@ class WorkshopMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Workshop::where('identity_id', auth()->user()->id)->first()) {
+        if (auth()->user() !== null && Workshop::where('identity_id', auth()->user()->id)->first()) {
             return $next($request);
         }
         return redirect('login');

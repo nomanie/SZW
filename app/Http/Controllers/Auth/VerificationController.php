@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\System\Identity;
-use App\Services\Auth\RegisterService;
+use App\Services\Auth\AuthService;
 use Illuminate\Http\Request;
 
 class VerificationController extends Controller
 {
     public function __construct(
-        protected RegisterService $service
+        protected AuthService $service
     ){}
 
     public function verify(Request $request, int $id)

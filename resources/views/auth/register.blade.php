@@ -20,7 +20,8 @@
                     Standardowe konto użytkownika
                 </div>
             </a>
-            <a class="col-12 col-lg-3 account-type" href="{{route('register.diagnostician')}}">
+            <a class="col-12 col-lg-3 account-type position-relative disabled">
+                <div class="position-absolute w-100" style="background-color: grey;opacity:0.2;height:100%;top:0;left:0;"></div>
                 <img src="{{asset('images/logoSZW.png')}}">
                 <div class="account-type__text">
                     Konto dla stacji diagnostycznej

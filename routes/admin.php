@@ -1,10 +1,15 @@
 <?php
 
 use App\Http\Controllers\Admin\Cars\CarBrandsController;
+use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('/admin')->name('admin.')->group(function () {
-    Route::get('/', function () {
+Route::prefix('/admin')->middleware(AdminMiddleware::class)->name('admin.')->group(function () {
+    //zabezpieczyć jakoś
+    Route::get('/', function() {
+       return redirect('admin.dashboard');
+    });
+    Route::get('/dashboard', function () {
         return view('admin.pages.dashboard');
     })->name('dashboard');
     Route::prefix('/cars')->name('cars.')->group(function () {

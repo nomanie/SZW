@@ -17,7 +17,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}" />
     </head>
     <body class="antialiased">
-       <div id="app">
+       <div id="app" class="overflow-hidden">
            @if (isset($content))
                @yield('content')
            @else
@@ -25,23 +25,16 @@
                    <div class="sidebar__container">
                        <sidebar></sidebar>
                    </div>
-                   <div class="col" style="width: calc(100% - 100px)">
-                       <div class="row">
-                           <div class="col">
-                                <header-nav></header-nav>
-                           </div>
-                       </div>
-                       <div class="row h-without-header">
-                           <div class="col h-100" id="content">
-                               <router-view></router-view>
-                           </div>
-                       </div>
+                   <div class="content">
+                        <header-nav></header-nav>
+                        <div class="pager">
+                            <router-view></router-view>
+                        </div>
                    </div>
                </div>
            @endif
        </div>
     </body>
     <script src="{{mix('js/app.js')}}"></script>
-    <script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
     @stack('scripts')
 </html>

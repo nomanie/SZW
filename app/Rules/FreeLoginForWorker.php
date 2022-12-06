@@ -2,7 +2,7 @@
 
 namespace App\Rules;
 
-use App\Models\Workers\Worker;
+use App\Models\Workshop\Workers\Worker;
 use Illuminate\Contracts\Validation\InvokableRule;
 
 class FreeLoginForWorker implements InvokableRule

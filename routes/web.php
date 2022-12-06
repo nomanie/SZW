@@ -16,9 +16,11 @@ use Illuminate\Support\Facades\Route;
 include_once('admin.php');
 include_once('wiki.php');
 include_once('auth.php');
+include_once('client.php');
+include_once('workshops.php');
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-include_once('workshops.php');
+

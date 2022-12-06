@@ -2,10 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Http\Middleware\InitializeTenancyByPath;
 use Illuminate\Support\Facades\Route;
-use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
-use Stancl\Tenancy\Middleware\InitializeTenancyByPath;
-use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,9 +18,9 @@ use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 */
 
 Route::group([
-    'prefix' => '/{tenant}',
+    'prefix' => '/{tenant:uuid}',
     'as' => 'workshop.',
-    'middleware' => [InitializeTenancyByPath::class, \App\Http\Middleware\WorkshopMiddleware::class],
+    'middleware' => [\App\Http\Middleware\WorkshopMiddleware::class, InitializeTenancyByPath::class, \App\Http\Middleware\CheckRouteDataMiddleware::class],
 ], function () {
     Route::get('/dashboard', function () {
         return view('workshop.pages.dashboard');

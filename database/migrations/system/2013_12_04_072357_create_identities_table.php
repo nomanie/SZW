@@ -15,12 +15,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('identities', function (Blueprint $table) {
+            $table->string('uuid')->unique();
             $table->id();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->string('tenancy_db_name')->nullable()->unique();
+            $table->boolean('is_admin')->default(false);
             $table->timestamps();
         });
     }
