@@ -9,7 +9,7 @@
             :reduce="view => view.index"
         ></v-select>
         <hr>
-        <div class="mt-3 align-items-baseline" v-for="(field, index) in form.form_fields">
+        <div class="mt-3 align-items-baseline" v-for="(field, index) in form.fields">
             <div class="row">
                 <div class="col-12 col-lg-4 px-3">
                     <b-form-group label="Nazwa pola">
@@ -59,15 +59,15 @@
                         <i class="fa fa-minus"></i>
                         Pole
                     </b-button>
-                    <b-button variant="primary" @click="addField()" v-if="index === form.form_fields.length - 1">
+                    <b-button variant="primary" @click="addField()" v-if="index === form.fields.length - 1">
                         <i class="fa fa-plus"></i>
                         Pole
                     </b-button>
-                    <b-button variant="success" @click="setDefaultForm()" v-if="index === form.form_fields.length - 1">
+                    <b-button variant="success" @click="setDefaultForm()" v-if="index === form.fields.length - 1">
                         <i class="fa fa-arrow-up"></i>
                         Ustaw domyślny formularz
                     </b-button>
-                    <b-button variant="secondary" @click="display()" v-if="index === form.form_fields.length - 1">
+                    <b-button variant="secondary" @click="display()" v-if="index === form.fields.length - 1">
                         <i class="fa-regular fa-eye"></i>
                         Podgląd
                     </b-button>
@@ -75,7 +75,19 @@
                 <hr>
             </div>
         </div>
-        <display-form :form="form.form_fields"></display-form>
+        <div class="row mt-3">
+            <div class="col-12 d-flex justify-content-end px-3">
+                <b-button variant="warning" class="mr-2">
+                    <i class="fa fa-eraser"></i>
+                    Cofnij zmiany
+                </b-button>
+                <b-button variant="success" @click="save()">
+                    <i class="fa fa-floppy-disk"></i>
+                    Zapisz
+                </b-button>
+            </div>
+        </div>
+        <display-form :form="form.fields"></display-form>
     </div>
 </template>
 <script>
@@ -89,13 +101,21 @@ export default {
         fieldTypes: {
             type: [Object, Array],
             default: () => []
-        }
+        },
+        data: {
+            type: [Object, Array],
+            default: () => []
+        },
+        id: {
+            type: Number,
+            default: () => null
+        },
     },
     data() {
         return {
             types: [],
             form: {
-                form_fields: [
+                fields: [
                     {
                         name: null,
                         type: null,
@@ -113,6 +133,11 @@ export default {
             ]
         }
     },
+    mounted() {
+        if (this.data) {
+            this.form = this.data
+        }
+    },
     watch: {
         form: {
             deep: true,
@@ -123,8 +148,14 @@ export default {
         }
     },
     methods: {
+        save() {
+            this.form.section = 'contact_form'
+            this.$http.put(route('workshop.workshops.update', this.id), this.form).then(() => {
+
+            })
+        },
         addField() {
-            this.form.form_fields.push({
+            this.form.fields.push({
                 name: null,
                 type: null,
                 required: false,
@@ -133,10 +164,10 @@ export default {
             })
         },
         removeField(index) {
-            this.form.form_fields.splice(index, 1)
+            this.form.fields.splice(index, 1)
         },
         setDefaultForm() {
-            this.form.form_fields = [
+            this.form.fields = [
                 {
                     name: 'Adres e-mail',
                     type: 2,

@@ -34,7 +34,7 @@
                 <div class="col-12 col-lg-6 px-3">
                     <div class="social_media_container d-flex">
                         <i class="fa fa-facebook"></i>
-                        <b-input type="text">
+                        <b-input type="text" v-model="form.social_media.facebook">
                         </b-input>
                     </div>
                 </div>
@@ -43,16 +43,7 @@
                 <div class="col-12 col-lg-6 px-3">
                     <div class="social_media_container d-flex">
                         <i class="fa fa-instagram"></i>
-                        <b-input type="text">
-                        </b-input>
-                    </div>
-                </div>
-            </div>
-            <div class="row mt-2">
-                <div class="col-12 col-lg-6 px-3">
-                    <div class="social_media_container d-flex">
-                        <i class="fa fa-linkedin"></i>
-                        <b-input type="text">
+                        <b-input type="text" v-model="form.social_media.instagram">
                         </b-input>
                     </div>
                 </div>
@@ -69,7 +60,7 @@
                     <i class="fa fa-eraser"></i>
                     Cofnij zmiany
                 </b-button>
-                <b-button variant="success" @click="">
+                <b-button variant="success" @click="save()">
                     <i class="fa fa-floppy-disk"></i>
                     Zapisz
                 </b-button>
@@ -80,10 +71,40 @@
 <script>
 export default {
     name: 'contact',
-    data() {
-        return {
-            form: {},
+    props: {
+        id: {
+            type: Number,
+            default: () => null
+        },
+        data: {
+            type: [Object, Array],
+            default: () => {}
         }
     },
+    data() {
+        return {
+            form: {
+                email: null,
+                phone: null,
+                social_media: {
+                    facebook: null,
+                    instagram: null
+                }
+            },
+        }
+    },
+    mounted() {
+        if (this.data) {
+            this.form = this.data
+        }
+    },
+    methods: {
+        save() {
+            this.form.section = 'contact'
+            this.$http.put(route('workshop.workshops.update', this.id), this.form).then(() => {
+
+            })
+        }
+    }
 }
 </script>

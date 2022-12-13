@@ -41,16 +41,40 @@
             </div>
             <hr>
         </div>
+        <div class="row mt-3">
+            <div class="col-12 d-flex justify-content-end px-3">
+                <b-button variant="warning" class="mr-2">
+                    <i class="fa fa-eraser"></i>
+                    Cofnij zmiany
+                </b-button>
+                <b-button variant="success" @click="save()">
+                    <i class="fa fa-floppy-disk"></i>
+                    Zapisz
+                </b-button>
+            </div>
+        </div>
     </div>
 </template>
 <script>
+import error from "@js/assets/form/error";
 export default {
     name: 'additionalFields',
+    components: {
+        error
+    },
     props: {
         fieldTypes: {
             type: [Object, Array],
             default: () => []
-        }
+        },
+        data: {
+            type: [Object, Array],
+            default: () => []
+        },
+        id: {
+            type: Number,
+            default: () => null
+        },
     },
     data() {
         return {
@@ -75,7 +99,18 @@ export default {
             }
         }
     },
+    mounted() {
+        if (this.data) {
+            this.form.fields = this.data
+        }
+    },
     methods: {
+        save() {
+            this.form.section = 'additional_fields'
+            this.$http.put(route('workshop.workshops.update', this.id), this.form).then(() => {
+
+            })
+        },
         addField() {
             this.form.fields.push({
                 name: null,

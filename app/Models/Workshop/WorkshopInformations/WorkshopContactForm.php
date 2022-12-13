@@ -9,11 +9,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Stancl\Tenancy\Database\Concerns\ResourceSyncing;
 
-class WorkshopContactForm extends Model implements Syncable
+class WorkshopContactForm extends Model
 {
-    use HasFactory, ResourceSyncing;
+    use HasFactory, UseTenantConnection;
 
-    protected $connection = 'tenant';
+    protected $casts = [
+        'fields' => 'array'
+    ];
 
     /* {!! Relacje !!} */
     public function workshop(): hasOne

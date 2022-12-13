@@ -12,6 +12,7 @@ use App\Services\Workshop\WorkshopService;
 use App\Traits\JsonResponseTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class WorkshopController extends Controller
 {
@@ -24,18 +25,22 @@ class WorkshopController extends Controller
     {
         $this->middleware(WorkshopMiddleware::class);
         //@todo dodać Permisje
-        //@todo dodać Logi
     }
 
     public function index(Request $request): WorkshopResource
     {
-       // zwracamy resource
-
-        return new WorkshopResource(Workshop::with('contactForm', 'places', 'additionalFields')->find(tenancy()->tenant->id));
+        return new WorkshopResource(Workshop::with('contactForm', 'places', 'additionalFields')
+            ->where('identity_id', auth()->user()->id)->first()
+        );
     }
 
     public function update(UpdateWorkshopRequest $request, Workshop $workshop)
     {
-        //@todo aktualizacja danych przy zapisie
+        $new_data = $this->service->setWorkshop($workshop)->update($request->all());
+        if ($new_data) {
+            $this->logService->add($workshop, $request, auth()->user()->id, $workshop->toArray(), $new_data->toArray());
+            return $this->successJsonResponse(__('Pomyślnie zapisano dane'));
+        }
+        return $this->errorJsonResponse(__('Dane nie zostały zapisane'));
     }
 }

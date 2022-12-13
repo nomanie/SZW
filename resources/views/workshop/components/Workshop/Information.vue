@@ -27,39 +27,63 @@
                             <i class="fa-solid fa-address-card"></i>
                             Informacje
                         </template>
-                        <info></info>
+                        <info
+                            :key="form.id"
+                            :id="form.id"
+                            :data="form.informations"
+                            :owners="form.owners"
+                        ></info>
                     </b-tab>
                     <b-tab>
                         <template #title>
                             <i class="fa-solid fa-building"></i>
                             Placówki
                         </template>
-                        <places></places>
+                        <places
+                            :key="form.id"
+                            :id="form.id"
+                            :data="form.places"
+                        ></places>
                     </b-tab>
                     <b-tab>
                         <template #title>
                             <i class="fa-solid fa-mobile-phone"></i>
                             Dane kontaktowe
                         </template>
-                        <contact></contact>
+                        <contact
+                            :key="form.id"
+                            :id="form.id"
+                            :data="form.contact"
+                        ></contact>
                     </b-tab>
                     <b-tab>
                         <template #title>
                             <i class="fa-solid fa-rectangle-list"></i>
                             Formularz kontaktowy
                         </template>
-                        <custom-form :field-types="fieldTypes"></custom-form>
+                        <custom-form
+                            :field-types="fieldTypes"
+                            :key="form.id"
+                            :id="form.id"
+                            :data="form.contact_form"
+                        ></custom-form>
                     </b-tab>
                     <b-tab>
                         <template #title>
                             <i class="fa-solid fa-plus"></i>
                             Dodatkowe dane
                         </template>
-                        <additional-fields :field-types="fieldTypes"></additional-fields>
+                        <additional-fields
+                            :field-types="fieldTypes"
+                            :key="form.id"
+                            :id="form.id"
+                            :data="form.additional_fields"
+                        ></additional-fields>
                     </b-tab>
                 </b-tabs>
             </div>
         </div>
+        <loader :loading="loading"></loader>
     </div>
 </template>
 
@@ -69,6 +93,8 @@ import additionalFields from './Partials/additionalFields'
 import customForm from './Partials/customForm'
 import contact from './Partials/contact'
 import info from './Partials/info'
+import loader from "@js/components/Loader";
+
 export default {
     name: 'Information',
     components: {
@@ -76,12 +102,14 @@ export default {
         additionalFields,
         customForm,
         contact,
-        info
+        info,
+        loader
     },
     data() {
         return {
             fieldTypes: [],
             form: {},
+            loading: false,
         }
     },
     mounted() {
@@ -90,26 +118,13 @@ export default {
     },
     methods: {
         getFieldTypes() {
-            this.$http.get(route('api.get.options', {enum: 'App\\Enums\\WorkshopMiddleware\\FieldTypeEnum'})).then((response) => {
+            this.$http.get(route('api.get.options', {enum: 'App\\Enums\\Workshop\\FieldTypeEnum'})).then((response) => {
                 this.fieldTypes = response.data
             })
         },
         getData() {
-            this.form.id = 1
-        },
-        save() {
-            this.$http.put(route('api.workshop.update', this.form.id), this.form).then((response) => {
-                this.$bvToast.toast('Pomyślnie zapisano dane', {
-                    title: 'Komunikat',
-                    autoHideDelay: 5000,
-                    variant: 'success',
-                })
-            }).catch((error) => {
-                this.$bvToast.toast('Wystąpił błąd podczas zapisu', {
-                    title: 'Błąd',
-                    autoHideDelay: 5000,
-                    variant: 'danger',
-                })
+            this.$http.get(route('workshop.workshops.index')).then((response) => {
+                this.form = response.data.data
             })
         }
     }

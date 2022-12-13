@@ -2,7 +2,7 @@
     <div class="mt-3">
         <h5>Właściciele firmy</h5>
         <hr>
-        <div class="row mt-3 align-items-baseline" v-for="(owner, index) in form.owners">
+        <div class="row mt-3 align-items-baseline" v-for="(owner, index) in form">
             <div class="col-12 col-lg-4 px-3">
                 <b-form-group label="Imię właściciela">
                     <b-input type="text" v-model="owner.first_name" placeholder="Imię właściciela">
@@ -22,7 +22,7 @@
                     <i class="fa fa-minus"></i>
                     właściciela
                 </b-button>
-                <b-button variant="primary" @click="addOwner()" v-if="index === form.owners.length - 1">
+                <b-button variant="primary" @click="addOwner()" v-if="index === form.length - 1">
                     <i class="fa fa-plus"></i>
                     właściciela
                 </b-button>
@@ -33,16 +33,20 @@
 <script>
 export default {
     name: 'owners',
+    props: {
+        data: {
+            type: Array,
+            default: () => []
+        }
+    },
     data() {
         return {
-            form: {
-                owners: [
-                    {
-                        first_name: null,
-                        last_name: null
-                    }
-                ]
-            }
+            form: [
+                {
+                    first_name: null,
+                    last_name: null
+                }
+            ]
         }
     },
     watch: {
@@ -52,14 +56,19 @@ export default {
             handler(value) {
                 this.$emit('update', this.form)
             }
+        },
+    },
+    mounted() {
+        if (this.data) {
+            this.form = this.data
         }
     },
     methods: {
         addOwner() {
-            this.form.owners.push({first_name: null, last_name: null})
+            this.form.push({first_name: null, last_name: null})
         },
         removeOwner(index) {
-            this.form.owners.splice(index, 1)
+            this.form.splice(index, 1)
         }
     }
 }

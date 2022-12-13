@@ -2,7 +2,13 @@
     <div class="mt-3 px-3">
 
         <div class="mt-3 align-items-baseline" v-for="(place, index) in form.places">
-            <h5>Placówka {{index + 1}}</h5>
+            <div class="d-flex justify-content-between">
+                <h5>Placówka {{index + 1}}</h5>
+                <button class="btn btn-primary fs-12 py-0" @click="$bvModal.show('map_modal')">
+                    <i class="fa-solid fa-location-dot mr-2"></i>
+                    Zaznacz na mapie
+                </button>
+            </div>
             <hr>
             <div class="row">
                 <div class="col-12 col-lg-4 px-3">
@@ -73,18 +79,33 @@
                         <i class="fa fa-eraser"></i>
                         Cofnij zmiany
                     </b-button>
-                    <b-button variant="success" @click="">
+                    <b-button variant="success" @click="save()">
                         <i class="fa fa-floppy-disk"></i>
                         Zapisz
                     </b-button>
                 </div>
             </div>
         </div>
+        <map-modal></map-modal>
     </div>
 </template>
 <script>
+import mapModal from './mapModal'
 export default {
     name: 'places',
+    components: {
+      mapModal
+    },
+    props: {
+        id: {
+            type: Number,
+            default: () => null
+        },
+        data: {
+            type: [Object, Array],
+            default: () => []
+        }
+    },
     data() {
         return {
             form: {
@@ -101,16 +122,18 @@ export default {
             }
         }
     },
-    watch: {
-        form: {
-            deep: true,
-            immediate: true,
-            handler(value) {
-                this.$emit('update', this.form)
-            }
+    mounted() {
+        if (this.data.length > 0) {
+            this.form.places = this.data
         }
     },
     methods: {
+        save() {
+            this.form.section = 'places'
+            this.$http.put(route('workshop.workshops.update', this.id), this.form).then(() => {
+
+            })
+        },
         addPlace() {
             this.form.places.push({
                 city: null,

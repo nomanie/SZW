@@ -35,7 +35,11 @@
                 </b-form-group>
             </div>
         </div>
-        <owners></owners>
+        <owners
+            :key="componentRerender"
+            :data="form.owners"
+            @update="setOwners"
+        ></owners>
         <div class="row">
             <div class="col-12">
                 <hr class="mt-3">
@@ -47,7 +51,7 @@
                     <i class="fa fa-eraser"></i>
                     Cofnij zmiany
                 </b-button>
-                <b-button variant="success" @click="">
+                <b-button variant="success" @click="save()">
                     <i class="fa fa-floppy-disk"></i>
                     Zapisz
                 </b-button>
@@ -63,22 +67,42 @@ export default {
     components: {
         owners
     },
+    props: {
+        id: {
+            type: Number,
+            default: () => null
+        },
+        data: {
+            type: [Object, Array],
+            default: () => {}
+        },
+        owners: {
+            type: [Object, Array],
+            default: () => []
+        }
+    },
     data() {
         return {
             form: {},
+            componentRerender: 0
         }
     },
     mounted() {
-      this.get()
+        if (this.data) {
+            this.form = this.data
+            this.form.owners = this.owners
+            this.componentRerender++
+        }
     },
     methods: {
-        get() {
-            this.$http.get(route('workshop.informations.index')).then((response) => {
-                this.form = response.data
+        save() {
+            this.form.section = 'info'
+            this.$http.put(route('workshop.workshops.update', this.id), this.form).then(() => {
+
             })
         },
-        save() {
-
+        setOwners($event) {
+            this.form.owners = $event
         }
     }
 }
