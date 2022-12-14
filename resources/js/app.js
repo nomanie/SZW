@@ -10,6 +10,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
 import 'bootstrap';
+import Vuex from 'vuex';
+import loader from '@js/loader';
 
 window.Vue = require('vue').default;
 // auth components
@@ -59,6 +61,7 @@ Vue.use(Ziggy)
 Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
+Vue.use(Vuex)
 Vue.http.interceptors.push((request, next) => {
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 
@@ -68,10 +71,12 @@ Vue.http.interceptors.push((request, next) => {
 
     next()
 })
+
+//global variables
 Vue.http.interceptors.push(function (request) {
-    this.loading = true
+    this.$store.dispatch('pending');
     return function (response) {
-        this.loading = false
+        this.$store.dispatch('done');
         if (response.status >= 300) {
             this.$bvToast.toast(response.body.errors ? "Wystąpił błąd w formuląrzu" : response.data.message, {
                 title: 'Błąd', variant: 'danger',
@@ -87,4 +92,5 @@ Vue.http.interceptors.push(function (request) {
 const app = new Vue({
     router: workshopRouter,
     el: '#app',
+    store: loader
 });

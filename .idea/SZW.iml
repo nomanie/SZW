@@ -136,6 +136,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/stancl/jobpipeline" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/stancl/virtualcolumn" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/stancl/tenancy" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/mrcnpdlk/validator" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -68,7 +68,7 @@
                 </div>
             </div>
         </div>
-        <loader :loading="loading"></loader>
+        <loader></loader>
     </div>
 </template>
 <script>
@@ -97,7 +97,6 @@ export default {
                 password: null,
                 remember_me: false
             },
-            loading: false,
             errors: {}
         }
     },

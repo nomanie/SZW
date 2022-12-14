@@ -1,5 +1,5 @@
 <template>
-    <div class="card-edit m-3">
+    <div class="card-edit m-3 position-relative">
         <div class="row">
             <div class="col-12 col-lg-3">
                 <div class="row">
@@ -83,7 +83,7 @@
                 </b-tabs>
             </div>
         </div>
-        <loader :loading="loading"></loader>
+        <loader></loader>
     </div>
 </template>
 
@@ -109,7 +109,6 @@ export default {
         return {
             fieldTypes: [],
             form: {},
-            loading: false,
         }
     },
     mounted() {

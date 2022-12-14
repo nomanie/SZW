@@ -89,6 +89,7 @@ class AuthService
             $user->identity_id = $this->identity->id;
             $user->first_name = $data['first_name'];
             $user->last_name = $data['last_name'];
+            $user->logo = public_path('/images/person');
 //            $user->phone = $data['phone'] ?? null;
 //            $user->date_of_birth = $data['date_of_birth'] ?? null;
 //            $user->city = $data['city'] ?? null;
@@ -124,6 +125,7 @@ class AuthService
 //            $workshop->logo = $data['logo'] ?? null;
             $workshop->nip = $data['nip'];
             $workshop->regon = $data['regon'];
+            $workshop->logo = public_path('/images/person');
 //            $workshop->company_created_at = $data['company_created_at'] ?? null;
 //            $workshop->website = $data['website'] ?? null;
 //            $workshop->social_media = $data['social_media'] ?? null;

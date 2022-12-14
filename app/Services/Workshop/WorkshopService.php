@@ -51,6 +51,9 @@ class WorkshopService
                 case 'additional_fields':
                     $this->saveFields($data['fields']);
                     break;
+                case 'map':
+                    $this->saveMap($data);
+                    break;
             }$this->workshop->save();
             DB::commit();
         } catch (\Exception $e) {
@@ -128,5 +131,11 @@ class WorkshopService
             DB::rollback();
             throw new Exception;
         }
+    }
+
+    protected function saveMap(array $data): void
+    {
+        // @todo dodawanie znaczników na mapie
+        // @todo dodać do workshop_places lat i lng
     }
 }
