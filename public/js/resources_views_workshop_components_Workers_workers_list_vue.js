@@ -55,7 +55,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.$http.get(route('api.get.options', {
-        "enum": 'App\\Enums\\WorkshopMiddleware\\ContractTypeEnum'
+        "enum": 'App\\Enums\\Workshop\\ContractTypeEnum'
       })).then(function (response) {
         _this2.options = response.data;
       })["catch"](function (error) {
@@ -70,7 +70,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       this.$http.get(route('api.get.options', {
-        "enum": 'App\\Enums\\WorkshopMiddleware\\PermissionEnum'
+        "enum": 'App\\Enums\\Workshop\\PermissionEnum'
       })).then(function (response) {
         _this3.permissions = response.data;
         console.log(_this3.permissions);
@@ -111,92 +111,85 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      modal_id: 'worker-modal',
       data: {},
       reload_table: 0,
       fields: [{
         data: 'id',
         name: 'ID',
-        title: 'ID',
-        visible: true,
-        className: 'exportable'
+        title: 'ID'
       }, {
         name: 'first_name',
-        sortField: 'first_name',
         title: 'Imię',
-        data: 'first_name',
-        visible: true,
-        className: 'exportable'
+        data: 'first_name'
       }, {
         name: 'last_name',
-        sortField: 'last_name',
         title: 'Nazwisko',
-        data: 'last_name',
-        visible: true,
-        className: 'exportable'
+        data: 'last_name'
       }, {
         name: 'login',
-        sortField: 'login',
         title: 'Login',
-        data: 'login',
-        visible: true,
-        className: 'exportable'
+        data: 'login'
       }, {
         name: 'position',
-        sortField: 'position',
         title: 'Stanowisko',
-        data: 'position',
-        visible: true,
-        className: 'exportable'
+        data: 'position'
       }, {
         name: 'contract_from',
-        sortField: 'contract_from',
         title: 'Umowa od',
         data: 'contract_from',
-        visible: true,
-        className: 'exportable'
+        "class": 'no-word-break'
       }, {
         name: 'contract_to',
-        sortField: 'contract_to',
         title: 'Umowa do',
         data: 'contract_to',
-        visible: true,
-        className: 'exportable'
+        "class": 'no-word-break'
       }, {
         name: 'contract_type',
-        sortField: 'contract_type',
         title: 'Rodzaj umowy',
-        data: 'contract_type',
-        visible: true,
-        className: 'exportable'
+        data: 'contract_type'
       }, {
         name: 'salary',
-        sortField: 'salary',
         title: 'Wynagrodzenie',
-        data: 'salary',
-        visible: true,
-        className: 'exportable'
+        data: 'salary'
       }, {
         data: 'action',
-        name: 'Akcje',
-        title: 'Akcje',
-        visible: true,
-        className: 'not-exportable not-selectable',
-        render: function render(data, type, row, meta) {
-          return '<button data-row_id="' + row.id + '" class="btn btn-success btn-edit mx-1 fs-12">Edytuj</button>' + '<button data-row_id="' + row.id + '" class="btn btn-danger btn-delete mx-1 fs-12">Usuń</button>';
-        }
+        name: 'action',
+        title: '',
+        exportable: false,
+        orderable: false,
+        className: 'not-exportable not-selectable'
       }]
     };
   },
   methods: {
-    remove: function remove(id) {
-      this.$http["delete"](route('api.workshop.workers.destroy', id)).then(function (response) {})["catch"](function (error) {});
-    },
-    edit: function edit($event) {
+    remove: function remove($event) {
       var _this = this;
 
-      this.$http.get(route('api.workshop.workers.show', $event)).then(function (response) {
-        _this.data = response.data.data;
-        _this.isEdit = true;
+      this.$http["delete"](route('workshop.workers.destroy', $event)).then(function (response) {
+        _this.reload_table++;
+      });
+    },
+    edit: function edit($event) {
+      var _this2 = this;
+
+      this.$http.get(route('workshop.workers.show', $event)).then(function (response) {
+        _this2.data = response.data.data;
+        _this2.isEdit = true;
+      });
+    },
+    add: function add($event) {
+      this.$bvModal.show(this.modal_id);
+    },
+    showModal: function showModal($event) {
+      var _this3 = this;
+
+      var edit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      this.isEdit = edit;
+      this.$http.get(route('admin.cars.brand.edit', $event)).then(function (response) {
+        _this3.data = response.data.data;
+
+        _this3.$bvModal.show(_this3.modal_id);
       });
     }
   }
@@ -268,7 +261,7 @@ __webpack_require__.r(__webpack_exports__);
     save: function save() {
       var _this = this;
 
-      this.$http.post(route('api.workshop.workers.store'), this.form).then(function (response) {
+      this.$http.post(route('workshop.workers.store'), this.form).then(function (response) {
         _this.$bvModal.hide('worker-modal');
 
         _this.$emit('reload');
@@ -277,7 +270,7 @@ __webpack_require__.r(__webpack_exports__);
     edit: function edit() {
       var _this2 = this;
 
-      this.$http.put(route('api.workshop.workers.update', this.form.id), this.form).then(function (response) {
+      this.$http.put(route('workshop.workers.update', this.form.id), this.form).then(function (response) {
         _this2.$bvModal.hide('worker-modal');
 
         _this2.$emit('reload');
@@ -287,7 +280,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       this.$http.get(route('api.get.options', {
-        "enum": 'App\\Enums\\WorkshopMiddleware\\ContractTypeEnum'
+        "enum": 'App\\Enums\\Workshop\\ContractTypeEnum'
       })).then(function (response) {
         _this3.options = response.data;
       });
@@ -921,13 +914,20 @@ var render = function render() {
     attrs: {
       "reload-table": _vm.reload_table,
       columns: _vm.fields,
+      "server-side-data": true,
+      "modal-id": _vm.modal_id,
       "table-id": "car-brand-table",
-      "api-url": "api.workshop.workers.index",
+      "api-url": "workshop.workers",
       "table-name": "Tabela_pracowników",
-      "delete-url": "api.workshop.workers.destroy"
+      "delete-url": "workshop.workers.destroy"
     },
     on: {
-      update: _vm.edit
+      update: _vm.edit,
+      "delete": _vm.remove,
+      add: _vm.add,
+      edit: function edit($event) {
+        return _vm.showModal($event, true);
+      }
     }
   })], 1)]);
 };
@@ -953,18 +953,7 @@ var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("div", [_c("div", {
-    staticClass: "btn btn-primary",
-    on: {
-      click: function click($event) {
-        _vm.$bvModal.show("worker-modal");
-
-        _vm.defaultForm();
-      }
-    }
-  }, [_c("i", {
-    staticClass: "fa fa-plus me-2"
-  }), _vm._v(" "), _vm._v("\n                Pracownika\n")]), _vm._v(" "), _c("b-modal", {
+  return _c("div", [_c("b-modal", {
     attrs: {
       id: "worker-modal",
       title: "Dodaj nowego pracownika",
@@ -985,7 +974,7 @@ var render = function render() {
           }
         }, [_c("i", {
           staticClass: "fa fa-eraser pe-3"
-        }), _vm._v("\n                        Wyczyść\n                    ")]), _vm._v(" "), _c("div", [_c("button", {
+        }), _vm._v("\n                    Wyczyść\n                ")]), _vm._v(" "), _c("div", [_c("button", {
           staticClass: "btn btn-success",
           attrs: {
             type: "button"
@@ -995,7 +984,7 @@ var render = function render() {
           }
         }, [_c("i", {
           staticClass: "fa fa-save pe-3"
-        }), _vm._v("\n                            Zapisz\n                        ")]), _vm._v(" "), _c("button", {
+        }), _vm._v("\n                        Zapisz\n                    ")]), _vm._v(" "), _c("button", {
           staticClass: "btn btn-danger",
           attrs: {
             type: "button",
@@ -1003,7 +992,7 @@ var render = function render() {
           }
         }, [_c("i", {
           staticClass: "fa-solid fa-xmark pe-3"
-        }), _vm._v("\n                            Anuluj\n                        ")])])])];
+        }), _vm._v("\n                        Anuluj\n                    ")])])])];
       },
       proxy: true
     }])
@@ -1015,7 +1004,7 @@ var render = function render() {
     staticClass: "row"
   }, [_c("div", {
     staticClass: "col item"
-  }, [_vm._v("\n                                Imię pracownika:\n                                "), _c("div", [_c("div", {
+  }, [_vm._v("\n                            Imię pracownika:\n                            "), _c("div", [_c("div", {
     staticClass: "input__wrapper mt-1"
   }, [_c("input", {
     directives: [{
@@ -1052,7 +1041,7 @@ var render = function render() {
     staticClass: "row"
   }, [_c("div", {
     staticClass: "col item"
-  }, [_vm._v("\n                                Nazwisko pracownika:\n                                "), _c("div", [_c("div", {
+  }, [_vm._v("\n                            Nazwisko pracownika:\n                            "), _c("div", [_c("div", {
     staticClass: "input__wrapper mt-1"
   }, [_c("input", {
     directives: [{
@@ -1091,7 +1080,7 @@ var render = function render() {
     staticClass: "row"
   }, [_c("div", {
     staticClass: "col item"
-  }, [_vm._v("\n                                Numer telefonu:\n                                "), _c("div", [_c("div", {
+  }, [_vm._v("\n                            Numer telefonu:\n                            "), _c("div", [_c("div", {
     staticClass: "input__wrapper mt-1"
   }, [_c("input", {
     directives: [{
@@ -1128,7 +1117,7 @@ var render = function render() {
     staticClass: "row"
   }, [_c("div", {
     staticClass: "col item"
-  }, [_vm._v("\n                                Login:\n                                "), _c("div", [_c("div", {
+  }, [_vm._v("\n                            Login:\n                            "), _c("div", [_c("div", {
     staticClass: "input__wrapper mt-1"
   }, [_c("input", {
     directives: [{
@@ -1167,7 +1156,7 @@ var render = function render() {
     staticClass: "row"
   }, [_c("div", {
     staticClass: "col item"
-  }, [_vm._v("\n                                Zatrudniony do:\n                                "), _c("div", [_c("div", {
+  }, [_vm._v("\n                            Zatrudniony do:\n                            "), _c("div", [_c("div", {
     staticClass: "input__wrapper mt-1"
   }, [_c("input", {
     directives: [{
@@ -1203,7 +1192,7 @@ var render = function render() {
     staticClass: "row"
   }, [_c("div", {
     staticClass: "col item"
-  }, [_vm._v("\n                                Zatrudniony od:\n                                "), _c("div", [_c("div", {
+  }, [_vm._v("\n                            Zatrudniony od:\n                            "), _c("div", [_c("div", {
     staticClass: "input__wrapper mt-1"
   }, [_c("input", {
     directives: [{
@@ -1241,7 +1230,7 @@ var render = function render() {
     staticClass: "row"
   }, [_c("div", {
     staticClass: "col item"
-  }, [_vm._v("\n                                Stanowisko:\n                                "), _c("div", [_c("div", {
+  }, [_vm._v("\n                            Stanowisko:\n                            "), _c("div", [_c("div", {
     staticClass: "input__wrapper mt-1"
   }, [_c("input", {
     directives: [{
@@ -1278,7 +1267,7 @@ var render = function render() {
     staticClass: "row"
   }, [_c("div", {
     staticClass: "col item"
-  }, [_vm._v("\n                                Typ umowy:\n                                "), _c("div", [_c("div", {
+  }, [_vm._v("\n                            Typ umowy:\n                            "), _c("div", [_c("div", {
     staticClass: "input__wrapper mt-1"
   }, [_c("v-select", {
     "class": {
@@ -1307,7 +1296,7 @@ var render = function render() {
     staticClass: "row"
   }, [_c("div", {
     staticClass: "col item"
-  }, [_vm._v("\n                                Pensja:\n                                "), _c("div", [_c("div", {
+  }, [_vm._v("\n                            Pensja:\n                            "), _c("div", [_c("div", {
     staticClass: "input__wrapper mt-1"
   }, [_c("input", {
     directives: [{
@@ -1350,7 +1339,7 @@ var render = function render() {
     staticClass: "row"
   }, [_c("div", {
     staticClass: "col item"
-  }, [_vm._v("\n                                Notatki:\n                                "), _c("div", [_c("div", {
+  }, [_vm._v("\n                            Notatki:\n                            "), _c("div", [_c("div", {
     staticClass: "input__wrapper mt-1"
   }, [_c("textarea", {
     directives: [{

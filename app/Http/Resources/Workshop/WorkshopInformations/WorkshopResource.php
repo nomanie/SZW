@@ -5,6 +5,7 @@ namespace App\Http\Resources\Workshop\WorkshopInformations;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class WorkshopResource extends JsonResource
 {
@@ -18,7 +19,7 @@ class WorkshopResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'logo' => $this->logo,
+            'logo' => Storage::disk('workshop')->url($this->logo),
             'places' => $this->places->toArray() ?? [],
             'additional_fields' => $this->additionalFields->toArray(),
             'contact_form' => $this->contactForm,

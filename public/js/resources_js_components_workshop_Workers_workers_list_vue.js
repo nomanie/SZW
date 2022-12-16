@@ -55,7 +55,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.$http.get(route('api.get.options', {
-        "enum": 'App\\Enums\\WorkshopMiddleware\\ContractTypeEnum'
+        "enum": 'App\\Enums\\Workshop\\ContractTypeEnum'
       })).then(function (response) {
         _this2.options = response.data;
       })["catch"](function (error) {

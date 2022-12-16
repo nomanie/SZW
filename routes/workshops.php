@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\api\v1\Workshop\Workers\WorkerController;
 use App\Http\Controllers\api\v1\Workshop\WorkshopInformations\WorkshopController;
 use App\Http\Middleware\InitializeTenancyByPath;
 use Illuminate\Support\Facades\Route;
@@ -61,4 +62,8 @@ Route::as('workshop.')->group(function(){
         })->name('error-report');
     });
     Route::resource('/workshops', WorkshopController::class)->only(['index', 'update']);
+    Route::post('/workers/export', [WorkerController::class, 'export'])->name('workers.export');
+    Route::get('/workers/download/{path}', [WorkerController::class, 'download'])->name('workers.download');
+    Route::resource('workers', App\Http\Controllers\api\v1\Workshop\Workers\WorkerController::class);
+    Route::post('/workshops/{workshop}/upload/logo', [WorkshopController::class, 'upload'])->name('upload.logo');
 });

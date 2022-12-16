@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('phone');
             $table->string('zip_code');
             $table->string('building_number');
-            $table->string('flat_number');
+            $table->string('flat_number')->nullable();
             $table->timestamps();
         });
     }

@@ -5,9 +5,14 @@
         <div class="row mt-3 align-items-baseline" v-for="(field, index) in form.fields">
             <div class="col-12 col-lg-4 px-3">
                 <b-form-group label="Nazwa pola">
-                    <b-input type="text" v-model="field.name" placeholder="Nazwa pola">
-
+                    <b-input
+                        type="text"
+                        v-model="field.name"
+                        placeholder="Nazwa pola"
+                        :class="{invalid : errors[`fields.${index}.name`]}"
+                    >
                     </b-input>
+                    <error :errors="errors[`fields.${index}.name`]"></error>
                 </b-form-group>
             </div>
             <div class="col-12 col-lg-4 px-3">
@@ -17,16 +22,22 @@
                         placeholder="Wybierz rodzaj pola"
                         :options="fieldTypes"
                         :reduce="field => field.index"
+                        :class="{invalid : errors[`fields.${index}.type`]}"
                     >
-
                     </v-select>
+                    <error :errors="errors[`fields.${index}.type`]"></error>
                 </b-form-group>
             </div>
             <div class="col-12 col-lg-4 px-3">
                 <b-form-group label="Wartość pola">
-                    <b-input v-model="field.value" type="text" laceholder="Wartość pola">
-
+                    <b-input
+                        v-model="field.value"
+                        type="text"
+                        laceholder="Wartość pola"
+                        :class="{invalid : errors[`fields.${index}.value`]}"
+                    >
                     </b-input>
+                    <error :errors="errors[`fields.${index}.value`]"></error>
                 </b-form-group>
             </div>
             <div class="col-12 col-lg-12 px-3 mt-2 mb-2">
@@ -57,6 +68,7 @@
 </template>
 <script>
 import error from "@js/assets/form/error";
+
 export default {
     name: 'additionalFields',
     components: {
@@ -78,6 +90,7 @@ export default {
     },
     data() {
         return {
+            errors: {},
             types: [],
             form: {
                 fields: [

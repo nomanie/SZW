@@ -2,6 +2,7 @@
 
 namespace App\Models\System;
 
+use App\Models\Workshop\Workers\Worker;
 use App\Models\Workshop\WorkshopInformations\WorkshopAdditionalField;
 use App\Models\Workshop\WorkshopInformations\WorkshopContactForm;
 use App\Models\Workshop\WorkshopInformations\WorkshopPlace;
@@ -9,13 +10,11 @@ use App\Traits\LogTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Stancl\Tenancy\Contracts\TenantWithDatabase;
 use Stancl\Tenancy\Database\Concerns;
 use Stancl\Tenancy\Database\Concerns\CentralConnection;
-use Stancl\Tenancy\Database\Concerns\ResourceSyncing;
 use Stancl\Tenancy\Database\TenantCollection;
 use Stancl\Tenancy\Events;
 
@@ -88,5 +87,9 @@ class Workshop extends Model implements TenantWithDatabase
         return $this->hasMany(WorkshopAdditionalField::class);
     }
 
+    public function workers(): hasMany
+    {
+        return $this->hasMany(Worker::class, 'workshop_id', 'id');
+    }
 
 }

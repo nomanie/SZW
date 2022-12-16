@@ -111,6 +111,7 @@ export default {
         login() {
             this.$http.post(route('login'), this.form).then((response) => {
                 localStorage.setItem('id', response.data.id)
+                localStorage.setItem('token', response.data.token)
                 window.location = response.data.route
             }).catch((error) => {
                 this.errors = error.data.errors

@@ -25,7 +25,7 @@
                 <div class="row">
                     @foreach($row as $key => $value)
                         @if(is_string($value) || is_numeric($value))
-                            <div class="col">{!! $value !!}</div>
+                            <div class="col" style="text-align: center">{!! $value !!}</div>
                         @else
                             <div class="col"></div>
                         @endif

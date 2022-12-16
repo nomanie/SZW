@@ -12,6 +12,7 @@ use App\Services\Workshop\WorkshopService;
 use App\Traits\JsonResponseTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class WorkshopController extends Controller
@@ -42,5 +43,17 @@ class WorkshopController extends Controller
             return $this->successJsonResponse(__('Pomyślnie zapisano dane'));
         }
         return $this->errorJsonResponse(__('Dane nie zostały zapisane'));
+    }
+
+    public function upload(Request $request, Workshop $workshop)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:png,jpg,jpeg,webp|max:2048'
+        ]);
+        $file = $this->service->setWorkshop($workshop)->saveLogo($request->file('image'));
+        if ($file) {
+            return $this->successJsonResponse(__('Poprawnie zapisano logo'), 200, ['file' => $file]);
+        }
+        return $this->errorJsonResponse(__('Nie udało się zapisać loga'));
     }
 }

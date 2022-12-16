@@ -1,15 +1,16 @@
 <?php
 namespace App\Services\Workshop\Workers;
 
+use App\Models\System\Workshop;
 use App\Models\Workshop\Workers\Worker;
 
 class WorkerService
 {
-    public function __construct(protected Worker $worker = new Worker())
-    {}
+    protected Worker $worker;
 
     public function saveOrUpdate(mixed $data, Worker $worker = null): Worker
     {
+        $this->worker = new Worker();
         if ($worker) {
             $this->worker = $worker;
         }

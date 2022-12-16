@@ -12190,6 +12190,18 @@ table.border-col td:last-of-type, table.border-col th:last-of-type {
   overflow-y: scroll;
 }
 
+.dataTables_scroll {
+  overflow-x: auto !important;
+}
+
+.dataTables_scrollBody {
+  position: unset !important;
+}
+
+.no-word-break {
+  white-space: nowrap;
+}
+
 ul li {
   list-style: none;
 }

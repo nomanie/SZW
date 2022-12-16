@@ -19,6 +19,7 @@
         "maatwebsite/excel": "^3.1",
         "mrcnpdlk/validator": "^0.3.2",
         "psr/simple-cache": "^2.0",
+        "spatie/laravel-ray": "^1.31",
         "stancl/tenancy": "^3.6",
         "tightenco/ziggy": "^1.5",
         "yajra/laravel-datatables": "^9.0",

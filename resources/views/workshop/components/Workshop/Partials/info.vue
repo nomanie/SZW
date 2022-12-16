@@ -126,11 +126,7 @@ export default {
     methods: {
         save() {
             this.form.section = 'info'
-            this.$http.put(route('workshop.workshops.update', this.id), this.form).then(() => {
-                this.errors = {}
-            }).catch((error) => {
-                this.errors = error.data.errors
-            })
+            this.$http.put(route('workshop.workshops.update', this.id), this.form)
         },
         setOwners($event) {
             this.form.owners = $event

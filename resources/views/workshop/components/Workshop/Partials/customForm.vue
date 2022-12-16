@@ -7,15 +7,22 @@
             placeholder="Wybierz Wygląd formularza"
             :options="view_templates"
             :reduce="view => view.index"
+            :class="{invalid : errors.view}"
         ></v-select>
+        <error :errors="errors.view"></error>
         <hr>
         <div class="mt-3 align-items-baseline" v-for="(field, index) in form.fields">
             <div class="row">
                 <div class="col-12 col-lg-4 px-3">
                     <b-form-group label="Nazwa pola">
-                        <b-input type="text" v-model="field.name" placeholder="Nazwa pola">
-
+                        <b-input
+                            type="text"
+                            v-model="field.name"
+                            placeholder="Nazwa pola"
+                            :class="{invalid : errors[`fields.${index}.name`]}"
+                        >
                         </b-input>
+                        <error :errors="errors[`fields.${index}.name`]"></error>
                     </b-form-group>
                 </div>
                 <div class="col-12 col-lg-4 px-3">
@@ -25,24 +32,36 @@
                             placeholder="Wybierz rodzaj pola"
                             :options="fieldTypes"
                             :reduce="field => field.index"
+                            :class="{invalid : errors[`fields.${index}.type`]}"
                         >
                         </v-select>
+                        <error :errors="errors[`fields.${index}.type`]"></error>
                     </b-form-group>
                 </div>
             </div>
             <div class="row mt-2">
                 <div class="col-12 col-lg-4 px-3">
                     <b-form-group label="Minimalna długość">
-                        <b-input v-model="field.min" type="number" laceholder="Minimalna długość">
-
+                        <b-input
+                            v-model="field.min"
+                            type="number"
+                            laceholder="Minimalna długość"
+                            :class="{invalid : errors[`fields.${index}.min`]}"
+                        >
                         </b-input>
+                        <error :errors="errors[`fields.${index}.min`]"></error>
                     </b-form-group>
                 </div>
                 <div class="col-12 col-lg-4 px-3">
                     <b-form-group label="Maksymalna długość">
-                        <b-input v-model="field.max" type="number" laceholder="Maksymalna długość">
-
+                        <b-input
+                            v-model="field.max"
+                            type="number"
+                            laceholder="Maksymalna długość"
+                            :class="{invalid : errors[`fields.${index}.max`]}"
+                        >
                         </b-input>
+                        <error :errors="errors[`fields.${index}.max`]"></error>
                     </b-form-group>
                 </div>
                 <div class="col-12 col-lg-4 px-3">
@@ -92,10 +111,13 @@
 </template>
 <script>
 import displayForm from "./displayForm"
+import error from '@js/assets/form/error'
+
 export default {
     name: 'customForm',
     components: {
-        displayForm
+        displayForm,
+        error
     },
     props: {
         fieldTypes: {
@@ -113,6 +135,7 @@ export default {
     },
     data() {
         return {
+            errors: {},
             types: [],
             form: {
                 fields: [

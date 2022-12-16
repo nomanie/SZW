@@ -143,15 +143,17 @@ class CarBrandsController extends Controller
                 ->setView('vendor.datatables.print')
                 ->setModel('App\Models\System\Cars\CarBrand')
                 ->getDataFromAjaxRequest($data)
-                ->setFilename('Marki_samochodow')
+                ->generateFilename('Marki_samochodow')
+                ->setDisk('admin')
                 ->generate();
         }
         //@todo zrobić zapis do bazy i zwracanie id, przenieść folder głębiej
-        return $this->pdfGenerator->getFile();
+        return $this->pdfGenerator->getFileInUrl();
     }
 
     public function download(string $path)
     {
+        $this->pdfGenerator->setDisk('admin')->setPath($path);
         return $this->pdfGenerator->download();
     }
 

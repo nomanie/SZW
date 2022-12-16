@@ -15,10 +15,6 @@ use Illuminate\Support\Facades\Route;
 */
 Route::group(['as' => 'api.'], function() {
     Route::get('/enums/{enum}/{function?}', [App\Http\Controllers\api\v1\Enums\EnumsController::class, 'getOptions'])->name('get.options');
-
-    Route::prefix('workshop')->name('workshop.')->as('workshop.')->group(function() {
-       Route::apiResource('workers', App\Http\Controllers\api\v1\Workshop\Workers\WorkerController::class);
-   });
 });
 
 include_once('adminApi.php');

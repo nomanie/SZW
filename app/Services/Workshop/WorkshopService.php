@@ -8,6 +8,7 @@ use App\Models\Workshop\WorkshopInformations\WorkshopContactForm;
 use App\Models\Workshop\WorkshopInformations\WorkshopPlace;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class WorkshopService
 {
@@ -17,8 +18,13 @@ class WorkshopService
     {
     }
 
-    public function setWorkshop(Workshop $workshop): static
+    public function setWorkshop(Workshop|int $workshop): static
     {
+        if (gettype($workshop) === 'int')
+        {
+            $workshop = Workshop::find($workshop);
+        }
+
         $this->workshop = $workshop;
 
         return $this;
@@ -79,7 +85,7 @@ class WorkshopService
                 $new_place->street = $place['street'];
                 $new_place->zip_code = $place['zip_code'];
                 $new_place->building_number = $place['building_number'];
-                $new_place->flat_number = $place['flat_number'];
+                $new_place->flat_number = $place['flat_number'] ?? null;
                 $new_place->workshop_id = $this->workshop->id;
                 $new_place->save();
             }
@@ -137,5 +143,30 @@ class WorkshopService
     {
         // @todo dodawanie znaczników na mapie
         // @todo dodać do workshop_places lat i lng
+    }
+
+    /** Zapisuje zdjęcie loga warsztatu
+     * @param $file
+     * @return bool
+     * @throws Exception
+     */
+    public function saveLogo($file): bool|string
+    {
+        if ($this->workshop->logo !== null) {
+            Storage::disk('workshop')->delete($this->workshop->logo);
+        }
+        DB::beginTransaction();
+        try {
+            $imageName = $this->workshop->tenancy_db_name . '_' . now()->timestamp . '.' . $file->extension();
+            $file = Storage::disk('workshop')->putFileAs('/logo', $file, $imageName, 'public');
+            $url = Storage::disk('workshop')->url($file);
+            $this->workshop->logo = '/logo/' . $imageName;
+            $this->workshop->save();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw new Exception;
+        }
+        return Storage::disk('workshop')->url($this->workshop->logo);
     }
 }

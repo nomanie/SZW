@@ -78,10 +78,12 @@ Vue.http.interceptors.push(function (request) {
     return function (response) {
         this.$store.dispatch('done');
         if (response.status >= 300) {
+            this.errors = response.data.errors
             this.$bvToast.toast(response.body.errors ? "Wystąpił błąd w formuląrzu" : response.data.message, {
                 title: 'Błąd', variant: 'danger',
             })
         } else {
+            this.errors = {}
             this.$bvToast.toast(response.data.message, {
                 title: 'Komunikat', variant: 'success',
             })

@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="avatar">
-                            <img src="../../../../../public/images/person.jpg">
+                            <img :src="getLogo">
                         </div>
                     </div>
                 </div>
@@ -13,7 +13,8 @@
             <div class="col-12 col-lg-4 d-flex align-items-center">
                 <div>
                 </div>
-                <button class="btn btn-primary">
+                <input ref="fileUpload" type="file" hidden @change="saveImage">
+                <button class="btn btn-primary" @click="$refs.fileUpload.click()">
                     <i class="fa fa-camera"></i>
                     Zmień Logo
                 </button>
@@ -107,6 +108,7 @@ export default {
     },
     data() {
         return {
+            file: null,
             fieldTypes: [],
             form: {},
         }
@@ -114,6 +116,11 @@ export default {
     mounted() {
         this.getFieldTypes()
         this.getData()
+    },
+    computed: {
+        getLogo() {
+            return (this.form.logo !== null ? this.form.logo : 'http://127.0.0.1:8000/images/person.jpg')
+        }
     },
     methods: {
         getFieldTypes() {
@@ -125,6 +132,19 @@ export default {
             this.$http.get(route('workshop.workshops.index')).then((response) => {
                 this.form = response.data.data
             })
+        },
+        saveImage($event) {
+            if ($event.target.files[0] !== undefined) {
+                let formData = new FormData();
+                formData.append('image', $event.target.files[0]);
+                this.$http.post(route('workshop.upload.logo', this.form.id), formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    }
+                }).then((response) => {
+                    this.form.logo = response.data.data.file
+                })
+            }
         }
     }
 }
