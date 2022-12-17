@@ -2,10 +2,14 @@
 
 namespace App\Generators\PDF;
 
+use App\Enums\Workshop\MediableTypeEnum;
+use App\Models\Workshop\Mediable;
+use App\Services\Workshop\MediableService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use phpDocumentor\Reflection\Types\This;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class PdfGenerator
 {
@@ -14,11 +18,14 @@ class PdfGenerator
     protected string $view;
     protected string $filename;
     protected string $model;
-    protected string $path;
+    protected string $path = 'exports/';
     protected $pdf;
     protected string $disk;
+    protected Mediable $mediable;
 
-    public function __construct()
+    public function __construct(
+        protected MediableService $mediableService
+    )
     {
         $this->pdf = app('snappy.pdf.wrapper');
     }
@@ -51,7 +58,7 @@ class PdfGenerator
         return $this;
     }
 
-    public function generateFilename(string $filename):static
+    public function generateFilename(string $filename): static
     {
         $this->filename = $filename . '_' . (new \Carbon\Carbon)->getTimestamp() . '.pdf';
 
@@ -65,33 +72,25 @@ class PdfGenerator
         return $this;
     }
 
-    public function getFile(): string
-    {
-        return 'storage/' . $this->path;
-    }
-
-    public function setPath(string $path): static
-    {
-
-        $this->path = str_replace('-', '/', $path);
-        $this->setFilename(Arr::last(explode('/', $this->path)));
-
-        return $this;
-    }
-
     public function getFilename(): string
     {
         return $this->filename;
     }
 
-    public function generate(): static
+    public function generate(): Mediable
     {
         $data = $this->data;
         $view = view($this->view, compact('data'));
-        $this->path = storage_path('app/' . $this->disk . 's/exports/' . $this->filename);
-        $this->pdf->generateFromHtml($view, $this->path);
-        $this->setPublicPath();
-        return $this;
+        $path = storage_path('app/' . $this->disk . 's/' . $this->path . $this->filename);
+        $this->pdf->generateFromHtml($view, $path);
+        $size = Storage::disk($this->disk)->size($this->path . $this->filename);
+
+        return $this->mediableService->setDisk($this->disk)
+            ->setExtension('.pdf')
+            ->setFilename($this->filename)
+            ->setSize($size)
+            ->setType(MediableTypeEnum::EXPORT)
+            ->store();
     }
 
     public function inline(): string
@@ -102,20 +101,9 @@ class PdfGenerator
         return $this->pdf->inline();
     }
 
-    public function download(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+    public function download(): StreamedResponse
     {
-        return response()->download($this->getFile(), $this->filename,
-            [
-                'Content-Type' => 'application/pdf'
-            ]
-        );
-    }
-
-    public function getFileInUrl(): string
-    {
-        $file = Storage::url($this->path);
-
-        return str_replace('/', '-', $this->path);
+        return Storage::disk($this->disk)->download($this->path . $this->filename);
     }
 
     public function setDisk(string $disk): static
@@ -125,9 +113,21 @@ class PdfGenerator
         return $this;
     }
 
-    public function setPublicPath(): static
+    public function setMediable(Mediable|int $mediable): static
     {
-        $this->path = explode('storage/',$this->path)[1];
+        if (gettype($mediable) === 'int') {
+            $mediable = Mediable::find($mediable);
+        }
+        $this->mediable = $mediable;
+        $this->disk = $this->mediable->disk;
+        $this->filename = $this->mediable->name . $this->mediable->extension;
+        $this->path = MediableTypeEnum::getPath($this->mediable->type);
+        return $this;
+    }
+
+    public function setPath(string $path): static
+    {
+        $this->path = $path;
 
         return $this;
     }

@@ -13,11 +13,11 @@ body {
 }
 
 a, router-link {
-    color: inherit;
-    text-decoration: none;
+    color: inherit !important;
+    text-decoration: none !important;
 
     &:hover {
-        color: inherit;
+        color: inherit !important;
     }
 }
 

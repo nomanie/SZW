@@ -167,6 +167,7 @@ class WorkshopService
             DB::rollback();
             throw new Exception;
         }
+
         return Storage::disk('workshop')->url($this->workshop->logo);
     }
 }

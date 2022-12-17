@@ -8,6 +8,7 @@ use App\Http\Requests\CreateWorkerRequest;
 use App\Http\Requests\UpdateWorkerRequest;
 use App\Http\Resources\Workshop\Workers\WorkerResource;
 use App\Models\System\Cars\CarBrand;
+use App\Models\Workshop\Mediable;
 use App\Models\Workshop\Workers\Worker;
 use App\Services\System\LogService;
 use App\Services\Workshop\Workers\WorkerService;
@@ -135,19 +136,18 @@ class WorkerController extends Controller
     {
         $data = $request->all();
         if ($request->type === 'pdf') {
-            $this->pdfGenerator
+            return $this->pdfGenerator
                 ->setView('vendor.datatables.print')
                 ->setModel('App\Models\Workshop\Workers\Worker')
                 ->getDataFromAjaxRequest($data)
-                ->setFilename('Pracownicy')
+                ->generateFilename('Pracownicy')
+                ->setDisk('workshop')
                 ->generate();
         }
-        //@todo zrobić zapis do bazy i zwracanie id, przenieść folder głębiej
-        return $this->pdfGenerator->getFile();
     }
 
-    public function download(string $path)
+    public function download(Mediable $mediable)
     {
-        return $this->pdfGenerator->download();
+        return $this->pdfGenerator->setMediable($mediable)->download();
     }
 }

@@ -250,7 +250,8 @@ export default {
                                         ids: ids
                                     }
                                     _self.$http.post(route(_self.apiUrl + '.export'), data).then((response) => {
-                                        window.location = route(_self.apiUrl + '.download', response.data)
+                                        console.log(response)
+                                        window.location = route(_self.apiUrl + '.download', response.data.id)
                                     })
                                 }
                             },

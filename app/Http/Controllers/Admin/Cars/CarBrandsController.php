@@ -7,6 +7,7 @@ use App\Http\Requests\System\Cars\StoreCarBrandRequest;
 use App\Http\Requests\System\Cars\UpdateCarBrandRequest;
 use App\Http\Resources\Admin\Cars\BrandResource;
 use App\Models\System\Cars\CarBrand;
+use App\Models\Workshop\Mediable;
 use App\Services\System\Cars\CarBrandService;
 use App\Generators\PDF\PdfGenerator;
 use App\Services\System\LogService;
@@ -139,7 +140,7 @@ class CarBrandsController extends Controller
     {
         $data = $request->all();
         if ($request->type === 'pdf') {
-            $this->pdfGenerator
+            return $this->pdfGenerator
                 ->setView('vendor.datatables.print')
                 ->setModel('App\Models\System\Cars\CarBrand')
                 ->getDataFromAjaxRequest($data)
@@ -147,14 +148,11 @@ class CarBrandsController extends Controller
                 ->setDisk('admin')
                 ->generate();
         }
-        //@todo zrobić zapis do bazy i zwracanie id, przenieść folder głębiej
-        return $this->pdfGenerator->getFileInUrl();
     }
 
-    public function download(string $path)
+    public function download(Mediable $mediable)
     {
-        $this->pdfGenerator->setDisk('admin')->setPath($path);
-        return $this->pdfGenerator->download();
+        return $this->pdfGenerator->setMediable($mediable)->download();
     }
 
 }
