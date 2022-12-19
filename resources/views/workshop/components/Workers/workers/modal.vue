@@ -237,6 +237,10 @@ export default {
         data: {
             type: [Object, Array],
             default: () => {}
+        },
+        show: {
+            type: Boolean,
+            default: () => {}
         }
     },
     data() {
@@ -255,8 +259,7 @@ export default {
         data: function() {
             this.form = this.data
             this.is_edit = true
-            this.$bvModal.show('worker-modal')
-        }
+        },
     },
     computed: {
         btnUrl() {

@@ -8,7 +8,7 @@ class WorkerService
 {
     protected Worker $worker;
 
-    public function saveOrUpdate(mixed $data, Worker $worker = null): Worker
+    public function saveOrUpdate(mixed $data, Worker $worker = null): Worker|null
     {
         $this->worker = new Worker();
         if ($worker) {
@@ -30,6 +30,6 @@ class WorkerService
         $this->worker->info = $data['info'];
         $this->worker->save();
 
-        return $this->worker;
+        return $this->worker ?? null;
     }
 }

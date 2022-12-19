@@ -25,8 +25,8 @@ class WorkerController extends Controller
 
     public function __construct(
         private readonly WorkerService $service,
-        protected LogService $logService,
-        protected PdfGenerator $pdfGenerator
+        protected readonly LogService $logService,
+        protected readonly PdfGenerator $pdfGenerator
     )
     {
         //@todo dodać Permisje
@@ -69,9 +69,11 @@ class WorkerController extends Controller
 
     public function store(CreateWorkerRequest $request): JsonResponse
     {
-        //@todo dorobić logi
         $input = $request->validated();
-        if ($this->service->saveOrUpdate($input)) {
+        $worker = $this->service->saveOrUpdate($input);
+
+        if ($worker) {
+            $this->logService->add($worker, $request, new_data: $input);
             return $this->successJsonResponse(__('Pomyślnie dodano pracownika'));
         }
         return $this->errorJsonResponse(__('Nie udało się dodać nowego pracownika'));
@@ -87,6 +89,12 @@ class WorkerController extends Controller
     {
         return new WorkerResource($worker);
     }
+
+    public function edit(Worker $worker): WorkerResource
+    {
+        return new WorkerResource($worker);
+    }
+
 
     /**
      * Update the specified resource in storage.

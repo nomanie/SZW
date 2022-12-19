@@ -11,17 +11,18 @@
                 :reload-table="reload_table"
                 :columns="fields"
                 :server-side-data="true"
-                :modal-id="modal_id"
+                :modal-id="add_edit_modal_id"
                 table-id="car-brand-table"
                 api-url="workshop.workers"
                 table-name="Tabela_pracowników"
                 delete-url="workshop.workers.destroy"
-                @update="edit"
                 @delete="remove"
                 @add="add"
-                @edit="showModal($event, true)"
+                @edit="edit($event, true)"
+                @show="show"
             >
             </datatable>
+            <show :data="data"></show>
         </div>
     </div>
 </template>
@@ -30,16 +31,19 @@
 import modal from './modal'
 import TaskList from "../../../../../js/assets/task_list/TaskList";
 import edit from './edit'
+import show from './show'
 
 export default {
     components: {
         TaskList,
         modal,
-        edit
+        edit,
+        show
     },
     data() {
         return {
-            modal_id: 'worker-modal',
+            add_edit_modal_id: 'worker-modal',
+            show_modal_id: 'worker-info-modal',
             data: {},
             reload_table: 0,
             fields: [
@@ -107,23 +111,23 @@ export default {
                 this.reload_table++
             })
         },
-        edit($event) {
-            this.$http.get(route('workshop.workers.show', $event)).then((response) => {
-                this.data = response.data.data;
-                this.isEdit = true
-            })
-        },
         add($event) {
-            this.$bvModal.show(this.modal_id)
+            this.$bvModal.show(this.add_edit_modal_id)
         },
-        showModal($event, edit = false) {
+        edit($event, edit = false) {
             this.isEdit = edit
-            this.$http.get(route('admin.cars.brand.edit', $event)).then((response) => {
+            this.$http.get(route('workshop.workers.edit', $event)).then((response) => {
                 this.data = response.data.data
-                this.$bvModal.show(this.modal_id)
+                this.$bvModal.show(this.add_edit_modal_id)
             })
 
         },
+        show($event) {
+            this.$http.get(route('workshop.workers.show', $event)).then((response) => {
+                this.data = response.data.data
+                this.$bvModal.show(this.show_modal_id)
+            })
+        }
     }
 }
 </script>
