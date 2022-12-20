@@ -11668,11 +11668,11 @@ body {
 }
 
 a, router-link {
-  color: inherit;
-  text-decoration: none;
+  color: inherit !important;
+  text-decoration: none !important;
 }
 a:hover, router-link:hover {
-  color: inherit;
+  color: inherit !important;
 }
 
 .h-100vh {
@@ -11709,7 +11709,7 @@ a:hover, router-link:hover {
 
 .pager {
   overflow-y: auto;
-  height: 80vh;
+  height: 90vh;
 }
 .pager > * {
   margin: 1rem;
@@ -11866,6 +11866,17 @@ a:hover, router-link:hover {
 .pager {
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+.modal-fs {
+  min-width: 95%;
+  width: 95%;
+  margin: 0 auto !important;
+}
+.modal-fs .modal-content {
+  width: 100%;
+  height: 95vh;
+  margin: 1rem 0;
 }
 
 .card {
@@ -12188,6 +12199,18 @@ table.border-col td:last-of-type, table.border-col th:last-of-type {
 .table--scrollable {
   height: 70vh;
   overflow-y: scroll;
+}
+
+.dataTables_scroll {
+  overflow-x: auto !important;
+}
+
+.dataTables_scrollBody {
+  position: unset !important;
+}
+
+.no-word-break {
+  white-space: nowrap;
 }
 
 ul li {

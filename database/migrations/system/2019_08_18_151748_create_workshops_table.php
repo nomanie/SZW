@@ -19,7 +19,6 @@ return new class extends Migration
             $table->foreignId('identity_id')
                 ->references('id')->on('identities')
                 ->cascadeOnDelete()->cascadeOnUpdate();
-            $table->json('workshops')->nullable();
             $table->json('owners')->nullable();
             $table->string('name');
             $table->string('logo')->nullable();
@@ -30,7 +29,6 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->json('social_media')->nullable();
-            $table->json('additional_data')->nullable();
             $table->timestamps();
         });
     }

@@ -18,7 +18,12 @@ return new class extends Migration
             $table->foreignId('workshop_id')
                 ->references('id')->on('system.workshops')
                 ->cascadeOnDelete()->cascadeOnUpdate();
-            $table->json('place')->nullable();
+            $table->string('city');
+            $table->string('street');
+            $table->string('phone');
+            $table->string('zip_code');
+            $table->string('building_number');
+            $table->string('flat_number')->nullable();
             $table->timestamps();
         });
     }

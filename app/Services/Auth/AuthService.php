@@ -89,6 +89,7 @@ class AuthService
             $user->identity_id = $this->identity->id;
             $user->first_name = $data['first_name'];
             $user->last_name = $data['last_name'];
+            $user->logo = public_path('/images/person');
 //            $user->phone = $data['phone'] ?? null;
 //            $user->date_of_birth = $data['date_of_birth'] ?? null;
 //            $user->city = $data['city'] ?? null;
@@ -124,6 +125,7 @@ class AuthService
 //            $workshop->logo = $data['logo'] ?? null;
             $workshop->nip = $data['nip'];
             $workshop->regon = $data['regon'];
+            $workshop->logo = public_path('/images/person');
 //            $workshop->company_created_at = $data['company_created_at'] ?? null;
 //            $workshop->website = $data['website'] ?? null;
 //            $workshop->social_media = $data['social_media'] ?? null;
@@ -156,6 +158,9 @@ class AuthService
         return false;
     }
 
+    /** Dodaje typ konta do sesji
+     * @return $this
+     */
     public function addTypesToSession(): static
     {
         Session::forget('account_type');
@@ -176,6 +181,10 @@ class AuthService
         return $this;
     }
 
+    /** Ustawia identity dla serwisu
+     * @param int $id
+     * @return $this
+     */
     public function setIdentity(int $id): static
     {
         $this->identity = Identity::find($id);
@@ -183,6 +192,9 @@ class AuthService
         return $this;
     }
 
+    /** Zwraca widok dashboardu dla danego typu konta
+     * @return string
+     */
     public function getView(): string
     {
         if (Session::get('account_type')[0] === 'admin') {
@@ -194,6 +206,9 @@ class AuthService
         return Session::get('account_type')[0] . '.pages.dashboard';
     }
 
+    /** Zwraca url do widoku dashboard dla danego typu konta
+     * @return string
+     */
     public function getRoute(): string
     {
         if (Session::get('account_type')[0] === 'admin') {
@@ -205,12 +220,19 @@ class AuthService
         return route(Session::get('account_type')[0] . '.dashboard', $this->identity->uuid);
     }
 
+    /** Zwraca url widoku dashboard
+     * @return string
+     */
     public function getHomeRoute(): string
     {
         $this->identity = auth()->user();
         return $this->getRoute();
     }
 
+    /** Generuje unikalne uuid dla Identity
+     * @param int $length
+     * @return string
+     */
     public function generateUuid(int $length = 10): string
     {
         while(true) {
@@ -219,5 +241,31 @@ class AuthService
                 return $uuid;
             }
         }
+    }
+
+    /** Tworzy token dostępu dla danego Identity
+     * @return void
+     */
+    public function makeToken(): void
+    {
+        auth()->user()->createToken('login');
+    }
+
+    /** Pobiera token dla danego Identity
+     * @return mixed
+     */
+    public function getToken()
+    {
+        $token = auth()->user()->currentAccessToken();
+        Session::put('token', $token);
+        return $token;
+    }
+
+    /** Ustawia id Identity do sesji
+     * @return void
+     */
+    public function addIdToSession(): void
+    {
+        Session::put('id', $this->identity->id);
     }
 }

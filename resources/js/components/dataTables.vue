@@ -71,11 +71,11 @@ export default {
         },
         scrollX: {
             Type: Boolean,
-            default: false
+            default: true
         },
         scrollY: {
             Type: Boolean,
-            default: true
+            default: false
         },
         colReorder: {
             Type: Boolean,
@@ -140,10 +140,10 @@ export default {
                 },
                 processing: true,
                 serverSide: true,
-                ajax: route(this.apiUrl),
+                ajax: route(this.apiUrl + '.index'),
                 pageLength: this.perPage,
                 columns: this.cols,
-                scrollY: '60vh',
+                scrollY: '50vh',
                 scrollX: this.scrollX,
                 scrollCollapse: true,
                 searching: this.searching,
@@ -249,8 +249,9 @@ export default {
                                         columns: columns.map(column => column.data),
                                         ids: ids
                                     }
-                                    _self.$http.post(route('admin.cars.brand.export'), data).then((response) => {
-                                        window.location = route('admin.cars.brand.download', response.data)
+                                    _self.$http.post(route(_self.apiUrl + '.export'), data).then((response) => {
+                                        console.log(response)
+                                        window.location = route(_self.apiUrl + '.download', response.data.id)
                                     })
                                 }
                             },

@@ -42,6 +42,27 @@ return [
             'visibility' => 'public',
         ],
 
+        'workshop' => [
+            'driver' => 'local',
+            'root' => storage_path('app/workshops'),
+            'url' => env('APP_URL').'/storage/app/workshops',
+            'visibility' => 'public',
+        ],
+
+        'admin' => [
+            'driver' => 'local',
+            'root' => storage_path('app/admins'),
+            'url' => env('APP_URL').'/storage/app/admins',
+            'visibility' => 'public',
+        ],
+
+        'client' => [
+            'driver' => 'local',
+            'root' => storage_path('app/clients'),
+            'url' => env('APP_URL').'/storage/app/clients',
+            'visibility' => 'public',
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
@@ -67,7 +88,9 @@ return [
     */
 
     'links' => [
-        public_path('storage') => storage_path('app/public'),
+        public_path('storage/app/workshops') => storage_path('app/workshops'),
+        public_path('storage/app/admins') => storage_path('app/admins'),
+        public_path('storage/app/clients') => storage_path('app/clients'),
     ],
 
 ];

@@ -100,7 +100,7 @@
                 </div>
             </div>
         </div>
-        <loader :loading="loading"></loader>
+        <loader></loader>
     </div>
 </template>
 <script>
@@ -116,7 +116,6 @@ export default {
         return {
             form: {},
             errors: {},
-            loading: false,
             created: false
         }
     },

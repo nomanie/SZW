@@ -2,22 +2,28 @@
 
 namespace App\Models\Workshop\Workers;
 
-use App\Models\Workers\Group;
+use App\Models\System\Workshop;
 use App\Traits\LogTrait;
+use App\Traits\UseTenantConnection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Worker extends Model
 {
-    use HasFactory, LogTrait;
-
+    use UseTenantConnection, HasFactory, LogTrait;
     /* * * * * * * * * * * * * * * * * * *
     *            Relacje                *
     * * * * * * * * * * * * * * * * * * */
-    public function groups(): belongsToMany
+    public function permissions(): hasMany
     {
-        return $this->belongsToMany(Group::class);
+        return $this->hasMany(Permission::class);
+    }
+
+    public function workshop(): belongsTo
+    {
+        return $this->belongsTo(Workshop::class);
     }
 
     /* * * * * * * * * * * * * * * * * * *

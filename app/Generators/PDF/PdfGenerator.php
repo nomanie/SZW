@@ -2,24 +2,37 @@
 
 namespace App\Generators\PDF;
 
+use App\Enums\Workshop\MediableTypeEnum;
+use App\Models\Workshop\Mediable;
+use App\Services\Workshop\MediableService;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+use phpDocumentor\Reflection\Types\This;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+
 class PdfGenerator
 {
 
-    protected mixed     $data;
-    protected string    $view;
-    protected string    $filename;
-    protected string    $model;
-    protected string    $path;
-    protected           $pdf;
+    protected mixed $data;
+    protected string $view;
+    protected string $filename;
+    protected string $model;
+    protected string $path = 'exports/';
+    protected $pdf;
+    protected string $disk;
+    protected Mediable $mediable;
 
-    public function __construct()
+    public function __construct(
+        protected MediableService $mediableService
+    )
     {
         $this->pdf = app('snappy.pdf.wrapper');
     }
 
     public function getDataFromAjaxRequest(mixed $data): static
     {
-        $this->data = (new $this->model)->select($data['columns'])->whereIn('id', $data['ids'])->get()->toArray();
+        $this->data = (new $this->model)->whereIn('id', $data['ids'])->get($data['columns'])->toArray();
 
         return $this;
     }
@@ -45,16 +58,18 @@ class PdfGenerator
         return $this;
     }
 
-    public function setFilename(string $filename): static
+    public function generateFilename(string $filename): static
     {
-        $this->filename = $filename . '_' . (new \Carbon\Carbon)->getTimestamp()  . '.pdf';
+        $this->filename = $filename . '_' . (new \Carbon\Carbon)->getTimestamp() . '.pdf';
 
         return $this;
     }
 
-    public function getFile(): string
+    public function setFilename(string $filename): static
     {
-        return $this->path;
+        $this->filename = $filename;
+
+        return $this;
     }
 
     public function getFilename(): string
@@ -62,15 +77,20 @@ class PdfGenerator
         return $this->filename;
     }
 
-    public function generate(): static
+    public function generate(): Mediable
     {
         $data = $this->data;
         $view = view($this->view, compact('data'));
-        $this->path = storage_path('tmp/' . $this->filename);
+        $path = storage_path('app/' . $this->disk . 's/' . $this->path . $this->filename);
+        $this->pdf->generateFromHtml($view, $path);
+        $size = Storage::disk($this->disk)->size($this->path . $this->filename);
 
-        $this->pdf->generateFromHtml($view, $this->path);
-
-        return $this;
+        return $this->mediableService->setDisk($this->disk)
+            ->setExtension('.pdf')
+            ->setFilename($this->filename)
+            ->setSize($size)
+            ->setType(MediableTypeEnum::EXPORT)
+            ->store();
     }
 
     public function inline(): string
@@ -81,12 +101,34 @@ class PdfGenerator
         return $this->pdf->inline();
     }
 
-    public function download(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+    public function download(): StreamedResponse
     {
-        return response()->download($this->getFile(), $this->filename,
-            [
-            'Content-Type'=> 'application/pdf'
-            ]
-        );
+        return Storage::disk($this->disk)->download($this->path . $this->filename);
+    }
+
+    public function setDisk(string $disk): static
+    {
+        $this->disk = $disk;
+
+        return $this;
+    }
+
+    public function setMediable(Mediable|int $mediable): static
+    {
+        if (gettype($mediable) === 'int') {
+            $mediable = Mediable::find($mediable);
+        }
+        $this->mediable = $mediable;
+        $this->disk = $this->mediable->disk;
+        $this->filename = $this->mediable->name . $this->mediable->extension;
+        $this->path = MediableTypeEnum::getPath($this->mediable->type);
+        return $this;
+    }
+
+    public function setPath(string $path): static
+    {
+        $this->path = $path;
+
+        return $this;
     }
 }

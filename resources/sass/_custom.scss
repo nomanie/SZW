@@ -13,11 +13,11 @@ body {
 }
 
 a, router-link {
-    color: inherit;
-    text-decoration: none;
+    color: inherit !important;
+    text-decoration: none !important;
 
     &:hover {
-        color: inherit;
+        color: inherit !important;
     }
 }
 
@@ -60,8 +60,10 @@ a, router-link {
     > * {
         margin: 1rem;
     }
+
     overflow-y: auto;
-    height: 80vh;
+    height: 90vh;
+
     &::-webkit-scrollbar-track {
         -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
         background-color: #F5F5F5;
@@ -130,6 +132,7 @@ a, router-link {
         box-shadow: 1px 1px 2px 2px rgba(13, 110, 253, 0.6);
         transform: scale(1.05);
     }
+
     &.disabled:hover {
         color: inherit;
         text-decoration: none;
@@ -144,6 +147,7 @@ a, router-link {
 .fs-12 {
     font-size: 12px !important;
 }
+
 .fs-20 {
     font-size: 20px !important;
 }
@@ -232,10 +236,24 @@ a, router-link {
         }
     }
 }
+
 .content {
     width: calc(100% - 275px)
 }
+
 .pager {
     overflow-x: hidden;
     overflow-y: auto;
+}
+
+.modal-fs {
+    min-width: 95%;
+    width: 95%;
+    margin: 0 auto !important;
+
+    .modal-content {
+        width: 100%;
+        height: 95vh;
+        margin: 1rem 0;
+    }
 }

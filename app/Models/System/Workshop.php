@@ -2,6 +2,7 @@
 
 namespace App\Models\System;
 
+use App\Models\Workshop\Workers\Worker;
 use App\Models\Workshop\WorkshopInformations\WorkshopAdditionalField;
 use App\Models\Workshop\WorkshopInformations\WorkshopContactForm;
 use App\Models\Workshop\WorkshopInformations\WorkshopPlace;
@@ -9,9 +10,11 @@ use App\Traits\LogTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Stancl\Tenancy\Contracts\TenantWithDatabase;
 use Stancl\Tenancy\Database\Concerns;
+use Stancl\Tenancy\Database\Concerns\CentralConnection;
 use Stancl\Tenancy\Database\TenantCollection;
 use Stancl\Tenancy\Events;
 
@@ -29,7 +32,7 @@ class Workshop extends Model implements TenantWithDatabase
         Concerns\TenantRun,
         Concerns\InvalidatesResolverCache,
         Concerns\HasDatabase,
-        LogTrait;
+        LogTrait, CentralConnection;
 
     protected $table = 'system.workshops';
     protected $casts = [
@@ -69,20 +72,24 @@ class Workshop extends Model implements TenantWithDatabase
         return $this->belongsTo(Identity::class);
     }
 
-    public function contactForm(): belongsTo
+    public function contactForm(): hasOne
     {
-        return $this->belongsTo(WorkshopContactForm::class);
+        return $this->hasOne(WorkshopContactForm::class);
     }
 
-    public function places(): belongsToMany
+    public function places(): hasMany
     {
-        return $this->belongsToMany(WorkshopPlace::class);
+        return $this->hasMany(WorkshopPlace::class, 'workshop_id', 'id');
     }
 
-    public function additionalFields(): belongsToMany
+    public function additionalFields(): hasMany
     {
-        return $this->belongsToMany(WorkshopAdditionalField::class);
+        return $this->hasMany(WorkshopAdditionalField::class);
     }
 
+    public function workers(): hasMany
+    {
+        return $this->hasMany(Worker::class, 'workshop_id', 'id');
+    }
 
 }

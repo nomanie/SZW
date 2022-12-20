@@ -74,9 +74,21 @@
                         </router-link>
                     </b-dropdown-item>
                     <b-dropdown-item>
+                        <i class="fa-solid fa-book"></i>
+                        <router-link :to="{name: 'settings'}">
+                            <span>Dziennik aktywności</span>
+                        </router-link>
+                    </b-dropdown-item>
+                    <b-dropdown-item>
                         <i class="fa-solid fa-users"></i>
                         <router-link :to="{name: 'workers'}">
                             <span>Użytkownicy</span>
+                        </router-link>
+                    </b-dropdown-item>
+                    <b-dropdown-item>
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                        <router-link :to="{name: 'workers'}">
+                            <span>Synchronizacje</span>
                         </router-link>
                     </b-dropdown-item>
                     <b-dropdown-item>

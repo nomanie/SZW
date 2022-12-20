@@ -113,7 +113,7 @@
                 </div>
             </div>
         </div>
-        <loader :loading="loading"></loader>
+        <loader></loader>
     </div>
 </template>
 <script>
@@ -124,14 +124,13 @@ export default {
     name: 'workshop',
     components: {
         error,
-        loader
+        loader,
     },
     data() {
         return {
             form: {},
             errors: {},
             created: false,
-            loading: false
         }
     },
     mounted() {

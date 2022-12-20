@@ -1,12 +1,5 @@
 <template>
     <div>
-        <div class="btn btn-primary" @click="$bvModal.show('worker-modal'); defaultForm();">
-            <i class="fa fa-plus me-2"></i>
-<!--            <div class="cut"></div>-->
-<!--            <div class="text">-->
-                Pracownika
-<!--            </div>-->
-        </div>
         <b-modal id="worker-modal" title="Dodaj nowego pracownika" size="lg">
             <form>
                 <p>Dane pracownika</p>
@@ -244,6 +237,10 @@ export default {
         data: {
             type: [Object, Array],
             default: () => {}
+        },
+        show: {
+            type: Boolean,
+            default: () => {}
         }
     },
     data() {
@@ -262,8 +259,7 @@ export default {
         data: function() {
             this.form = this.data
             this.is_edit = true
-            this.$bvModal.show('worker-modal')
-        }
+        },
     },
     computed: {
         btnUrl() {
@@ -286,19 +282,19 @@ export default {
             }
         },
         save() {
-            this.$http.post(route('api.workshop.workers.store'), this.form).then((response) => {
+            this.$http.post(route('workshop.workers.store'), this.form).then((response) => {
                 this.$bvModal.hide('worker-modal')
                 this.$emit('reload')
             })
         },
         edit() {
-            this.$http.put(route('api.workshop.workers.update', this.form.id), this.form).then((response) => {
+            this.$http.put(route('workshop.workers.update', this.form.id), this.form).then((response) => {
                 this.$bvModal.hide('worker-modal')
                 this.$emit('reload')
             })
         },
         getOptions() {
-            this.$http.get(route('api.get.options', {enum: 'App\\Enums\\WorkshopMiddleware\\ContractTypeEnum'})).then((response) => {
+            this.$http.get(route('api.get.options', {enum: 'App\\Enums\\Workshop\\ContractTypeEnum'})).then((response) => {
                 this.options = response.data
             })
         }

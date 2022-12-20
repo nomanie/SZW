@@ -55,7 +55,7 @@ const routes = [
         path: websiteUrl + "/workers",
         name: "workers",
         component: () => import('@workshop/Workers/workers/list'),
-    },
+    }
 ]
 
 const router = new VueRouter({

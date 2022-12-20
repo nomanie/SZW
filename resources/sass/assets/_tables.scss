@@ -87,3 +87,13 @@ table {
     height: 70vh;
     overflow-y: scroll;
 }
+.dataTables_scroll {
+    overflow-x: auto !important;
+}
+.dataTables_scrollBody {
+    position: unset !important;
+}
+.no-word-break {
+    white-space: nowrap;
+}
+

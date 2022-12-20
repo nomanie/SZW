@@ -15,10 +15,12 @@ return new class extends Migration
     {
         Schema::create('mediables', function (Blueprint $table) {
             $table->id();
-            $table->string('path');
-            $table->string('mediable_type');
-            $table->integer('mediable_id');
+            $table->string('disk');
             $table->string('name');
+            $table->string('extension');
+            $table->string('type');
+            $table->dateTime('delete_at')->nullable();
+            $table->string('size');
             $table->timestamps();
         });
     }

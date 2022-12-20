@@ -20,11 +20,13 @@
     </div>
 </template>
 <script>
+import {mapState} from "vuex";
+
 export default {
     name: 'Loader',
-    props: {
-        loading: false
-    }
+    computed: {
+        ...mapState(['loading'])
+    },
 }
 </script>
 <style type="scss" scoped>

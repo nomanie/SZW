@@ -1,11 +1,11 @@
 <template>
-    <div class="card-edit">
+    <div class="card-edit m-3 position-relative">
         <div class="row">
             <div class="col-12 col-lg-3">
                 <div class="row">
                     <div class="col-12">
                         <div class="avatar">
-                            <img src="../../../../../public/images/person.jpg">
+                            <img :src="getLogo">
                         </div>
                     </div>
                 </div>
@@ -13,7 +13,8 @@
             <div class="col-12 col-lg-4 d-flex align-items-center">
                 <div>
                 </div>
-                <button class="btn btn-primary">
+                <input ref="fileUpload" type="file" hidden @change="saveImage">
+                <button class="btn btn-primary" @click="$refs.fileUpload.click()">
                     <i class="fa fa-camera"></i>
                     Zmień Logo
                 </button>
@@ -27,39 +28,63 @@
                             <i class="fa-solid fa-address-card"></i>
                             Informacje
                         </template>
-                        <info></info>
+                        <info
+                            :key="form.id"
+                            :id="form.id"
+                            :data="form.informations"
+                            :owners="form.owners"
+                        ></info>
                     </b-tab>
                     <b-tab>
                         <template #title>
                             <i class="fa-solid fa-building"></i>
                             Placówki
                         </template>
-                        <places></places>
+                        <places
+                            :key="form.id"
+                            :id="form.id"
+                            :data="form.places"
+                        ></places>
                     </b-tab>
                     <b-tab>
                         <template #title>
                             <i class="fa-solid fa-mobile-phone"></i>
                             Dane kontaktowe
                         </template>
-                        <contact></contact>
+                        <contact
+                            :key="form.id"
+                            :id="form.id"
+                            :data="form.contact"
+                        ></contact>
                     </b-tab>
                     <b-tab>
                         <template #title>
                             <i class="fa-solid fa-rectangle-list"></i>
                             Formularz kontaktowy
                         </template>
-                        <custom-form :field-types="fieldTypes"></custom-form>
+                        <custom-form
+                            :field-types="fieldTypes"
+                            :key="form.id"
+                            :id="form.id"
+                            :data="form.contact_form"
+                        ></custom-form>
                     </b-tab>
                     <b-tab>
                         <template #title>
                             <i class="fa-solid fa-plus"></i>
                             Dodatkowe dane
                         </template>
-                        <additional-fields :field-types="fieldTypes"></additional-fields>
+                        <additional-fields
+                            :field-types="fieldTypes"
+                            :key="form.id"
+                            :id="form.id"
+                            :data="form.additional_fields"
+                        ></additional-fields>
                     </b-tab>
                 </b-tabs>
             </div>
         </div>
+        <loader></loader>
     </div>
 </template>
 
@@ -69,6 +94,8 @@ import additionalFields from './Partials/additionalFields'
 import customForm from './Partials/customForm'
 import contact from './Partials/contact'
 import info from './Partials/info'
+import loader from "@js/components/Loader";
+
 export default {
     name: 'Information',
     components: {
@@ -76,10 +103,12 @@ export default {
         additionalFields,
         customForm,
         contact,
-        info
+        info,
+        loader
     },
     data() {
         return {
+            file: null,
             fieldTypes: [],
             form: {},
         }
@@ -88,29 +117,34 @@ export default {
         this.getFieldTypes()
         this.getData()
     },
+    computed: {
+        getLogo() {
+            return (this.form.logo !== null ? this.form.logo : 'http://127.0.0.1:8000/images/person.jpg')
+        }
+    },
     methods: {
         getFieldTypes() {
-            this.$http.get(route('api.get.options', {enum: 'App\\Enums\\WorkshopMiddleware\\FieldTypeEnum'})).then((response) => {
+            this.$http.get(route('api.get.options', {enum: 'App\\Enums\\Workshop\\FieldTypeEnum'})).then((response) => {
                 this.fieldTypes = response.data
             })
         },
         getData() {
-            this.form.id = 1
-        },
-        save() {
-            this.$http.put(route('api.workshop.update', this.form.id), this.form).then((response) => {
-                this.$bvToast.toast('Pomyślnie zapisano dane', {
-                    title: 'Komunikat',
-                    autoHideDelay: 5000,
-                    variant: 'success',
-                })
-            }).catch((error) => {
-                this.$bvToast.toast('Wystąpił błąd podczas zapisu', {
-                    title: 'Błąd',
-                    autoHideDelay: 5000,
-                    variant: 'danger',
-                })
+            this.$http.get(route('workshop.workshops.index')).then((response) => {
+                this.form = response.data.data
             })
+        },
+        saveImage($event) {
+            if ($event.target.files[0] !== undefined) {
+                let formData = new FormData();
+                formData.append('image', $event.target.files[0]);
+                this.$http.post(route('workshop.upload.logo', this.form.id), formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    }
+                }).then((response) => {
+                    this.form.logo = response.data.data.file
+                })
+            }
         }
     }
 }

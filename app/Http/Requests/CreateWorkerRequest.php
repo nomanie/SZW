@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\Workshop\ContractTypeEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
@@ -29,14 +30,14 @@ class CreateWorkerRequest extends FormRequest
         return [
             'first_name' => 'required|string|min:3',
             'last_name' => 'required|string|min:3',
-            'contract_from' => 'required|date',
+            'contract_from' => 'sometimes|nullable|date',
             'contract_to' => 'required|date',
             'login' => 'required',
             'phone' => 'string|min:9',
             'contract_type' => Rule::in(ContractTypeEnum::getList()),
-            'position' => 'sometimes',
-            'info' => 'sometimes',
-            'salary' => 'sometimes'
+            'position' => 'sometimes|nullable',
+            'info' => 'sometimes|nullable',
+            'salary' => 'sometimes|nullable'
         ];
     }
 

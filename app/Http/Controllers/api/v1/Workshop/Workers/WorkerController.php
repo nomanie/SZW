@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\api\v1\Workshop\Workers;
 
+use App\Generators\PDF\PdfGenerator;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateWorkerRequest;
 use App\Http\Requests\UpdateWorkerRequest;
 use App\Http\Resources\Workshop\Workers\WorkerResource;
 use App\Models\System\Cars\CarBrand;
+use App\Models\Workshop\Mediable;
 use App\Models\Workshop\Workers\Worker;
 use App\Services\System\LogService;
 use App\Services\Workshop\Workers\WorkerService;
@@ -14,13 +16,18 @@ use App\Traits\JsonResponseTrait;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\Facades\DataTables;
 
 class WorkerController extends Controller
 {
     use JsonResponseTrait;
 
-    public function __construct(private WorkerService $service, protected LogService $logService)
+    public function __construct(
+        private readonly WorkerService $service,
+        protected readonly LogService $logService,
+        protected readonly PdfGenerator $pdfGenerator
+    )
     {
         //@todo dodać Permisje
     }
@@ -34,17 +41,39 @@ class WorkerController extends Controller
     public function index(): JsonResponse
     {
         return DataTables::of(Worker::all())
-            ->addColumn('action', '')
-            ->addIndexColumn()
-            ->rawColumns(['action'])->make();
+            ->addColumn('action', function ($row) {
+                $route = 'admin.cars.brand';
+                return '<div class="w-100 cursor-pointer dropdown-action">
+                                    <div class="w-100" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                       <i class="fa-solid fa-ellipsis-vertical"></i>
+                                    </div>
+                                    <ul class="dropdown-menu">
+                                        <li class="dt-ajax" data-type="show" data-id="' . $row->id . '">
+                                        <i class="fa fa-circle-info"></i>
+                                            Szczegóły
+                                        </li>
+                                        <li class="dt-ajax" data-type="edit" data-id="' . $row->id . '">
+                                            <i class="fa fa-pencil"></i>
+                                            Edytuj
+                                        </li>
+                                        <li class="dt-ajax" data-type="delete" data-id="' . $row->id . '">
+                                            <i class="fa fa-trash"></i>
+                                            Usuń
+                                        </li>
+                                    </ul>
+                                </div>';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     public function store(CreateWorkerRequest $request): JsonResponse
     {
-        //@todo dorobić logi
-        //@todo zrobić funkcje jsonResponse()
         $input = $request->validated();
-        if ($this->service->saveOrUpdate($input)) {
+        $worker = $this->service->saveOrUpdate($input);
+
+        if ($worker) {
+            $this->logService->add($worker, $request, new_data: $input);
             return $this->successJsonResponse(__('Pomyślnie dodano pracownika'));
         }
         return $this->errorJsonResponse(__('Nie udało się dodać nowego pracownika'));
@@ -61,6 +90,12 @@ class WorkerController extends Controller
         return new WorkerResource($worker);
     }
 
+    public function edit(Worker $worker): WorkerResource
+    {
+        return new WorkerResource($worker);
+    }
+
+
     /**
      * Update the specified resource in storage.
      *
@@ -74,7 +109,7 @@ class WorkerController extends Controller
         $newWorker = $this->service->saveOrUpdate($input, $worker);
 
         if ($newWorker) {
-            $this->logService->add($worker, $request, old_data: $worker->toArray() ,new_data: $input);
+            $this->logService->add($worker, $request, old_data: $worker->toArray(), new_data: $input);
             return $this->successJsonResponse(__('Pomyślnie edytowano Pracownika'));
         }
         return $this->errorJsonResponse(__('Edycja pracownika nie udała się'));
@@ -103,6 +138,24 @@ class WorkerController extends Controller
             }
             return $this->errorJsonResponse(__('Nie udało się usunąć marki'));
         }
+    }
 
+    public function export(Request $request)
+    {
+        $data = $request->all();
+        if ($request->type === 'pdf') {
+            return $this->pdfGenerator
+                ->setView('vendor.datatables.print')
+                ->setModel('App\Models\Workshop\Workers\Worker')
+                ->getDataFromAjaxRequest($data)
+                ->generateFilename('Pracownicy')
+                ->setDisk('workshop')
+                ->generate();
+        }
+    }
+
+    public function download(Mediable $mediable)
+    {
+        return $this->pdfGenerator->setMediable($mediable)->download();
     }
 }

@@ -68,7 +68,7 @@
                 </div>
             </div>
         </div>
-        <loader :loading="loading"></loader>
+        <loader></loader>
     </div>
 </template>
 <script>
@@ -97,7 +97,6 @@ export default {
                 password: null,
                 remember_me: false
             },
-            loading: false,
             errors: {}
         }
     },
@@ -112,6 +111,7 @@ export default {
         login() {
             this.$http.post(route('login'), this.form).then((response) => {
                 localStorage.setItem('id', response.data.id)
+                localStorage.setItem('token', response.data.token)
                 window.location = response.data.route
             }).catch((error) => {
                 this.errors = error.data.errors
