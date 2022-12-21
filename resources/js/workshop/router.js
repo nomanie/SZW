@@ -55,6 +55,11 @@ const routes = [
         path: websiteUrl + "/workers",
         name: "workers",
         component: () => import('@workshop/Workers/workers/list'),
+    },
+    {
+        path: websiteUrl + "/workers/:id",
+        name: "workers.show",
+        component: () => import('@workshop/Workers/workers/show'),
     }
 ]
 

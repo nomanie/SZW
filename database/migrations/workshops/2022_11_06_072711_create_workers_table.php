@@ -20,13 +20,10 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('login');
             $table->string('password')->nullable();
-            $table->string('position')->nullable();
-            $table->string('contract_from')->nullable();
-            $table->string('contract_to')->nullable();
-            $table->string('contract_type')->nullable();
-            $table->float('salary')->nullable();
+            $table->string('phone')->nullable();
             $table->string('info')->nullable();
-            $table->boolean('is_active')->default(false);
+            $table->boolean('is_active')->default(true);
+            $table->boolean('change_password_on_login')->default(true);
             $table->timestamps();
         });
     }

@@ -26,6 +26,11 @@ class Worker extends Model
         return $this->belongsTo(Workshop::class);
     }
 
+    public function contracts(): HasMany
+    {
+        return $this->hasMany(WorkerContract::class);
+    }
+
     /* * * * * * * * * * * * * * * * * * *
      *            Funkcje                *
      * * * * * * * * * * * * * * * * * * */

@@ -214,7 +214,7 @@
                     </div>
                 </div>
             </form>
-            <template #modal-footer>
+            <template #modal-footer="{cancel}">
                 <div class="w-100 justify-content-between d-flex">
                     <button type="button" class="btn btn-warning me-4" @click="defaultForm"><i class="fa fa-eraser pe-3"></i>
                         Wyczyść
@@ -223,7 +223,7 @@
                         <button type="button" class="btn btn-success" @click="save"><i class="fa fa-save pe-3"></i>
                             Zapisz
                         </button>
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                        <button type="button" class="btn btn-danger" @click="cancel()">
                             <i class="fa-solid fa-xmark pe-3"></i>
                             Anuluj
                         </button>

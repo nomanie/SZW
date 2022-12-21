@@ -58,12 +58,21 @@ Route::as('workshop.')->group(function(){
             return view('workshop.pages.errorReport');
         })->name('error-report');
         Route::get('/workers', function () {
-            return view('workshop.pages.errorReport');
-        })->name('error-report');
+            return view('workshop.pages.workers.workers.index');
+        })->name('workers.index');
+        Route::get('/workers/{worker}', function () {
+            return view('workshop.pages.workers.workers.show');
+        })->name('workers.show');
     });
-    Route::resource('/workshops', WorkshopController::class)->only(['index', 'update']);
-    Route::post('/workers/export', [WorkerController::class, 'export'])->name('workers.export');
-    Route::get('/workers/download/{mediable}', [WorkerController::class, 'download'])->name('workers.download');
-    Route::resource('workers', App\Http\Controllers\api\v1\Workshop\Workers\WorkerController::class);
     Route::post('/workshops/{workshop}/upload/logo', [WorkshopController::class, 'upload'])->name('upload.logo');
+    Route::resource('/workshops', WorkshopController::class)->only(['index', 'update']);
+
+    Route::as('workers.')->prefix('/workers')->group(function(){
+        Route::post('/export', [WorkerController::class, 'export'])->name('workers.export');
+        Route::get('/download/{mediable}', [WorkerController::class, 'download'])->name('workers.download');
+        Route::resource('/', App\Http\Controllers\api\v1\Workshop\Workers\WorkerController::class);
+
+        Route::resource('contracts', App\Http\Controllers\api\v1\Workshop\Workers\ContractController::class);
+    });
+
 });

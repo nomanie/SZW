@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-modal id="worker-modal" title="Dodaj nowego pracownika" size="lg">
+        <b-modal id="worker-modal" title="Dodaj nowego pracownika" size="lg" @shown="defaultForm">
             <form>
                 <p>Dane pracownika</p>
                 <div class="row">
@@ -207,7 +207,7 @@
                     </div>
                 </div>
             </form>
-            <template #modal-footer>
+            <template #modal-footer="{cancel}">
                 <div class="w-100 justify-content-between d-flex">
                     <button type="button" class="btn btn-warning me-4" @click="defaultForm"><i class="fa fa-eraser pe-3"></i>
                         Wyczyść
@@ -216,7 +216,7 @@
                         <button type="button" class="btn btn-success" @click="btnUrl"><i class="fa fa-save pe-3"></i>
                             Zapisz
                         </button>
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                        <button type="button" class="btn btn-danger" @click="cancel()">
                             <i class="fa-solid fa-xmark pe-3"></i>
                             Anuluj
                         </button>
@@ -227,7 +227,7 @@
     </div>
 </template>
 <script>
-import error from '../../../../../js/assets/form/error'
+import error from '@js/assets/form/error'
 
 export default {
     components: {
@@ -268,18 +268,20 @@ export default {
     },
     methods: {
         defaultForm() {
-            this.form = {
-                first_name: null,
-                last_name: null,
-                contract_from: null,
-                contract_to: null,
-                login: null,
-                phone: null,
-                contract_type: null,
-                position: null,
-                salary: null,
-                info: null
-            }
+           if (!this.is_edit) {
+               this.form = {
+                   first_name: null,
+                   last_name: null,
+                   contract_from: null,
+                   contract_to: null,
+                   login: null,
+                   phone: null,
+                   contract_type: null,
+                   position: null,
+                   salary: null,
+                   info: null
+               }
+           }
         },
         save() {
             this.$http.post(route('workshop.workers.store'), this.form).then((response) => {

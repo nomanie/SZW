@@ -19,11 +19,6 @@ class WorkerResource extends JsonResource
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'login' => $this->login,
-            'position' => $this->position,
-            'contract_from' => $this->contract_from,
-            'contract_to' => $this->contract_to,
-            'contract_type' => $this->contract_type,
-            'salary' => $this->salary,
             'info' => $this->info,
             'is_active' => $this->is_active,
         ];

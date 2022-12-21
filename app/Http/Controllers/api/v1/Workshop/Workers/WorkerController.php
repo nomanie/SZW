@@ -17,6 +17,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
 
 class WorkerController extends Controller
@@ -24,8 +25,8 @@ class WorkerController extends Controller
     use JsonResponseTrait;
 
     public function __construct(
-        private readonly WorkerService $service,
-        protected readonly LogService $logService,
+        private readonly WorkerService  $service,
+        protected readonly LogService   $logService,
         protected readonly PdfGenerator $pdfGenerator
     )
     {
@@ -42,26 +43,7 @@ class WorkerController extends Controller
     {
         return DataTables::of(Worker::all())
             ->addColumn('action', function ($row) {
-                $route = 'admin.cars.brand';
-                return '<div class="w-100 cursor-pointer dropdown-action">
-                                    <div class="w-100" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                       <i class="fa-solid fa-ellipsis-vertical"></i>
-                                    </div>
-                                    <ul class="dropdown-menu">
-                                        <li class="dt-ajax" data-type="show" data-id="' . $row->id . '">
-                                        <i class="fa fa-circle-info"></i>
-                                            Szczegóły
-                                        </li>
-                                        <li class="dt-ajax" data-type="edit" data-id="' . $row->id . '">
-                                            <i class="fa fa-pencil"></i>
-                                            Edytuj
-                                        </li>
-                                        <li class="dt-ajax" data-type="delete" data-id="' . $row->id . '">
-                                            <i class="fa fa-trash"></i>
-                                            Usuń
-                                        </li>
-                                    </ul>
-                                </div>';
+                return view('global.datatable.dropdown_actions')->with(['row' => $row]);
             })
             ->rawColumns(['action'])
             ->make(true);
@@ -89,12 +71,6 @@ class WorkerController extends Controller
     {
         return new WorkerResource($worker);
     }
-
-    public function edit(Worker $worker): WorkerResource
-    {
-        return new WorkerResource($worker);
-    }
-
 
     /**
      * Update the specified resource in storage.
@@ -134,9 +110,9 @@ class WorkerController extends Controller
         } else {
             $this->logService->add($worker, $request, old_data: $worker->toArray());
             if ($worker->delete()) {
-                return $this->successJsonResponse(__('Pomyślnie usunięto markę'));
+                return $this->successJsonResponse(__('Pomyślnie usunięto pracownika'));
             }
-            return $this->errorJsonResponse(__('Nie udało się usunąć marki'));
+            return $this->errorJsonResponse(__('Nie udało się usunąć pracownika'));
         }
     }
 

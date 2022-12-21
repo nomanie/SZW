@@ -22,7 +22,6 @@
                 @show="show"
             >
             </datatable>
-            <show :data="data"></show>
         </div>
     </div>
 </template>
@@ -43,7 +42,6 @@ export default {
     data() {
         return {
             add_edit_modal_id: 'worker-modal',
-            show_modal_id: 'worker-info-modal',
             data: {},
             reload_table: 0,
             fields: [
@@ -116,17 +114,14 @@ export default {
         },
         edit($event, edit = false) {
             this.isEdit = edit
-            this.$http.get(route('workshop.workers.edit', $event)).then((response) => {
+            this.$http.get(route('workshop.workers.show', $event)).then((response) => {
                 this.data = response.data.data
                 this.$bvModal.show(this.add_edit_modal_id)
             })
 
         },
         show($event) {
-            this.$http.get(route('workshop.workers.show', $event)).then((response) => {
-                this.data = response.data.data
-                this.$bvModal.show(this.show_modal_id)
-            })
+            this.$router.push({ name: 'workers.show', params: { id: $event } })
         }
     }
 }
