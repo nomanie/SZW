@@ -10,6 +10,10 @@ class EnumsController extends Controller
     public function getOptions(string $enum, string $function = 'getList'): JsonResponse
     {
         $options = (new $enum)->$function();
-        return response()->json($options);
+        $newOptions = [];
+        foreach ($options as $key => $value) {
+            $newOptions[] = ['id' => $key, 'label' => $value];
+        }
+        return response()->json($newOptions);
     }
 }

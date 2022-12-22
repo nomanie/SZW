@@ -14,6 +14,8 @@ class WorkerResource extends JsonResource
      */
     public function toArray($request)
     {
+        $contract = $this->contracts->whereNull('archived_at')->first();
+
         return [
             'id' => $this->id,
             'first_name' => $this->first_name,
@@ -21,6 +23,11 @@ class WorkerResource extends JsonResource
             'login' => $this->login,
             'info' => $this->info,
             'is_active' => $this->is_active,
+            'salary' => $contract->salary,
+            'contract_type' => $contract->contract_type,
+            'contract_from' => $contract->contract_from,
+            'contract_to' => $contract->contract_to,
+            'position' => $contract->position,
         ];
     }
 }

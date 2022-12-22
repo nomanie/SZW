@@ -10,8 +10,8 @@
             <datatable
                 :reload-table="reload_table"
                 :columns="fields"
-                :server-side-data="true"
                 :modal-id="add_edit_modal_id"
+                :scroll-x="false"
                 table-id="car-brand-table"
                 api-url="workshop.workers"
                 table-name="Tabela_pracowników"

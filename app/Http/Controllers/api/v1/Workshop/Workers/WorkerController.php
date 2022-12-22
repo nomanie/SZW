@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api\v1\Workshop\Workers;
 
+use App\Datatables\Workshop\Workers\WorkerDataTables;
 use App\Generators\PDF\PdfGenerator;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateWorkerRequest;
@@ -41,24 +42,21 @@ class WorkerController extends Controller
      */
     public function index(): JsonResponse
     {
-        return DataTables::of(Worker::all())
-            ->addColumn('action', function ($row) {
-                return view('global.datatable.dropdown_actions')->with(['row' => $row]);
-            })
-            ->rawColumns(['action'])
-            ->make(true);
+        return (new WorkerDataTables)->render();
     }
 
     public function store(CreateWorkerRequest $request): JsonResponse
     {
         $input = $request->validated();
-        $worker = $this->service->saveOrUpdate($input);
-
-        if ($worker) {
-            $this->logService->add($worker, $request, new_data: $input);
-            return $this->successJsonResponse(__('Pomyślnie dodano pracownika'));
+        try {
+            $worker = $this->service->saveOrUpdate($input);
+            if ($worker) {
+                $this->logService->add($worker, $request, new_data: $input);
+                return $this->successJsonResponse(__('Pomyślnie dodano pracownika'));
+            }
+        } catch(\Exception $e) {
+            return $this->errorJsonResponse(__('Nie udało się dodać nowego pracownika'));
         }
-        return $this->errorJsonResponse(__('Nie udało się dodać nowego pracownika'));
     }
 
     /**

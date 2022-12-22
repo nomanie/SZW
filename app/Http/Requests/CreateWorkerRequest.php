@@ -34,7 +34,7 @@ class CreateWorkerRequest extends FormRequest
             'contract_to' => 'required|date',
             'login' => 'required',
             'phone' => 'string|min:9',
-            'contract_type' => Rule::in(ContractTypeEnum::getList()),
+            'contract_type' => Rule::in(ContractTypeEnum::cases()),
             'position' => 'sometimes|nullable',
             'info' => 'sometimes|nullable',
             'salary' => 'sometimes|nullable'

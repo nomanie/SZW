@@ -4,7 +4,9 @@ namespace App\Services\Workshop\Workers;
 use App\Models\System\Workshop;
 use App\Models\Workshop\Workers\Worker;
 use App\Models\Workshop\Workers\WorkerContract;
+use Illuminate\Support\Facades\DB;
 use phpDocumentor\Reflection\Types\Boolean;
+use PHPUnit\Util\Exception;
 
 class WorkerService
 {
@@ -21,28 +23,42 @@ class WorkerService
         if (isset($data['password'])) {
             $this->worker->password = bcrypt(10, $data['password']);
         }
-        $this->worker->workshop_id = 1;
-        $this->worker->first_name = $data['first_name'];
-        $this->worker->last_name = $data['last_name'];
-        $this->worker->login = $data['login'];
-        $this->worker->info = $data['info'];
-        $this->worker->save();
+        DB::beginTransaction();
+        try {
+            $this->worker->workshop_id = 1;
+            $this->worker->first_name = $data['first_name'];
+            $this->worker->last_name = $data['last_name'];
+            $this->worker->login = $data['login'];
+            $this->worker->info = $data['info'];
+            $this->worker->save();
 
-        $this->saveContract($data, $this->worker->id);
+            $this->saveContract($data, $this->worker->id);
+            DB::commit();
+        } catch(\Exception $e) {
+            DB::rollBack();
+            throw new Exception();
+        }
 
         return $this->worker ?? null;
     }
 
     public function saveContract(array $data, int $worker_id): WorkerContract|bool
     {
-        $contract = new WorkerContract();
-        $contract->position = $data['position'];
-        $contract->contract_to = $data['contract_to'];
-        $contract->contract_from = $data['contract_from'];
-        $contract->contract_type = $data['contract_type'];
-        $contract->salary = $data['salary'];
-        $contract->worker_id = $worker_id;
-        $contract->save();
+        DB::beginTransaction();
+        try {
+            $contract = new WorkerContract();
+            $contract->position = $data['position'];
+            $contract->contract_to = $data['contract_to'];
+            $contract->contract_from = $data['contract_from'];
+            $contract->contract_type = $data['contract_type'];
+            $contract->salary = $data['salary'];
+            $contract->worker_id = $worker_id;
+            $contract->save();
+            DB::commit();
+        } catch(\Exception $e) {
+            DB::rollBack();
+            throw new Exception();
+        }
 
         return $contract;
     }

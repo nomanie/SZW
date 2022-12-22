@@ -152,6 +152,7 @@
                                         <v-select
                                             v-model="form.contract_type"
                                             :options="options"
+                                            :reduce="item => item.id"
                                             :class="{invalid : errors.contract_type}"
                                             placeholder="Wybierz rodzaj umowy"
                                         >
@@ -298,6 +299,7 @@ export default {
         getOptions() {
             this.$http.get(route('api.get.options', {enum: 'App\\Enums\\Workshop\\ContractTypeEnum'})).then((response) => {
                 this.options = response.data
+                console.log(this.options)
             })
         }
     }

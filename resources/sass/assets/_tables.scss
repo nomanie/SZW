@@ -90,8 +90,12 @@ table {
 .dataTables_scroll {
     overflow-x: auto !important;
 }
+.dataTables_scrollHead {
+    overflow: unset !important;
+}
 .dataTables_scrollBody {
     position: unset !important;
+    overflow: unset !important;
 }
 .no-word-break {
     white-space: nowrap;

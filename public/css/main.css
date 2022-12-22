@@ -12209,8 +12209,13 @@ table.border-col td:last-of-type, table.border-col th:last-of-type {
   overflow-x: auto !important;
 }
 
+.dataTables_scrollHead {
+  overflow: unset !important;
+}
+
 .dataTables_scrollBody {
   position: unset !important;
+  overflow: unset !important;
 }
 
 .no-word-break {
