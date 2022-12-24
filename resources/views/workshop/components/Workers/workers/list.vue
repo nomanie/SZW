@@ -11,7 +11,6 @@
                 :reload-table="reload_table"
                 :columns="fields"
                 :modal-id="add_edit_modal_id"
-                :scroll-x="false"
                 table-id="car-brand-table"
                 api-url="workshop.workers"
                 table-name="Tabela_pracowników"

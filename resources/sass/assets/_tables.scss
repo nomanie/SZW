@@ -93,6 +93,9 @@ table {
 .dataTables_scrollHead {
     overflow: unset !important;
 }
+.dataTables_scrollHeadInner {
+    width: 100%;
+}
 .dataTables_scrollBody {
     position: unset !important;
     overflow: unset !important;

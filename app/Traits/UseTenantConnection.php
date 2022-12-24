@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Session;
 
 trait UseTenantConnection
 {
+    /** Ustawia bazę danych na kliencką
+     *
+     */
     public function __construct()
     {
         if (tenancy()->tenant !== null) {
@@ -19,5 +22,13 @@ trait UseTenantConnection
             $this->table = Workshop::where('identity_id', Session::get('id'))
                     ->first()->tenancy_db_name . '.' . $this->getTable();
         }
+    }
+
+    /**Zwraca bazę danych danego użytkownika (do użytku przy n:m relacjach)
+     * @return string
+     */
+    public function getDatabase(): string
+    {
+        return explode('.', $this->table)[0];
     }
 }

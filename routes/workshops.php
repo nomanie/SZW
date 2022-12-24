@@ -62,7 +62,7 @@ Route::as('workshop.')->group(function(){
         })->name('workers.index');
         Route::get('/workers/{worker}', function () {
             return view('workshop.pages.workers.workers.show');
-        })->name('workers.show');
+        })->name('workers.details');
     });
     Route::post('/workshops/{workshop}/upload/logo', [WorkshopController::class, 'upload'])->name('upload.logo');
     Route::resource('/workshops', WorkshopController::class)->only(['index', 'update']);
@@ -70,9 +70,9 @@ Route::as('workshop.')->group(function(){
     Route::as('workers.')->prefix('/workers')->group(function(){
         Route::post('/export', [WorkerController::class, 'export'])->name('workers.export');
         Route::get('/download/{mediable}', [WorkerController::class, 'download'])->name('workers.download');
-        Route::resource('/', App\Http\Controllers\api\v1\Workshop\Workers\WorkerController::class);
-
         Route::resource('contracts', App\Http\Controllers\api\v1\Workshop\Workers\ContractController::class);
+        Route::resource('permissions', App\Http\Controllers\api\v1\Workshop\Workers\Permission\PermissionController::class);
     });
+    Route::resource('/workers', App\Http\Controllers\api\v1\Workshop\Workers\WorkerController::class);
 
 });

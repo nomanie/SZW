@@ -8,20 +8,26 @@ class DataTables
     protected string $model;
     protected $table;
     protected array $rawColumns = [];
+    protected $query;
 
-    public function __construct()
+    public function getTable(): static
     {
-        $this->table = \Yajra\DataTables\DataTables::of((new $this->model)->all());
+        if ($this->query) {
+            $this->table = \Yajra\DataTables\DataTables::of($this->query);
+        } else {
+            $this->table = \Yajra\DataTables\DataTables::of((new $this->model)->all());
+        }
+        return $this;
     }
 
     public function render(): JsonResponse
     {
-        return $this->columns()->actionColumn()->rawColumns()->make();
+        return $this->getTable()->columns()->editColumns()->actionColumn()->rawColumns()->make();
     }
 
     public function columns(): static
     {
-
+        return $this;
     }
 
     public function actionColumn(): static
@@ -43,5 +49,10 @@ class DataTables
     public function make(): JsonResponse
     {
         return $this->table->make(true);
+    }
+
+    public function editColumns(): static
+    {
+        return $this;
     }
 }

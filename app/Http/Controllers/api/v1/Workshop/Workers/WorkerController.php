@@ -5,8 +5,8 @@ namespace App\Http\Controllers\api\v1\Workshop\Workers;
 use App\Datatables\Workshop\Workers\WorkerDataTables;
 use App\Generators\PDF\PdfGenerator;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreateWorkerRequest;
-use App\Http\Requests\UpdateWorkerRequest;
+use App\Http\Requests\Workshop\Workers\CreateWorkerRequest;
+use App\Http\Requests\Workshop\Workers\UpdateWorkerRequest;
 use App\Http\Resources\Workshop\Workers\WorkerResource;
 use App\Models\System\Cars\CarBrand;
 use App\Models\Workshop\Mediable;
@@ -18,8 +18,6 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-use Illuminate\View\View;
-use Yajra\DataTables\Facades\DataTables;
 
 class WorkerController extends Controller
 {
@@ -67,6 +65,7 @@ class WorkerController extends Controller
      */
     public function show(Worker $worker): WorkerResource
     {
+        Session::put('worker_id', $worker->id);
         return new WorkerResource($worker);
     }
 

@@ -12213,6 +12213,10 @@ table.border-col td:last-of-type, table.border-col th:last-of-type {
   overflow: unset !important;
 }
 
+.dataTables_scrollHeadInner {
+  width: 100%;
+}
+
 .dataTables_scrollBody {
   position: unset !important;
   overflow: unset !important;

@@ -69,7 +69,7 @@
                             <div class="input__wrapper mt-1">
                                 <input
                                     v-model="form.login"
-                                    type="login"
+                                    type="text"
                                     placeholder="Login"
                                     class="form-control"
                                     :class="{invalid : errors.login}"
@@ -131,7 +131,8 @@ export default {
     data() {
         return {
             form: {},
-            errors: {}
+            errors: {},
+            id: this.$route.params.id,
         }
     },
     watch: {
@@ -141,7 +142,7 @@ export default {
     },
     methods: {
         save() {
-
+            this.$http.put(route('workshop.workers.update', this.id), this.form)
         }
     }
 }

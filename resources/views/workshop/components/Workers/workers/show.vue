@@ -44,7 +44,7 @@
                                 ></info>
                             </div>
                         </b-tab>
-                        <b-tab>
+                        <b-tab lazy>
                             <template #title>
                                 <i class="fa-solid fa-file-circle-check"></i>
                                 Umowa
@@ -61,9 +61,9 @@
                                 <i class="fa-solid fa-user-lock"></i>
                                 Uprawnienia
                             </template>
-                            <div>
-                                Przypisane zadania
-                            </div>
+                            <permissions
+                                :data="form.permissions"
+                            ></permissions>
                         </b-tab>
                         <b-tab>
                             <template #title>
@@ -94,13 +94,15 @@
 import loader from "@js/components/Loader";
 import info from "@workshop/Workers/workers/partials/info"
 import contract from "@workshop/Workers/workers/partials/contract"
+import permissions from "@workshop/Workers/workers/partials/permissions"
 
 export default {
     name: 'show',
     components: {
         loader,
         info,
-        contract
+        contract,
+        permissions
     },
     props: {},
     computed: {
@@ -111,7 +113,8 @@ export default {
     data() {
         return {
             form: {},
-            id: this.$route.params.id
+            id: this.$route.params.id,
+            reload_table: 0
         }
     },
     mounted() {
@@ -121,7 +124,6 @@ export default {
         get() {
             this.$http.get(route('workshop.workers.show', this.id)).then((res) => {
                 this.form = res.data.data
-                console.log(this.form)
             })
         },
         destroy() {
