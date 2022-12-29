@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('workers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('workshop_id')->references('id')->on('system.workshops')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('identity_id')->references('id')->on('system.identities')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('first_name');
             $table->string('last_name');
             $table->string('login');
-            $table->string('password')->nullable();
             $table->string('phone')->nullable();
             $table->string('info')->nullable();
             $table->boolean('is_active')->default(true);

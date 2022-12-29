@@ -2,12 +2,11 @@
 
 namespace App\Services\Workshop\Workers;
 
-use App\Models\System\Workshop;
+use App\Enums\AccountTypeEnum;
 use App\Models\Workshop\Workers\Worker;
-use App\Models\Workshop\Workers\WorkerContract;
+use App\Services\Auth\AuthService;
 use Illuminate\Support\Facades\DB;
-use phpDocumentor\Reflection\Types\Boolean;
-use PHPUnit\Util\Exception;
+use Illuminate\Support\Facades\Session;
 
 class WorkerService
 {
@@ -21,21 +20,26 @@ class WorkerService
      * @param array $data
      * @param Worker|null $worker
      * @return Worker|null
+     * @throws \Exception
      */
     public function saveOrUpdate(array $data, Worker $worker = null): Worker|null
     {
         if ($worker) {
             $this->worker = $worker;
         } else {
+            $identity = (new AuthService)->save($data, AccountTypeEnum::WORKER, workshop()->id);
             $this->worker = new Worker();
         }
 
         if (isset($data['password'])) {
             $this->worker->password = bcrypt(10, $data['password']);
         }
-        DB::beginTransaction();
-        try {
-            $this->worker->workshop_id = 1;
+//        DB::beginTransaction();
+//        try {
+            if (!$worker) {
+                $this->worker->workshop_id = 1;
+                $this->worker->identity_id = $identity->id;
+            }
             $this->worker->first_name = $data['first_name'];
             $this->worker->last_name = $data['last_name'];
             $this->worker->login = $data['login'];
@@ -46,11 +50,11 @@ class WorkerService
             if (isset($data['contract_type'])) {
                 $this->contractService->save($data, $this->worker->id);
             }
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollBack();
-            throw new Exception();
-        }
+//            DB::commit();
+//        } catch (\Exception $e) {
+//            DB::rollBack();
+//            throw new Exception();
+//        }
 
         return $this->worker ?? null;
     }

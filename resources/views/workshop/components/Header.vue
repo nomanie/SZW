@@ -58,7 +58,7 @@
                         </button>
                     </template>
                     <b-dropdown-item>
-                        Piotr Skwarek
+                        {{ name }}
                     </b-dropdown-item>
                     <b-dropdown-divider></b-dropdown-divider>
                     <b-dropdown-item>
@@ -113,6 +113,11 @@ import NotificationList from "../../../js/components/NotificationList";
 export default {
     name: 'HeaderNav',
     components: {NotificationList},
+    props: {
+        name: {
+            type: String,
+        }
+    },
     methods: {
         logout() {
             console.log('test')

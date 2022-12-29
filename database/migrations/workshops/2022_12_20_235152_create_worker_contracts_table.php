@@ -22,7 +22,7 @@ return new class extends Migration
             $table->date('contract_to')->nullable();
             $table->integer('contract_type')->nullable();
             $table->float('salary')->nullable();
-            $table->date('archived_at')->nullable();
+            $table->dateTime('archived_at')->nullable();
             $table->timestamps();
         });
     }

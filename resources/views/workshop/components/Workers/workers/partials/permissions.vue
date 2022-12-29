@@ -1,13 +1,15 @@
 <template>
     <div ref="checkboxes" v-if="form">
         <h5>Uprawnienia</h5>
-        <div class="row mx-4" v-for="(section, index) in permissions">
+        <div class="row mx-4 flex-column mb-3" v-for="(section, index) in permissions">
             <div class="col-12 text-capitalize">{{ section[0].section }}:</div>
-            <b-form-group class="d-flex flex-column" v-model="form" v-for="(permission, id) in section" :key="id">
-                <b-form-checkbox :value="permission.id">
-                    {{ permission.name }}
-                </b-form-checkbox>
-            </b-form-group>
+            <b-form-checkbox
+                v-for="(permission, id) in section" :key="id"
+                :value="permission.id"
+                :checked="form"
+            >
+                {{ permission.name }}
+            </b-form-checkbox>
         </div>
         <div class="col-12 mb-2">
             <hr>
@@ -32,25 +34,19 @@ export default {
     props: {
         data: {
             type: [Array, Object],
-            default: () => {
-            }
+            default: () => []
         }
     },
     data() {
         return {
             permissions: {},
-            form: {}
-        }
-    },
-    watch: {
-        data: function () {
-            this.form = this.data
-            console.log(this.form)
+            form: []
         }
     },
     mounted() {
         this.form = this.data
         this.get()
+        console.log(this.form)
     },
     methods: {
         get() {

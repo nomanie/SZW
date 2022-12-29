@@ -30,28 +30,33 @@ class AuthService
      * @param array $data - dane użytkownika
      * @param int $account_type - typ tworzonego konta
      * @return bool null jeśli błąd
+     * @throws Exception
      */
-    public function save(array $data, int $account_type): ?Identity
+    public function save(array $data, int $account_type, int $workshop_id = null): ?Identity
     {
-//        try{
+        try {
             if (!$this->checkIfUserExists($data)) {
                 // Zapis podstawowego usera
                 $this->identity->uuid = $this->generateUuid();
                 $this->identity->email = $data['email'];
                 $this->identity->password = bcrypt($data['password']);
+                $this->identity->reset_password = (bool) $workshop_id;
                 $this->identity->save();
             }
             // Zapis konta typu klient
             if ($account_type == AccountTypeEnum::CLIENT) {
                 $this->saveUser($data);
-            } else {
+            } else if ($account_type == AccountTypeEnum::WORKSHOP) {
                 // Zapis konta typu warsztat
                 $this->saveWorkshop($data);
+            } else if ($account_type == AccountTypeEnum::WORKER) {
+                // Zapis konta typu pracownik
+                $this->saveWorker($workshop_id);
             }
-//        } catch(\Exception $e) {
-//            return null;
-//        }
-        $this->sendVerificationEmail();
+        } catch (\Exception $e) {
+            throw new Exception;
+        }
+//        $this->sendVerificationEmail();
         return $this->identity;
     }
 
@@ -116,28 +121,29 @@ class AuthService
      */
     public function saveWorkshop(array $data): ?Workshop
     {
-            // Tworzenie warsztatu
-            $workshop = new Workshop();
-            $workshop->identity_id = $this->identity->id;
+        // Tworzenie warsztatu
+        $workshop = new Workshop();
+        $workshop->identity_id = $this->identity->id;
+        $workshop->uuid = $this->identity->uuid;
 //            $workshop->workshops = $data['workshops'] ?? null;
 //            $workshop->owners = $data['owners'] ?? null;
-            $workshop->name = $data['name'];
+        $workshop->name = $data['name'];
 //            $workshop->logo = $data['logo'] ?? null;
-            $workshop->nip = $data['nip'];
-            $workshop->regon = $data['regon'];
-            $workshop->logo = public_path('/images/person');
+        $workshop->nip = $data['nip'];
+        $workshop->regon = $data['regon'];
+        $workshop->logo = public_path('/images/person');
 //            $workshop->company_created_at = $data['company_created_at'] ?? null;
 //            $workshop->website = $data['website'] ?? null;
 //            $workshop->social_media = $data['social_media'] ?? null;
 //            $workshop->additional_data = $data['additional_data'] ?? null;
-            //Tworzenie subdomeny
-            $workshop->save();
+        //Tworzenie subdomeny
+        $workshop->save();
 //            $workshop->domains()->create(['domain' => 'Warsztat_' . $workshop->id, 'tenant_id' => $workshop->id]);
-            Artisan::call('tenants:migrate', [
-                '--tenants' => [$workshop->id]
-            ]);
+        Artisan::call('tenants:migrate', [
+            '--tenants' => [$workshop->id]
+        ]);
 
-            return $workshop;
+        return $workshop;
     }
 
     /** Sprawdza czy użytkownik o podanym mailu istnieje już w bazie
@@ -147,8 +153,7 @@ class AuthService
     private function checkIfUserExists($data): bool
     {
         $identity = Identity::where('email', '=', $data['email'])->first();
-        if ($identity)
-        {
+        if ($identity) {
             $this->identity = $identity;
             if ($this->identity->email_verified_at !== null) {
                 $this->dontSendEmail = true;
@@ -165,12 +170,15 @@ class AuthService
     {
         Session::forget('account_type');
         if ($this->identity->workshop) {
-            Session::push('account_type','workshop');
+            Session::push('account_type', 'workshop');
         }
         if ($this->identity->user) {
-            Session::push('account_type','client');
+            Session::push('account_type', 'client');
         }
-        if($this->identity->is_admin) {
+        if($this->identity->worker) {
+            Session::push('account_type', 'worker');
+        }
+        if ($this->identity->is_admin) {
             // jeśli admin to loguje na /admin, a tam może przelogować się na inny typ konta
             //@todo zrobić jedno konto warsztat i klient dla wszystkich adminów
             Session::forget('account_type');
@@ -200,7 +208,7 @@ class AuthService
         if (Session::get('account_type')[0] === 'admin') {
             return view('admin.pages.dashboard');
         }
-        if(count(Session::get('account_type')) > 1) {
+        if (count(Session::get('account_type')) > 1) {
             return view('changeType');
         }
         return Session::get('account_type')[0] . '.pages.dashboard';
@@ -214,8 +222,11 @@ class AuthService
         if (Session::get('account_type')[0] === 'admin') {
             return route('admin.dashboard');
         }
-        if(count(Session::get('account_type')) > 1) {
+        if (count(Session::get('account_type')) > 1) {
             return route('changeType');
+        }
+        if (Session::get('account_type')[0] === 'worker') {
+            return route('workshop.dashboard', $this->getWorkshopUuid());
         }
         return route(Session::get('account_type')[0] . '.dashboard', $this->identity->uuid);
     }
@@ -235,7 +246,7 @@ class AuthService
      */
     public function generateUuid(int $length = 10): string
     {
-        while(true) {
+        while (true) {
             $uuid = Str::random($length);
             if (Identity::where('uuid', $uuid)->count() === 0) {
                 return $uuid;
@@ -267,5 +278,40 @@ class AuthService
     public function addIdToSession(): void
     {
         Session::put('id', $this->identity->id);
+    }
+
+    public function saveWorker(int $workshop_id): bool
+    {
+        $record = DB::table('system.workers')
+            ->where('identity_id', $this->identity->id)
+            ->where('workshop_id', $workshop_id)
+            ->first();
+        if (!$record) {
+            return DB::table('system.workers')->insert([
+                'identity_id' => $this->identity->id,
+                'workshop_id' => $workshop_id
+            ]);
+        }
+        return true;
+    }
+
+    private function getWorkshopUuid()
+    {
+        if ($this->identity->worker->workshop_id !== null) {
+            return Workshop::where('id', $this->identity->worker->workshop_id)->first()->uuid;
+        }
+    }
+
+    public function getUuid(): string
+    {
+        if (Session::get('account_type')[0] == 'worker') {
+            return $this->getWorkshopUuid();
+        }
+        return auth()->user()->uuid;
+    }
+
+    public function checkIfMustChangePassword(): bool
+    {
+        return $this->identity->reset_password;
     }
 }

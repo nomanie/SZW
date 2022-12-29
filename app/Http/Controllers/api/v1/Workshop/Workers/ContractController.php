@@ -47,7 +47,8 @@ class ContractController extends Controller
 //        $input = $request->validated();
         $input = $request->all();
         try {
-            $this->service->save($input, $input['worker_id']);
+            $contract = $this->service->save($input, $input['worker_id']);
+            $this->logService->add($contract, $request, user()->id, new_data: $input);
         } catch(Exception $e) {
             return $this->errorJsonResponse(__('Nie udało się dodać nowej umowy'));
         }
@@ -76,12 +77,12 @@ class ContractController extends Controller
     public function update(UpdateWorkerContractRequest $request, WorkerContract $contract)
     {
         $input = $request->all();
-        try {
-            $this->service->save($input, $input['worker_id'], $contract);
-        } catch(Exception $e) {
-            return $this->errorJsonResponse(__('Nie udało się zmienić umowy'));
+        $new_contract = $this->service->save($input, $input['worker_id'], $contract);
+        if ($new_contract) {
+            $this->logService->add($contract, $request, user()->id, $contract->toArray(), $new_contract->toArray());
+            return $this->successJsonResponse(__('Pomyślnie zmieniono umowę'));
         }
-        return $this->successJsonResponse(__('Pomyślnie zmieniono umowę'));
+        return $this->errorJsonResponse(__('Nie udało się zmienić umowy'));
     }
 
     /**

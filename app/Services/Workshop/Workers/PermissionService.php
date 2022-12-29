@@ -30,10 +30,10 @@ namespace App\Services\Workshop\Workers;
         return $data;
     }
 
-    public function save(array $data): bool
+    public function save(array $data, Worker $worker): bool
     {
         try {
-            $this->worker = Worker::find(Session::get('worker_id'));
+            $this->worker = $worker;
             $this->worker->permissions()->detach();
             $this->worker->permissions()->attach($data);
             $this->worker->save();

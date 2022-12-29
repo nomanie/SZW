@@ -83,6 +83,46 @@
                         </div>
                     </div>
                 </div>
+                <div class="row mt-3">
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <div class="col item">
+                                Adres e-mail:
+                                <div>
+                                    <div class="input__wrapper mt-1">
+                                        <input
+                                            v-model="form.email"
+                                            type="text"
+                                            class="form-control"
+                                            placeholder="Adres e-mail"
+                                            :class="{invalid : errors.email}"
+                                        >
+                                        <error :errors="errors.email"></error>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <div class="col item">
+                                Hasło (wymagana zmiana przy pierwszym logowaniu):
+                                <div>
+                                    <div class="input__wrapper mt-1">
+                                        <input
+                                            v-model="form.password"
+                                            type="password"
+                                            class="form-control"
+                                            placeholder="Hasło"
+                                            :class="{invalid : errors.password}"
+                                        >
+                                        <error :errors="errors.password"></error>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <hr>
                 <p>Umowa</p>
                 <div class="row mt-3">
@@ -280,7 +320,9 @@ export default {
                    contract_type: null,
                    position: null,
                    salary: null,
-                   info: null
+                   info: null,
+                   email: null,
+                   password: null,
                }
            }
         },

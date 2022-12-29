@@ -46,15 +46,15 @@ class WorkerController extends Controller
     public function store(CreateWorkerRequest $request): JsonResponse
     {
         $input = $request->validated();
-        try {
+//        try {
             $worker = $this->service->saveOrUpdate($input);
             if ($worker) {
                 $this->logService->add($worker, $request, new_data: $input);
                 return $this->successJsonResponse(__('Pomyślnie dodano pracownika'));
             }
-        } catch(\Exception $e) {
-            return $this->errorJsonResponse(__('Nie udało się dodać nowego pracownika'));
-        }
+//        } catch(\Exception $e) {
+//            return $this->errorJsonResponse(__('Nie udało się dodać nowego pracownika'));
+//        }
     }
 
     /**
@@ -79,10 +79,10 @@ class WorkerController extends Controller
     public function update(UpdateWorkerRequest $request, Worker $worker)
     {
         $input = $request->validated();
+        $old_worker = $worker->toArray();
         $newWorker = $this->service->saveOrUpdate($input, $worker);
-
         if ($newWorker) {
-            $this->logService->add($worker, $request, old_data: $worker->toArray(), new_data: $input);
+            $this->logService->add($worker, $request, old_data: $old_worker, new_data: $input);
             return $this->successJsonResponse(__('Pomyślnie edytowano Pracownika'));
         }
         return $this->errorJsonResponse(__('Edycja pracownika nie udała się'));

@@ -20,10 +20,12 @@ return new class extends Migration
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('city');
             $table->string('street');
-            $table->string('phone');
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
             $table->string('zip_code');
             $table->string('building_number');
             $table->string('flat_number')->nullable();
+            $table->json('social_media')->nullable();
             $table->timestamps();
         });
     }

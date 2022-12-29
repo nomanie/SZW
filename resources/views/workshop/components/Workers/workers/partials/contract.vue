@@ -159,7 +159,7 @@
                                 </template>
                                 <div class="text-center fs-20 my-3">
                                     <i class="fa-solid fa-hammer"></i>
-                                    W budowie
+                                    Prace trwają
                                 </div>
                             </b-tab>
                         </b-tabs>

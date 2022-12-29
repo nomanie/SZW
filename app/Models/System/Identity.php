@@ -13,7 +13,7 @@ class Identity extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
 
-    protected $table = 'identities';
+    protected $table = 'system.identities';
     protected $primaryKey = 'id';
     protected $guarded = [];
 
@@ -29,6 +29,11 @@ class Identity extends Authenticatable
     public function user(): hasOne
     {
         return $this->hasOne(User::class, 'identity_id', 'id');
+    }
+
+    public function worker(): hasOne
+    {
+        return $this->hasOne(SystemWorker::class, 'identity_id', 'id');
     }
 
 }

@@ -26,7 +26,7 @@
                        <sidebar></sidebar>
                    </div>
                    <div class="content">
-                        <header-nav></header-nav>
+                        <header-nav name="{{auth()->user()->email}}"></header-nav>
                         <div class="pager">
                             <router-view></router-view>
                         </div>

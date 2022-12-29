@@ -8,11 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class LogService
 {
-    public function __construct(protected Log $log = new Log())
-    {
-
-    }
-
+    protected Log $log;
     public function add(
         $model,
         Request $request,
@@ -24,6 +20,7 @@ class LogService
     {
         DB::beginTransaction();
         try {
+            $this->log = new Log();
             $this->log->route = $request->route()->getName();
             $this->log->route_type = $request->method();
             $this->log->sender_id = $sender_id;
@@ -37,11 +34,14 @@ class LogService
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
+            throw new \Exception();
         }
+        return true;
     }
 
     public function remove()
     {
         $this->log->delete();
     }
+
 }

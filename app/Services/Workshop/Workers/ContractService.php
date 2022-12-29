@@ -31,7 +31,7 @@ namespace App\Services\Workshop\Workers;
             }
 
             $this->contract->position = $data['position'];
-            $this->contract->contract_to = $data['for_indefined_period'] ? null : $data['contract_to'];
+            $this->contract->contract_to = $data['contract_to'] ?? null;
             $this->contract->contract_from = $data['contract_from'];
             $this->contract->contract_type = $data['contract_type'];
             $this->contract->salary = $data['salary'];
@@ -66,7 +66,7 @@ namespace App\Services\Workshop\Workers;
       */
      public function workerHasActiveContract(): bool
      {
-         return $this->worker->currentContract->exists();
+         return $this->worker->currentContract?->exists() ?? false;
      }
 
      public function generate()

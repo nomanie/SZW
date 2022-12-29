@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Enums\AccountTypeEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\changePasswordRequest;
 use App\Http\Requests\Auth\RegisterClientRequest;
 use App\Http\Requests\Auth\RegisterWorkshopRequest;
+use App\Models\System\Identity;
 use App\Services\Auth\AuthService;
 use App\Services\System\LogService;
 use App\Traits\EmailExistsInAccountTypeTrait;
@@ -48,6 +50,19 @@ class RegisterController extends Controller
             return $this->successJsonResponse(__('Pomylnie utworzono konto'));
         }
         return $this->errorJsonResponse(__('Nie udało się utworzyć konta'));
+    }
+
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        if (auth()->user()->reset_password) {
+            $input = $request->validated();
+            $identity = auth()->user();
+            $identity->password = bcrypt($input['password']);
+            $identity->reset_password = false;
+            $identity->save();
+            return redirect()->to($this->service->setIdentity(auth()->user()->id)->getRoute());
+        }
+        else auth()->logout();
     }
 
 }

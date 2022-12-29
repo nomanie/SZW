@@ -44,24 +44,26 @@
                                 ></info>
                             </div>
                         </b-tab>
-                        <b-tab lazy>
+                        <b-tab @click="showned_tabs.push('contracts')">
                             <template #title>
                                 <i class="fa-solid fa-file-circle-check"></i>
                                 Umowa
                             </template>
                             <div>
                                 <contract
+                                    v-if="showned_tabs.includes('contracts')"
                                     :data="form"
                                     @reset="get()"
                                 ></contract>
                             </div>
                         </b-tab>
-                        <b-tab>
+                        <b-tab @click="showned_tabs.push('permissions')">
                             <template #title>
                                 <i class="fa-solid fa-user-lock"></i>
                                 Uprawnienia
                             </template>
                             <permissions
+                                v-if="showned_tabs.includes('permissions')"
                                 :data="form.permissions"
                             ></permissions>
                         </b-tab>
@@ -70,8 +72,9 @@
                                 <i class="fa-solid fa-wrench"></i>
                                 Przypisane zadania
                             </template>
-                            <div>
-                                Dziennik aktywności
+                            <div class="text-center fs-20 my-3">
+                                <i class="fa-solid fa-hammer"></i>
+                                Prace trwają
                             </div>
                         </b-tab>
                         <b-tab>
@@ -79,8 +82,9 @@
                                 <i class="fa-solid fa-book"></i>
                                 Dziennik aktywności
                             </template>
-                            <div>
-                                Uprawnienia
+                            <div class="text-center fs-20 my-3">
+                                <i class="fa-solid fa-hammer"></i>
+                                Prace trwają
                             </div>
                         </b-tab>
                     </b-tabs>
@@ -114,7 +118,8 @@ export default {
         return {
             form: {},
             id: this.$route.params.id,
-            reload_table: 0
+            reload_table: 0,
+            showned_tabs: [], // do lazy loadingu, zapamiętuje załadowane taby i nie renderuje ich ponownie przy zmianie
         }
     },
     mounted() {

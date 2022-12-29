@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('workshops', function (Blueprint $table) {
             $table->id();
+            $table->string('uuid');
             $table->string('tenancy_db_name')->nullable()->unique();
             $table->foreignId('identity_id')
                 ->references('id')->on('identities')
@@ -25,10 +26,6 @@ return new class extends Migration
             $table->string('nip');
             $table->string('regon');
             $table->date('company_created_at')->nullable();
-            $table->string('website')->nullable();
-            $table->string('phone')->nullable();
-            $table->string('email')->nullable();
-            $table->json('social_media')->nullable();
             $table->timestamps();
         });
     }
