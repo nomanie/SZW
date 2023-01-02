@@ -11786,6 +11786,10 @@ a:hover, router-link:hover {
   font-size: 12px !important;
 }
 
+.fs-16 {
+  font-size: 16px !important;
+}
+
 .fs-20 {
   font-size: 20px !important;
 }
@@ -12205,8 +12209,17 @@ table.border-col td:last-of-type, table.border-col th:last-of-type {
   overflow-x: auto !important;
 }
 
+.dataTables_scrollHead {
+  overflow: unset !important;
+}
+
+.dataTables_scrollHeadInner {
+  width: 100%;
+}
+
 .dataTables_scrollBody {
   position: unset !important;
+  overflow: unset !important;
 }
 
 .no-word-break {

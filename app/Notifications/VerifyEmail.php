@@ -41,6 +41,7 @@ class VerifyEmail extends VerifyEmailBase implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
+            ->from('skwapiotr@gmail.com')
             ->subject(__('Weryfikacja konta'))
             ->line('Aby zweryfikować swoje kotno naciśnij przycisk poniżej.')
             ->action(__('Weryfikuj'), $this->verificationUrl($notifiable))

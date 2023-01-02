@@ -104,6 +104,14 @@ export default {
         reloadDT: {
             type: Number,
             default: 0
+        },
+        hideAddRecord: {
+            type: Boolean,
+            default: false
+        },
+        hideDelete: {
+            type: Boolean,
+            default: false
         }
     },
     mixins: [dtMixin],
@@ -112,7 +120,7 @@ export default {
             datatable: null,
             cols: this.columns,
             options: [],
-            data: null
+            data: null,
         }
     },
     mounted() {
@@ -121,7 +129,7 @@ export default {
     watch: {
         reloadTable: function() {
             this.datatable.ajax.reload()
-        },
+        }
     },
     methods: {
         removeSelected(ids) {
@@ -279,6 +287,11 @@ export default {
                     {
                         text: 'Usuń zaznaczone',
                         className: 'btn btn-danger fs-10 mb-2',
+                        init: function(api, node, config) {
+                            if (_self.hideDelete) {
+                                $(node).hide()
+                            }
+                        },
                         action: function ( e, dt, node, config ) {
                             _self.removeSelected(dt.cells('.selected', 0).data().toArray())
                         }
@@ -298,10 +311,13 @@ export default {
                         className: 'btn btn-primary fs-10 mb-2',
                         init: function(api, node, config) {
                             $(node).removeClass('btn-secondary')
+                            if (_self.hideAddRecord) {
+                                $(node).hide()
+                            }
                         },
                         action: function ( e, dt, node, config ){
-                           _self.$emit('add')
-                        }
+                            _self.$emit('add')
+                        },
                     },
 
                 ],

@@ -26,9 +26,9 @@
                     </div>
                 </div>
             </div>
-            <template #modal-footer>
+            <template #modal-footer="{cancel}">
                 <div class="w-100 justify-content-between d-flex">
-                    <button type="button" class="btn btn-danger" @click="hide">
+                    <button type="button" class="btn btn-danger" @click="cancel()">
                         <i class="fa-solid fa-xmark pe-3"></i>
                         Zamknij
                     </button>
@@ -50,9 +50,6 @@ export default {
         }
     },
     methods: {
-        hide() {
-            this.$bvModal.hide('display_form_modal');
-        },
         getFieldTypes() {
             this.$http.get(route('api.get.options', {enum: 'App\\Enums\\Workshop\\FieldTypeEnum', function: 'getType'})).then((response) => {
                 this.fieldTypes = response.data

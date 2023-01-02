@@ -23,6 +23,7 @@ return new class extends Migration
             ['name' => 'client'],
             ['name' => 'workshop'],
             ['name' => 'diagnostician'],
+            ['name' => 'worker'],
             ['name' => 'insurance agent'],
             ['name' => 'admin'],
         ]);

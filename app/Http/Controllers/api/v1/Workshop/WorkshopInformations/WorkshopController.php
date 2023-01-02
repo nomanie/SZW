@@ -31,7 +31,7 @@ class WorkshopController extends Controller
     public function index(Request $request): WorkshopResource
     {
         return new WorkshopResource(Workshop::with('contactForm', 'places', 'additionalFields')
-            ->where('identity_id', auth()->user()->id)->first()
+            ->where('identity_id', auth()->user()->id)->orWhere('id', auth()->user()->worker->workshop_id)->first()
         );
     }
 

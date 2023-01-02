@@ -18,11 +18,16 @@ class LoginController extends Controller
         $data = $request->validated();
 
         if (Auth::attempt($data, $request->get('remember_me'))) {
-            $this->service->setIdentity(auth()->user()->id)->addTypesToSession()->addIdToSession();
-
+            $service = $this->service->setIdentity(auth()->user()->id);
+            if ($service->checkIfMustChangePassword()) {
+                return response()->json([
+                    'route' => 'change-password',
+                ]);
+            }
+            $service->addTypesToSession()->addIdToSession();
             return response()->json([
                 'route' => $this->service->getRoute(),
-                'id' => auth()->user()->uuid,
+                'id' => $this->service->getUuid(),
             ]);
         }
         return response()->json(['errors' => ['password' => [0 => 'Hasło jest niepoprawne']]], 422);

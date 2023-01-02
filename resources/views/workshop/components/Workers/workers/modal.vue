@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-modal id="worker-modal" title="Dodaj nowego pracownika" size="lg">
+        <b-modal id="worker-modal" title="Dodaj nowego pracownika" size="lg" @shown="defaultForm">
             <form>
                 <p>Dane pracownika</p>
                 <div class="row">
@@ -83,6 +83,46 @@
                         </div>
                     </div>
                 </div>
+                <div class="row mt-3">
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <div class="col item">
+                                Adres e-mail:
+                                <div>
+                                    <div class="input__wrapper mt-1">
+                                        <input
+                                            v-model="form.email"
+                                            type="text"
+                                            class="form-control"
+                                            placeholder="Adres e-mail"
+                                            :class="{invalid : errors.email}"
+                                        >
+                                        <error :errors="errors.email"></error>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <div class="col item">
+                                Hasło (wymagana zmiana przy pierwszym logowaniu):
+                                <div>
+                                    <div class="input__wrapper mt-1">
+                                        <input
+                                            v-model="form.password"
+                                            type="password"
+                                            class="form-control"
+                                            placeholder="Hasło"
+                                            :class="{invalid : errors.password}"
+                                        >
+                                        <error :errors="errors.password"></error>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <hr>
                 <p>Umowa</p>
                 <div class="row mt-3">
@@ -152,6 +192,7 @@
                                         <v-select
                                             v-model="form.contract_type"
                                             :options="options"
+                                            :reduce="item => item.id"
                                             :class="{invalid : errors.contract_type}"
                                             placeholder="Wybierz rodzaj umowy"
                                         >
@@ -207,7 +248,7 @@
                     </div>
                 </div>
             </form>
-            <template #modal-footer>
+            <template #modal-footer="{cancel}">
                 <div class="w-100 justify-content-between d-flex">
                     <button type="button" class="btn btn-warning me-4" @click="defaultForm"><i class="fa fa-eraser pe-3"></i>
                         Wyczyść
@@ -216,7 +257,7 @@
                         <button type="button" class="btn btn-success" @click="btnUrl"><i class="fa fa-save pe-3"></i>
                             Zapisz
                         </button>
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                        <button type="button" class="btn btn-danger" @click="cancel()">
                             <i class="fa-solid fa-xmark pe-3"></i>
                             Anuluj
                         </button>
@@ -227,7 +268,7 @@
     </div>
 </template>
 <script>
-import error from '../../../../../js/assets/form/error'
+import error from '@js/assets/form/error'
 
 export default {
     components: {
@@ -268,18 +309,22 @@ export default {
     },
     methods: {
         defaultForm() {
-            this.form = {
-                first_name: null,
-                last_name: null,
-                contract_from: null,
-                contract_to: null,
-                login: null,
-                phone: null,
-                contract_type: null,
-                position: null,
-                salary: null,
-                info: null
-            }
+           if (!this.is_edit) {
+               this.form = {
+                   first_name: null,
+                   last_name: null,
+                   contract_from: null,
+                   contract_to: null,
+                   login: null,
+                   phone: null,
+                   contract_type: null,
+                   position: null,
+                   salary: null,
+                   info: null,
+                   email: null,
+                   password: null,
+               }
+           }
         },
         save() {
             this.$http.post(route('workshop.workers.store'), this.form).then((response) => {
@@ -296,6 +341,7 @@ export default {
         getOptions() {
             this.$http.get(route('api.get.options', {enum: 'App\\Enums\\Workshop\\ContractTypeEnum'})).then((response) => {
                 this.options = response.data
+                console.log(this.options)
             })
         }
     }
