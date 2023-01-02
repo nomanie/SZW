@@ -75,4 +75,15 @@ Route::as('workshop.')->group(function(){
     });
     Route::resource('/workers', App\Http\Controllers\api\v1\Workshop\Workers\WorkerController::class);
 
+    Route::as('clients.')->prefix('/clients')->group(function(){
+        Route::post('/export', [WorkerController::class, 'export'])->name('clients.export');
+        Route::get('/download/{mediable}', [WorkerController::class, 'download'])->name('clients.download');
+    });
+    Route::resource('/clients', App\Http\Controllers\api\v1\Workshop\Clients\ClientController::class);
+
+    Route::as('archived_clients.')->prefix('/archived_clients')->group(function(){
+        Route::post('/export', [WorkerController::class, 'export'])->name('archived_clients.export');
+        Route::get('/download/{mediable}', [WorkerController::class, 'download'])->name('archived_clients.download');
+    });
+    Route::resource('/archived_clients', App\Http\Controllers\api\v1\Workshop\Clients\ArchivedClientsController::class);
 });

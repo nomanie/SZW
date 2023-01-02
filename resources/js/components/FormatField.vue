@@ -51,16 +51,12 @@ export default {
         {
             let format = this.format
             let formatString = format.split('').map((e, i) => e !== '.' ? e : '').filter((el) => el !== '')
-            let indexes = format.split('').map((e, i) => e === formatString ? i : '').filter((el) => el !== '')
+            let indexes = format.split('').map((e, i) => e === formatString[0] ? i : '').filter((el) => el !== '')
             let tempNip = this.field.split('')
             if ($event.keyCode !== 8 && $event.keyCode !== 46) {
                 for (let i = 0; i <= tempNip.length; i++) {
-                    let j = null
-                    if([3,7,10].includes(i)) {
-                        j = i
-                    }
-                    if (i === j && tempNip[j] !== '-') {
-                        tempNip.splice(j, 0, format.split('')[i])
+                    if (indexes.includes(i) && tempNip[i] !== formatString[0]) {
+                        tempNip.splice(i, 0, format.split('')[i])
                     }
                 }
             }

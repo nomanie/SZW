@@ -16,7 +16,7 @@ trait UseTenantConnection
         if (tenancy()->tenant !== null) {
             // Najpierw sprawdzamy czy tenancy jest zalogowany (administratorzy warsztatu)
             $this->table = tenancy()->tenant->tenancy_db_name . '.' . $this->getTable();
-        } else if (auth()->user()->worker !== null) {
+        } else if (auth()->user()?->worker !== null) {
             // Sprawdzanie czy loguje się pracownik warsztatu
             $this->table = Workshop::where('id', auth()->user()->worker->workshop_id)
                     ->first()->tenancy_db_name . '.' . $this->getTable();

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('phone')->nullable();
+            $table->string('email')->nullable()->unique();
             $table->date('date_of_birth')->nullable();
             $table->string('city')->nullable();
             $table->string('street')->nullable();
@@ -30,6 +31,7 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             $table->boolean('consent_sms_notification')->default(false);
             $table->boolean('consent_marketing_notification')->default(false);
+            $table->timestamp('deleted_at')->default(false);
             $table->timestamps();
         });
     }

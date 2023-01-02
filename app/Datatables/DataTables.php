@@ -9,6 +9,7 @@ class DataTables
     protected $table;
     protected array $rawColumns = [];
     protected $query;
+    protected $dropdownType = 0;
 
     public function getTable(): static
     {
@@ -35,7 +36,7 @@ class DataTables
         $this->rawColumns[] = 'actions';
         $this->table = $this->table
             ->addColumn('action', function ($row) {
-                return view('global.datatable.dropdown_actions')->with(['row' => $row]);
+                return view('global.datatable.dropdown_actions')->with(['row' => $row, 'type' => $this->dropdownType]);
             });
         return $this;
     }
@@ -53,6 +54,13 @@ class DataTables
 
     public function editColumns(): static
     {
+        return $this;
+    }
+
+    public function setDropdownType(int $type): static
+    {
+        $this->dropdownType = $type;
+
         return $this;
     }
 }
