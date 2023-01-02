@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             $table->boolean('consent_sms_notification')->default(false);
             $table->boolean('consent_marketing_notification')->default(false);
-            $table->timestamp('deleted_at')->default(false);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

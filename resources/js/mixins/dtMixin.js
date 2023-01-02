@@ -26,6 +26,9 @@ var dtMixin = {
         show(id) {
             this.$emit('show', id)
         },
+        restore(id) {
+            this.$emit('restore', id)
+        }
     }
 }
 export default dtMixin

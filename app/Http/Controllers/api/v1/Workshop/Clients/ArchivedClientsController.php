@@ -43,13 +43,13 @@ class ArchivedClientsController extends Controller
      * Update the specified resource in storage.
      *
      * @param UpdateClientRequest $request
-     * @param Client $client
+     * @param int $client_id
      * @return JsonResponse
      */
-    public function update(Request $request, Client $client)
+    public function update(Request $request, int $client_id)
     {
-
-        if ($client->restore()) {
+        $client = $this->service->restore($client_id);
+        if ($client) {
             $this->logService->add($client, $request, new_data: $client->toArray());
             return $this->successJsonResponse(__('Pomyślnie przywrócono klienta'));
         }

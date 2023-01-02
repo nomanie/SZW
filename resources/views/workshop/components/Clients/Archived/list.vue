@@ -7,10 +7,10 @@
             :reload-table="reload_table"
             :scroll-x="false"
             :modal-id="add_edit_modal_id"
+            :hide-add-record="true"
             delete-url="workshop.archived_clients.destroy"
-            @add="add"
             @delete="remove"
-            @edit="edit($event, true)"
+            @restore="restore($event)"
             api-url="workshop.archived_clients"
         >
         </datatable>
@@ -66,22 +66,16 @@ export default {
         }
     },
     methods: {
-        add($event) {
-            this.$bvModal.show(this.add_edit_modal_id)
-        },
         remove($event) {
-            this.$http.delete(route('workshop.clients.destroy', $event)).then((response) => {
+            this.$http.delete(route('workshop.archived_clients.destroy', $event)).then((response) => {
                 this.reload_table++
             })
         },
-        edit($event, edit = false) {
-            this.isEdit = edit
-            this.$http.get(route('workshop.clients.show', $event)).then((response) => {
-                this.data = response.data.data
-                this.$bvModal.show(this.add_edit_modal_id)
+        restore($event) {
+            this.$http.put(route('workshop.archived_clients.update', $event)).then((response) => {
+                this.reload_table++
             })
-
-        },
+        }
     }
 }
 </script>

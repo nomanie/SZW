@@ -41,4 +41,12 @@ namespace App\Services\Workshop;
         return $this->client;
     }
 
+    public function restore(int $id): Client|bool
+    {
+        $this->client = Client::find($id);
+        if ($this->client->restore()) {
+            return $this->client;
+        }
+        return false;
+    }
 }
