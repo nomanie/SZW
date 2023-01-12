@@ -63,7 +63,7 @@ class ArchivedClientsController extends Controller
      * @param Client $client
      * @return JsonResponse
      */
-    public function destroy(Request $request, Client $client): JsonResponse
+    public function destroy(Request $request, Client $archivedClient): JsonResponse
     {
         if (isset($request->all()['data'])) {
             $clients = Client::whereIn('id', $request->all()['data'])->get();
@@ -73,8 +73,8 @@ class ArchivedClientsController extends Controller
             }
             return $this->successJsonResponse(__('Pomyślnie usunięto :count rekordów', ['count' => count($request->all()['data'])]));
         } else {
-            $this->logService->add($client, $request, old_data: $client->toArray());
-            if ($client->forceDelete()) {
+            $this->logService->add($archivedClient, $request, old_data: $archivedClient->toArray());
+            if ($archivedClient->forceDelete()) {
                 return $this->successJsonResponse(__('Pomyślnie usunięto klienta'));
             }
             return $this->errorJsonResponse(__('Nie udało się usunąć klienta'));

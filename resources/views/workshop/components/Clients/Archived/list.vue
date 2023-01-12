@@ -74,6 +74,7 @@ export default {
         restore($event) {
             this.$http.put(route('workshop.archived_clients.update', $event)).then((response) => {
                 this.reload_table++
+                this.$emit('table:reload')
             })
         }
     }

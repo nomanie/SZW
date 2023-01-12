@@ -12,6 +12,11 @@ const routes = [
         component: () => import('@workshop/Clients'),
     },
     {
+        path: websiteUrl + "/clients/:id",
+        name: "clients.show",
+        component: () => import('@workshop/Clients/show'),
+    },
+    {
         path: websiteUrl + "/support",
         name: "support",
         component: () => import('../components/Support'),

@@ -11,6 +11,7 @@
             @add="add"
             @delete="remove"
             @edit="edit($event, true)"
+            @show="show"
             api-url="workshop.clients"
         >
         </datatable>
@@ -79,6 +80,7 @@ export default {
         remove($event) {
             this.$http.delete(route('workshop.clients.destroy', $event)).then((response) => {
                 this.reload_table++
+                this.$emit('table:reload')
             })
         },
         edit($event, edit = false) {
@@ -87,8 +89,10 @@ export default {
                 this.data = response.data.data
                 this.$bvModal.show(this.add_edit_modal_id)
             })
-
         },
+        show($event) {
+            this.$router.push({ name: 'clients.show', params: { id: $event } })
+        }
     }
 }
 </script>

@@ -36,8 +36,6 @@ Vue.component('header-nav', require('../views/workshop/components/Header.vue').d
 Vue.component('dashboard', require('../views/workshop/components/Dashboard.vue').default);
 Vue.component('clients', require('../views/workshop/components/Clients').default);
 Vue.component('clients-list', require('../views/workshop/components/Clients/List').default);
-Vue.component('car-list', require('../views/workshop/components/Clients/Cars').default);
-Vue.component('cars', require('../views/workshop/components/Clients/Cars').default);
 Vue.component('documents', require('../views/workshop/components/Documents').default);
 Vue.component('repairs', require('../views/workshop/components/Repairs').default);
 Vue.component('users', require('../views/workshop/components/Users').default);
@@ -47,6 +45,9 @@ Vue.component('settings', require('../views/workshop/components/Settings').defau
     //workers
     Vue.component('workers-list', require('../views/workshop/components/Workers/workers/list').default);
     Vue.component('workers-show', require('../views/workshop/components/Workers/workers/show').default);
+    //clients
+    Vue.component('clients-show', require('../views/workshop/components/Clients/show').default);
+
 // Components for wiki.
 Vue.component('wiki-header', require('../views/wiki/components/header.vue').default);
 // Admin component

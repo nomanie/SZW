@@ -63,6 +63,10 @@ Route::as('workshop.')->group(function(){
         Route::get('/workers/{worker}', function () {
             return view('workshop.pages.workers.workers.show');
         })->name('workers.details');
+        Route::get('/clients/{client}', function () {
+            return view('workshop.pages.clients.show');
+        })->name('clients.details');
+
     });
     Route::post('/workshops/{workshop}/upload/logo', [WorkshopController::class, 'upload'])->name('upload.logo');
     Route::resource('/workshops', WorkshopController::class)->only(['index', 'update']);

@@ -6,7 +6,6 @@ use App\Enums\AccountTypeEnum;
 use App\Models\Workshop\Workers\Worker;
 use App\Services\Auth\AuthService;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
 
 class WorkerService
 {
@@ -30,12 +29,8 @@ class WorkerService
             $identity = (new AuthService)->save($data, AccountTypeEnum::WORKER, workshop()->id);
             $this->worker = new Worker();
         }
-
-        if (isset($data['password'])) {
-            $this->worker->password = bcrypt(10, $data['password']);
-        }
-//        DB::beginTransaction();
-//        try {
+        DB::beginTransaction();
+        try {
             if (!$worker) {
                 $this->worker->workshop_id = 1;
                 $this->worker->identity_id = $identity->id;
@@ -50,11 +45,11 @@ class WorkerService
             if (isset($data['contract_type'])) {
                 $this->contractService->save($data, $this->worker->id);
             }
-//            DB::commit();
-//        } catch (\Exception $e) {
-//            DB::rollBack();
-//            throw new Exception();
-//        }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new Exception();
+        }
 
         return $this->worker ?? null;
     }
