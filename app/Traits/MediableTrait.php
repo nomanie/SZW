@@ -9,6 +9,7 @@ namespace App\Traits;
 {
      public function mediables(): belongsTo
      {
+         //@todo zmienić na morph
          return $this->belongsTo(Mediable::class, 'mediable_id');
      }
 }

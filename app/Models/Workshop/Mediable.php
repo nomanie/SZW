@@ -11,5 +11,4 @@ class Mediable extends Model
 {
     use HasFactory, UseTenantConnection, LogTrait;
 
-
 }

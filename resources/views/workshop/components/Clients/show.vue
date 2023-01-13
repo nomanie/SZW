@@ -5,15 +5,16 @@
                 <div class="d-flex">
                     <div class="d-flex">
                         <div class="avatar">
-
                         </div>
                     </div>
                     <div class="d-flex flex-column mx-3">
-                        <h3 class="mb-0">Piotr Skwarek</h3>
+                        <h3 class="mb-0">{{name}}</h3>
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <button class="btn btn-outline-danger my-1" style="padding: 2px 10px">Usuń Klienta</button>
-                                <button class="btn btn-outline-success my-1" style="padding: 2px 10px">Dodaj zdjęcie</button>
+                                <button class="btn btn-outline-danger my-1" style="padding: 2px 10px">Usuń Klienta
+                                </button>
+                                <button class="btn btn-outline-success my-1" style="padding: 2px 10px">Dodaj zdjęcie
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -43,30 +44,27 @@
                                 <i class="fa-solid fa-address-card"></i>
                                 Dane klienta
                             </template>
-                            <div class="text-center fs-20 my-3">
-                                <i class="fa-solid fa-hammer"></i>
-                                Prace trwają
-                            </div>
+                            <info
+                            @edit="getName"
+                            ></info>
                         </b-tab>
-                        <b-tab @click="showned_tabs.push('contracts')">
+                        <b-tab @click="showned_tabs.push('cars')">
                             <template #title>
                                 <i class="fa-solid fa-car"></i>
                                 Pojazdy
                             </template>
-                            <div class="text-center fs-20 my-3">
-                                <i class="fa-solid fa-hammer"></i>
-                                Prace trwają
-                            </div>
+                            <cars-list
+                                v-if="showned_tabs.includes('cars')"
+                            ></cars-list>
                         </b-tab>
-                        <b-tab @click="showned_tabs.push('permissions')">
+                        <b-tab @click="showned_tabs.push('document-list')">
                             <template #title>
                                 <i class="fa-solid fa-file"></i>
                                 Dokumenty
                             </template>
-                            <div class="text-center fs-20 my-3">
-                                <i class="fa-solid fa-hammer"></i>
-                                Prace trwają
-                            </div>
+                            <document-list
+                                v-if="showned_tabs.includes('document-list')"
+                            ></document-list>
                         </b-tab>
                         <b-tab>
                             <template #title>
@@ -96,23 +94,36 @@
     </div>
 </template>
 <script>
+import info from './tabs/info'
 import loader from "@js/components/Loader";
+import carsList from './tabs/cars/list'
+import documentList from './tabs/documents/list'
+
 export default {
     name: 'show',
     components: {
-      loader
+        loader,
+        info,
+        carsList,
+        documentList
     },
     data() {
         return {
-            showned_tabs: []
+            showned_tabs: [],
+            name: ''
         }
     },
+    methods: {
+        getName($event) {
+            this.name = $event
+        }
+    }
 }
 </script>
 <style scoped>
 .avatar {
     width: 100px;
     height: 100px;
-    border: solid 1px rgba(0,0,0,0.3);
+    border: solid 1px rgba(0, 0, 0, 0.3);
 }
 </style>

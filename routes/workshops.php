@@ -2,6 +2,11 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\api\v1\Workshop\Cars\ArchivedCarController;
+use App\Http\Controllers\api\v1\Workshop\Cars\CarController;
+use App\Http\Controllers\api\v1\Workshop\Clients\ArchivedClientController;
+use App\Http\Controllers\api\v1\Workshop\Clients\ClientController;
+use App\Http\Controllers\api\v1\Workshop\Documents\DocumentController;
 use App\Http\Controllers\api\v1\Workshop\Workers\WorkerController;
 use App\Http\Controllers\api\v1\Workshop\WorkshopInformations\WorkshopController;
 use App\Http\Middleware\InitializeTenancyByPath;
@@ -80,14 +85,32 @@ Route::as('workshop.')->group(function(){
     Route::resource('/workers', App\Http\Controllers\api\v1\Workshop\Workers\WorkerController::class);
 
     Route::as('clients.')->prefix('/clients')->group(function(){
-        Route::post('/export', [WorkerController::class, 'export'])->name('clients.export');
-        Route::get('/download/{mediable}', [WorkerController::class, 'download'])->name('clients.download');
+        Route::post('/export', [ClientController::class, 'export'])->name('clients.export');
+        Route::get('/download/{mediable}', [ClientController::class, 'download'])->name('clients.download');
     });
-    Route::resource('/clients', App\Http\Controllers\api\v1\Workshop\Clients\ClientController::class);
+    Route::resource('/clients', ClientController::class);
 
     Route::as('archived_clients.')->prefix('/archived_clients')->group(function(){
-        Route::post('/export', [WorkerController::class, 'export'])->name('archived_clients.export');
-        Route::get('/download/{mediable}', [WorkerController::class, 'download'])->name('archived_clients.download');
+        Route::post('/export', [ArchivedClientController::class, 'export'])->name('archived_clients.export');
+        Route::get('/download/{mediable}', [ArchivedClientController::class, 'download'])->name('archived_clients.download');
     });
-    Route::resource('/archived_clients', App\Http\Controllers\api\v1\Workshop\Clients\ArchivedClientsController::class);
+    Route::resource('/archived_clients', ArchivedClientController::class);
+
+    Route::as('cars.')->prefix('/cars')->group(function(){
+        Route::post('/export', [CarController::class, 'export'])->name('cars.export');
+        Route::get('/download/{mediable}', [CarController::class, 'download'])->name('cars.download');
+    });
+    Route::resource('/cars', CarController::class);
+
+    Route::as('archived_cars.')->prefix('/archived_cars')->group(function(){
+        Route::post('/export', [ArchivedCarController::class, 'export'])->name('archived_cars.export');
+        Route::get('/download/{mediable}', [ArchivedCarController::class, 'download'])->name('archived_cars.download');
+    });
+    Route::resource('/archived_cars', ArchivedCarController::class);
+
+    Route::as('documents.')->prefix('/documents')->group(function(){
+        Route::post('/export', [DocumentController::class, 'export'])->name('documents.export');
+        Route::get('/download/{mediable}', [DocumentController::class, 'download'])->name('documents.download');
+    });
+    Route::resource('/documents', DocumentController::class);
 });

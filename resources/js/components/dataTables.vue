@@ -112,6 +112,10 @@ export default {
         hideDelete: {
             type: Boolean,
             default: false
+        },
+        ajaxParams: {
+            type: [Array, Object],
+            default: () => {}
         }
     },
     mixins: [dtMixin],
@@ -148,7 +152,10 @@ export default {
                 },
                 processing: true,
                 serverSide: true,
-                ajax: route(this.apiUrl + '.index'),
+                ajax: {
+                    url: route(this.apiUrl + '.index'),
+                    data: this.ajaxParams
+                },
                 pageLength: this.perPage,
                 columns: this.cols,
                 scrollY: '50vh',

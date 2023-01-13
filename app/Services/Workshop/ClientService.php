@@ -35,7 +35,8 @@ namespace App\Services\Workshop;
         $this->client->building_number = $data['building_number'];
         $this->client->flat_number = $data['flat_number'];
         $this->client->zip_code = $data['zip_code'];
-//        $this->client->info = $data['info'];
+        $this->client->consent_marketing_notification = $data['consent_marketing_notification'];
+        $this->client->consent_sms_notification = $data['consent_sms_notification'];
         $this->client->save();
 
         return $this->client;
@@ -48,5 +49,15 @@ namespace App\Services\Workshop;
             return $this->client;
         }
         return false;
+    }
+
+    public function connect(int $id): Client|bool
+    {
+        //@todo łączenie identity klienta z klientem w bazie
+    }
+
+    public function disconnect(int $id): Client|bool
+    {
+        //@todo odłączanie identity od klienta
     }
 }

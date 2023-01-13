@@ -4,16 +4,13 @@ namespace App\Http\Controllers\api\v1\Workshop\WorkshopInformations;
 
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\WorkshopMiddleware;
-use App\Http\Requests\UpdateWorkshopRequest;
+use App\Http\Requests\Workshop\UpdateWorkshopRequest;
 use App\Http\Resources\Workshop\WorkshopInformations\WorkshopResource;
 use App\Models\System\Workshop;
 use App\Services\System\LogService;
 use App\Services\Workshop\WorkshopService;
 use App\Traits\JsonResponseTrait;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\View\View;
 
 class WorkshopController extends Controller
 {
