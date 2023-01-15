@@ -55,6 +55,7 @@ class DocumentController extends Controller
 
     public function store(CreateDocumentRequest $request): JsonResponse
     {
+        dd($request->all());
         $input = $request->validated();
         try {
             $document = $this->service->saveOrUpdate($input);

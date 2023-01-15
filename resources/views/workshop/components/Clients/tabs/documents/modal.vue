@@ -9,7 +9,7 @@
                     <div class="col-lg-6 col-12 d-flex justify-content-end flex-column">
                         <div class="row">
                             <div class="col-12 d-flex justify-content-end">
-                                <textarea placeholder="nagłówek dokumentu" rows="3"></textarea>
+                                <textarea placeholder="nagłówek dokumentu" rows="3" v-model="form.fv_header"></textarea>
                             </div>
                         </div>
                         <div class="row">
@@ -19,7 +19,7 @@
                                         Data wystawienia:
                                     </div>
                                     <div class="col-6 col-lg-5">
-                                        <input type="date" class="w-100">
+                                        <input type="date" class="w-100" v-model="form.issue_date">
                                     </div>
                                 </div>
                                 <div class="row justify-content-end">
@@ -27,7 +27,7 @@
                                         Data sprzedaży:
                                     </div>
                                     <div class="col-6 col-lg-5">
-                                        <input type="date" class="w-100">
+                                        <input type="date" class="w-100" v-model="form.sold_date">
                                     </div>
                                 </div>
                             </div>
@@ -51,7 +51,7 @@
                             <div class="col-12">
                                 <div class="row">
                                     <div class="col-12">
-                                        <input type="text" placeholder="nazwa sprzedawcy">
+                                        <input type="text" placeholder="nazwa sprzedawcy" v-model="form.issuer_name">
                                     </div>
                                 </div>
                             </div>
@@ -60,7 +60,7 @@
                             <div class="col-12">
                                 <div class="row">
                                     <div class="col-12">
-                                        <textarea placeholder="adres sprzedawcy" class="h-100"></textarea>
+                                        <textarea placeholder="adres sprzedawcy" class="h-100" v-model="form.issuer_address"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -69,7 +69,7 @@
                             <div class="col-12">
                                 <div class="row">
                                     <div class="col-12">
-                                        <input type="text" placeholder="NIP sprzedawcy">
+                                        <input type="text" placeholder="NIP sprzedawcy" v-model="form.issuer_nip">
                                     </div>
                                 </div>
                             </div>
@@ -87,7 +87,7 @@
                                     <div class="col-12">
                                         <div class="row">
                                             <div class="col-12">
-                                                <input type="text" placeholder="nazwa nabywcy">
+                                                <input type="text" placeholder="nazwa nabywcy" v-model="form.recipient_name">
                                             </div>
                                         </div>
                                     </div>
@@ -96,7 +96,7 @@
                                     <div class="col-12">
                                         <div class="row">
                                             <div class="col-12">
-                                                <textarea placeholder="adres nabywcy" class="h-100"></textarea>
+                                                <textarea placeholder="adres nabywcy" class="h-100" v-model="form.recipient_address"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -105,7 +105,7 @@
                                     <div class="col-12">
                                         <div class="row">
                                             <div class="col-12">
-                                                <input type="text" placeholder="NIP/Pesel nabywcy">
+                                                <input type="text" placeholder="NIP/Pesel nabywcy" v-model="form.recipient_nip">
                                             </div>
                                         </div>
                                     </div>
@@ -121,7 +121,7 @@
                                 <th style="width: 50px">
                                     Lp
                                 </th>
-                                <th style="width: 250px">
+                                <th style="width: 200px">
                                     Nazwa towaru lub usługi
                                 </th>
                                 <th style="width: 50px">
@@ -130,7 +130,7 @@
                                 <th style="width: 60px">
                                     Cena Netto
                                 </th>
-                                <th style="width: 60px">
+                                <th style="width: 85px">
                                     Stawka VAT
                                 </th>
                                 <th style="width: 60px">
@@ -148,35 +148,157 @@
                                     {{ index }}
                                 </td>
                                 <td>
-                                    <input type="text" v-model="form.contents[index].name" class="w-100">
+                                    <input type="text" v-model="form.contents[index].name" class="w-100 form-control">
                                 </td>
                                 <td>
-                                    <input type="text" v-model="form.contents[index].units" class="w-100">
+                                    <input type="text" v-model="form.contents[index].units" class="w-100 form-control" @input="calculate(index)">
                                 </td>
                                 <td>
-                                    <input type="text" v-model="form.contents[index].unit_cost" class="w-100">
+                                    <input type="text" v-model="form.contents[index].unit_cost" class="w-100 form-control" @input="calculate(index)">
                                 </td>
                                 <td>
-                                    <v-select
+                                    <vselect
                                         v-model="form.contents[index].vat_rate_id"
+                                        placeholder="Stawka VAT"
                                         :options="vat_rate_options"
-                                        class="w-100"
                                         :clearable="false"
+                                        :searchable="false"
+                                        :close-on-select="true"
+                                        :hide-on-backdrop="true"
+                                        @option:selected="setVatRate(index, $event)"
                                     >
-                                        <!-- @todo searchable psuje v-selecta-->
-                                        <template #open-indicator="{ attributes }">
-                                            <span v-bind="attributes"></span>
-                                        </template>
-                                    </v-select>
+                                    </vselect>
                                 </td>
                                 <td>
-                                    <input type="text" v-model="form.contents[index].sum_net" class="w-100" disabled>
+                                    <input type="text" v-model="form.contents[index].sum_net" class="w-100 form-control" disabled>
                                 </td>
                                 <td>
-                                    <input type="text" v-model="form.contents[index].sum_vat" class="w-100" disabled>
+                                    <input type="text" v-model="form.contents[index].sum_vat" class="w-100 form-control" disabled>
                                 </td>
                                 <td>
-                                    <input type="text" v-model="form.contents[index].sum_gross" class="w-100" disabled>
+                                    <input type="text" v-model="form.contents[index].sum_gross" class="w-100 form-control" disabled>
+                                </td>
+                                <td v-if="index > 0" style="width:30px">
+                                    <i class="fa-solid fa-trash cursor-pointer fs-16 text-danger" v-b-tooltip title="Usuń pozycję" @click="removePosition(index)"></i>
+                                </td>
+                                <td style="width:30px;" v-if="index === form.contents.length - 1">
+                                    <i class="fa-solid fa-plus cursor-pointer fs-16" v-b-tooltip title="Dodaj kolejną pozycję" @click="addPosition()"></i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                    Suma
+                                </td>
+                                <td>
+                                    <input type="text" v-model="form.sum_net" class="w-100 form-control" disabled>
+                                </td>
+                                <td>
+                                    <input type="text" v-model="form.sum_vat" class="w-100 form-control" disabled>
+                                </td>
+                                <td>
+                                    <input type="text" v-model="form.sum_gross" class="w-100 form-control" disabled>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="mt-4" style="width: 747px; margin:auto;">
+                        <table style="width: 687px;" class="summary_table">
+                            <tr>
+                                <td>
+                                    Forma płatności:
+                                </td>
+                                <td>
+                                    <vselect
+                                        v-model="form.payment_type"
+                                        :options="paymentTypes"
+                                        :clearable="false"
+                                        :searchable="false"
+                                        :close-on-select="true"
+                                        :hide-on-backdrop="true"
+                                        @option:selected="setPaymentType($event)"
+                                    >
+                                    </vselect>
+                                </td>
+                                <td>
+                                    Razem:
+                                </td>
+                                <td>
+                                    {{form.sum_gross}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Termin zapłaty:
+                                </td>
+                                <td>
+                                    <input type="date" v-model="form.payment_date">
+                                </td>
+                                <td>
+                                    Płatność otrzymana:
+                                </td>
+                                <td>
+                                    0.00
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Bank:
+                                </td>
+                                <td>
+                                    <input type="text" v-model="form.bank_type">
+                                </td>
+                                <td>
+                                    Do zapłaty:
+                                </td>
+                                <td>
+                                    {{form.sum_gross}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Nr konta:
+                                </td>
+                                <td>
+                                    <format-field
+                                        :key='form.account_number'
+                                        :data='form.account_number'
+                                        :min="0"
+                                        :max="26"
+                                        :state="errors.account_number && errors.account_number.length > 0"
+                                        format="..-....-....-....-....-....-...."
+                                        placeholder="Numer konta"
+                                        @input="form.account_number = $event"
+                                    ></format-field>
+                                </td>
+                                <td>
+                                    Słownie:
+                                </td>
+                                <td>
+                                    zrobić funkcje
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Uwagi</td>
+                                <td colspan="3">
+                                    Zwolenienie z podatku VAT na podstawie:
+                                    <vselect
+                                        v-model="form.notes"
+                                        :options="noteTypes"
+                                        :clearable="false"
+                                        :searchable="false"
+                                        :close-on-select="true"
+                                        :hide-on-backdrop="true"
+                                        @option:selected="setPaymentType($event)"
+                                    >
+                                    </vselect>
                                 </td>
                             </tr>
                         </table>
@@ -206,6 +328,7 @@
 <script>
 import error from '@js/assets/form/error'
 import FormatField from '@js/components/FormatField'
+import {priceFormat} from "@js/app";
 
 export default {
     components: {
@@ -247,6 +370,26 @@ export default {
                     label: '0%',
                     value: 0.00
                 }
+            ],
+            paymentTypes: [
+                {
+                    label: 'Gotówką',
+                    value: 0
+                },
+                {
+                    label: 'Kartą',
+                    value: 1
+                },
+                {
+                    label: 'Internetowo',
+                    value: 2
+                }
+            ],
+            noteTypes: [
+                {
+                    label: 'art. 43 ust. 1 pkt 40 ustawy o podatku od towarów i usług.',
+                    value: 0
+                }
             ]
         }
     },
@@ -259,29 +402,44 @@ export default {
     computed: {
         btnUrl() {
             return this.is_edit ? this.edit : this.save
-        }
+        },
     },
     methods: {
         defaultForm() {
             if (!this.is_edit) {
                 this.form = {
-                    first_name: null,
-                    last_name: null,
-                    phone: null,
-                    info: null,
-                    email: null,
-                    zip_code: null,
-                    building_number: null,
-                    flat_number: null,
-                    city: null,
-                    street: null,
-                    date_of_birth: null,
+                    fv_header: null,
+                    issue_date: null,
+                    sold_date: null,
+                    issuer_name: null,
+                    issuer_address: null,
+                    issuer_nip: null,
+                    recipient_name: null,
+                    recipient_address: null,
+                    recipient_nip: null,
+                    sum_vat: null,
+                    sum_net: null,
+                    sum_gross: null,
+                    payment_date: null,
+                    bank_type: null,
+                    account_number: null,
+                    notes: {
+                        label: 'Wybierz',
+                        value: null
+                    },
+                    payment_type: {
+                        label: 'Wybierz',
+                        value: null
+                    },
                     contents: [
                         {
                             name: null,
                             units: null,
                             unit_cost: null,
-                            vat_rate_id: null,
+                            vat_rate_id: {
+                                label: 'Wybierz',
+                                value: null
+                            },
                             sum_net: null,
                             sum_vat: null,
                             sum_gross: null,
@@ -291,7 +449,8 @@ export default {
             }
         },
         save() {
-            this.$http.post(route('workshop.clients.store'), this.form).then((response) => {
+            this.form.client_id = this.$route.params.id
+            this.$http.post(route('workshop.documents.store'), this.form).then((response) => {
                 this.$bvModal.hide('clients-modal')
                 this.$emit('reload')
             })
@@ -301,6 +460,69 @@ export default {
                 this.$bvModal.hide('clients-modal')
                 this.$emit('reload')
             })
+        },
+        setVatRate(index, $event) {
+            this.form.contents[index].vat_rate_id = $event
+            this.calculate(index)
+        },
+        setPaymentType($event) {
+            this.form.payment_type = $event
+        },
+        calculate(index) {
+            if (
+                this.form.contents[index].vat_rate_id !== null
+                && this.form.contents[index].vat_rate_id.value !== null
+                && this.form.contents[index].units !== null
+                && this.form.contents[index].unit_cost !== null
+            ) {
+                this.calculateNet(index)
+                this.$nextTick()
+                this.calculateVat(index)
+                this.$nextTick()
+                this.calculateGross(index)
+                this.$nextTick()
+                this.calculateFinalSums()
+            }
+        },
+        calculateNet(index) {
+            this.form.contents[index].sum_net = priceFormat((this.form.contents[index].units * this.form.contents[index].unit_cost))
+        },
+        calculateVat(index) {
+            this.form.contents[index].sum_vat = priceFormat((this.form.contents[index].sum_net) * this.form.contents[index].vat_rate_id.value)
+        },
+        calculateGross(index) {
+            this.form.contents[index].sum_gross = priceFormat(parseFloat((this.form.contents[index].sum_net)) + (parseFloat(this.form.contents[index].sum_net) * this.form.contents[index].vat_rate_id.value))
+        },
+        calculateFinalSums() {
+            let sum_vat = 0
+            let sum_net = 0
+            let sum_gross = 0
+            this.form.contents.forEach(function(element, index) {
+                sum_vat += parseFloat(element.sum_vat)
+                sum_net += parseFloat(element.sum_net)
+                sum_gross += parseFloat(element.sum_gross)
+            })
+            this.form.sum_vat = priceFormat(sum_vat)
+            this.form.sum_net = priceFormat(sum_net)
+            this.form.sum_gross = priceFormat(sum_gross)
+        },
+        addPosition() {
+            this.form.contents.push({
+                name: null,
+                units: null,
+                unit_cost: null,
+                vat_rate_id: {
+                    label: 'Wybierz',
+                    value: null
+                },
+                sum_net: null,
+                sum_vat: null,
+                sum_gross: null,
+            })
+        },
+        removePosition(index) {
+            this.form.contents.splice(index, 1)
+            this.calculateFinalSums()
         }
     }
 }
@@ -337,6 +559,13 @@ th {
     border: solid 1px;
     padding: 0 10px;
     color: white;
+}
+td > input, .vs__dropdown-toggle {
+    padding: 4px 0;
+    height: auto !important;
+}
+.summary_table td {
+    border: solid 1px black;
 }
 
 @media (max-width: 991px) {

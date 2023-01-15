@@ -28,6 +28,7 @@ Vue.component('calendar', require('./components/Calendar').default);
 Vue.component('error-report', require('./components/ErrorReport').default);
 Vue.component('v-input', require('./assets/form/error').default);
 Vue.component('datatable', require('./components/dataTables').default);
+Vue.component('vselect', require('./components/Vselect').default);
 //Workshop components
 //global
 Vue.component('sidebar', require('../views/workshop/components/Sidebar.vue').default);
@@ -97,6 +98,10 @@ Vue.http.interceptors.push(function (request) {
         }
     }
 })
+
+export function priceFormat(number) {
+    return number.toFixed(2)
+}
 
 const app = new Vue({
     router: workshopRouter,
