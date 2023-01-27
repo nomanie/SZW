@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-modal id="client-documents-modal" title="Dodaj nowy Dokument" size="lg" @shown="defaultForm">
-            <div class="document">
+            <div class="document" ref="documentModal">
                 <div class="row px-4">
                     <div class="col-lg-6 col-12">
                         <img src="../../../../../../../public/images/g7622.png">
@@ -9,7 +9,7 @@
                     <div class="col-lg-6 col-12 d-flex justify-content-end flex-column">
                         <div class="row">
                             <div class="col-12 d-flex justify-content-end">
-                                <textarea placeholder="nagłówek dokumentu" rows="3" v-model="form.fv_header"></textarea>
+                                <textarea :class="[!viewing ? '' : 'textarea-viewing']" :disabled="viewing" placeholder="nagłówek dokumentu" rows="3" v-model="form.fv_header"></textarea>
                             </div>
                         </div>
                         <div class="row">
@@ -19,7 +19,8 @@
                                         Data wystawienia:
                                     </div>
                                     <div class="col-6 col-lg-5">
-                                        <input type="date" class="w-100" v-model="form.issue_date">
+                                        <input v-if="!viewing" type="date" class="w-100" v-model="form.issue_date">
+                                        <div v-else> {{ form.issue_date }}</div>
                                     </div>
                                 </div>
                                 <div class="row justify-content-end">
@@ -27,7 +28,8 @@
                                         Data sprzedaży:
                                     </div>
                                     <div class="col-6 col-lg-5">
-                                        <input type="date" class="w-100" v-model="form.sold_date">
+                                        <input v-if="!viewing" type="date" class="w-100" v-model="form.sold_date">
+                                        <div v-else> {{ form.sold_date }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -51,7 +53,8 @@
                             <div class="col-12">
                                 <div class="row">
                                     <div class="col-12">
-                                        <input type="text" placeholder="nazwa sprzedawcy" v-model="form.issuer_name">
+                                        <input v-if="!viewing" type="text" placeholder="nazwa sprzedawcy" v-model="form.issuer_name">
+                                        <div v-else> {{ form.issuer_name }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -60,7 +63,7 @@
                             <div class="col-12">
                                 <div class="row">
                                     <div class="col-12">
-                                        <textarea placeholder="adres sprzedawcy" class="h-100" v-model="form.issuer_address"></textarea>
+                                        <textarea :class="[!viewing ? '' : 'textarea-viewing']" :disabled="viewing" placeholder="adres sprzedawcy" class="h-100" v-model="form.issuer_address"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -69,7 +72,8 @@
                             <div class="col-12">
                                 <div class="row">
                                     <div class="col-12">
-                                        <input type="text" placeholder="NIP sprzedawcy" v-model="form.issuer_nip">
+                                        <input v-if="!viewing" type="text" placeholder="NIP sprzedawcy" v-model="form.issuer_nip">
+                                        <div v-else> {{ form.issuer_nip }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -87,7 +91,8 @@
                                     <div class="col-12">
                                         <div class="row">
                                             <div class="col-12">
-                                                <input type="text" placeholder="nazwa nabywcy" v-model="form.recipient_name">
+                                                <input v-if="!viewing" type="text" placeholder="nazwa nabywcy" v-model="form.recipient_name">
+                                                <div v-else>{{ form.recipient_name }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -96,7 +101,7 @@
                                     <div class="col-12">
                                         <div class="row">
                                             <div class="col-12">
-                                                <textarea placeholder="adres nabywcy" class="h-100" v-model="form.recipient_address"></textarea>
+                                                <textarea :class="[!viewing ? '' : 'textarea-viewing']" :disabled="viewing" placeholder="adres nabywcy" class="h-100" v-model="form.recipient_address"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -105,7 +110,8 @@
                                     <div class="col-12">
                                         <div class="row">
                                             <div class="col-12">
-                                                <input type="text" placeholder="NIP/Pesel nabywcy" v-model="form.recipient_nip">
+                                                <input v-if="!viewing" type="text" placeholder="NIP/Pesel nabywcy" v-model="form.recipient_nip">
+                                                <div v-else>{{ form.recipient_nip }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -148,16 +154,20 @@
                                     {{ index }}
                                 </td>
                                 <td>
-                                    <input type="text" v-model="form.contents[index].name" class="w-100 form-control">
+                                    <input v-if="!viewing" type="text" v-model="form.contents[index].name" class="w-100 form-control text-left">
+                                    <div v-else> {{ form.contents[index].name }} </div>
                                 </td>
                                 <td>
-                                    <input type="text" v-model="form.contents[index].units" class="w-100 form-control" @input="calculate(index)">
+                                    <input v-if="!viewing" type="text" v-model="form.contents[index].units" class="w-100 form-control" @input="calculate(index)">
+                                    <div v-else> {{ form.contents[index].units }} </div>
                                 </td>
                                 <td>
-                                    <input type="text" v-model="form.contents[index].unit_cost" class="w-100 form-control" @input="calculate(index)">
+                                    <input v-if="!viewing" type="text" v-model="form.contents[index].unit_net" class="w-100 form-control" @input="calculate(index)">
+                                    <div v-else> {{ form.contents[index].unit_net }} </div>
                                 </td>
                                 <td>
                                     <vselect
+                                        v-if="!viewing"
                                         v-model="form.contents[index].vat_rate_id"
                                         placeholder="Stawka VAT"
                                         :options="vat_rate_options"
@@ -168,20 +178,26 @@
                                         @option:selected="setVatRate(index, $event)"
                                     >
                                     </vselect>
+                                    <div v-else >
+                                        {{ form.contents[index].vat_rate_id.label }}
+                                    </div>
                                 </td>
                                 <td>
-                                    <input type="text" v-model="form.contents[index].sum_net" class="w-100 form-control" disabled>
+                                    <input v-if="!viewing" type="text" v-model="form.contents[index].sum_net" class="w-100 form-control" disabled>
+                                    <div v-else> {{ form.contents[index].sum_net}}</div>
                                 </td>
                                 <td>
-                                    <input type="text" v-model="form.contents[index].sum_vat" class="w-100 form-control" disabled>
+                                    <input v-if="!viewing" type="text" v-model="form.contents[index].sum_vat" class="w-100 form-control" disabled>
+                                    <div v-else> {{ form.contents[index].sum_vat}}</div>
                                 </td>
                                 <td>
-                                    <input type="text" v-model="form.contents[index].sum_gross" class="w-100 form-control" disabled>
+                                    <input v-if="!viewing" type="text" v-model="form.contents[index].sum_gross" class="w-100 form-control" disabled>
+                                    <div v-else> {{ form.contents[index].sum_gross}}</div>
                                 </td>
-                                <td v-if="index > 0" style="width:30px">
+                                <td v-if="index > 0 && !viewing" style="width:30px">
                                     <i class="fa-solid fa-trash cursor-pointer fs-16 text-danger" v-b-tooltip title="Usuń pozycję" @click="removePosition(index)"></i>
                                 </td>
-                                <td style="width:30px;" v-if="index === form.contents.length - 1">
+                                <td style="width:30px;" v-if="index === form.contents.length - 1 && !viewing">
                                     <i class="fa-solid fa-plus cursor-pointer fs-16" v-b-tooltip title="Dodaj kolejną pozycję" @click="addPosition()"></i>
                                 </td>
                             </tr>
@@ -194,22 +210,25 @@
                                 </td>
                                 <td>
                                 </td>
-                                <td>
+                                <td :class="[!viewing ? '' : 'sum-td']">
                                     Suma
                                 </td>
-                                <td>
-                                    <input type="text" v-model="form.sum_net" class="w-100 form-control" disabled>
+                                <td :class="[!viewing ? '' : 'sum-td']">
+                                    <input v-if="!viewing" type="text" v-model="form.sum_net" class="w-100 form-control" disabled>
+                                    <div v-else> {{ form.sum_net }} </div>
                                 </td>
-                                <td>
-                                    <input type="text" v-model="form.sum_vat" class="w-100 form-control" disabled>
+                                <td :class="[!viewing ? '' : 'sum-td']">
+                                    <input v-if="!viewing" type="text" v-model="form.sum_vat" class="w-100 form-control" disabled>
+                                    <div v-else> {{ form.sum_vat }} </div>
                                 </td>
-                                <td>
-                                    <input type="text" v-model="form.sum_gross" class="w-100 form-control" disabled>
+                                <td :class="[!viewing ? '' : 'sum-td']">
+                                    <input v-if="!viewing" type="text" v-model="form.sum_gross" class="w-100 form-control" disabled>
+                                    <div v-else> {{ form.sum_gross }} </div>
                                 </td>
                             </tr>
                         </table>
                     </div>
-                    <div class="mt-4" style="width: 747px; margin:auto;">
+                    <div class="mt-4 mb-5" style="width: 747px; margin:auto;">
                         <table style="width: 687px;" class="summary_table">
                             <tr>
                                 <td>
@@ -217,6 +236,7 @@
                                 </td>
                                 <td>
                                     <vselect
+                                        v-if="!viewing"
                                         v-model="form.payment_type"
                                         :options="paymentTypes"
                                         :clearable="false"
@@ -226,6 +246,9 @@
                                         @option:selected="setPaymentType($event)"
                                     >
                                     </vselect>
+                                    <div v-else>
+                                        {{ form.payment_type.label }}
+                                    </div>
                                 </td>
                                 <td>
                                     Razem:
@@ -239,7 +262,8 @@
                                     Termin zapłaty:
                                 </td>
                                 <td>
-                                    <input type="date" v-model="form.payment_date">
+                                    <input v-if="!viewing" type="date" v-model="form.payment_date">
+                                    <div v-else>{{ form.payment_date }}</div>
                                 </td>
                                 <td>
                                     Płatność otrzymana:
@@ -253,7 +277,8 @@
                                     Bank:
                                 </td>
                                 <td>
-                                    <input type="text" v-model="form.bank_type">
+                                    <input v-if="!viewing" type="text" v-model="form.bank_type">
+                                    <div v-else>{{ form.bank_type }}</div>
                                 </td>
                                 <td>
                                     Do zapłaty:
@@ -268,6 +293,7 @@
                                 </td>
                                 <td>
                                     <format-field
+                                        v-if="!viewing"
                                         :key='form.account_number'
                                         :data='form.account_number'
                                         :min="0"
@@ -277,6 +303,7 @@
                                         placeholder="Numer konta"
                                         @input="form.account_number = $event"
                                     ></format-field>
+                                    <div v-else>{{ form.account_number }}</div>
                                 </td>
                                 <td>
                                     Słownie:
@@ -290,27 +317,49 @@
                                 <td colspan="3">
                                     Zwolenienie z podatku VAT na podstawie:
                                     <vselect
+                                        v-if="!viewing"
                                         v-model="form.notes"
                                         :options="noteTypes"
                                         :clearable="false"
                                         :searchable="false"
                                         :close-on-select="true"
                                         :hide-on-backdrop="true"
-                                        @option:selected="setPaymentType($event)"
+                                        @option:selected="setNote($event)"
                                     >
                                     </vselect>
+                                    <div v-else>
+                                        {{ form.notes.label }}
+                                    </div>
                                 </td>
                             </tr>
                         </table>
+                    </div>
+                    <div class="mt-5">
+                        <div class="row mt-5">
+                            <div class="col-12 col-md-6 text-center">
+                                . . . . . . . . . . . . . . . . . . . . . . . . <br>
+                                <span class="fs-10">Podpis nabywcy</span>
+                            </div>
+                            <div class="col-12 col-md-6 text-center">
+                                . . . . . . . . . . . . . . . . . . . . . . . . <br>
+                                <span class="fs-10">Podpis wystawcy</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <template #modal-footer="{cancel}">
                 <div class="w-100 justify-content-between d-flex">
-                    <button type="button" class="btn btn-warning me-4" @click="defaultForm"><i
-                        class="fa fa-eraser pe-3"></i>
-                        Wyczyść
-                    </button>
+                    <div>
+                        <button type="button" class="btn btn-warning me-4" @click="defaultForm">
+                            <i class="fa fa-eraser pe-3"></i>
+                            Wyczyść
+                        </button>
+                        <button type="button" class="btn me-4" :class="[viewing ? 'btn-outline-secondary' : 'btn-secondary']" @click="view">
+                            <i class="fa fa-eye pe-3"></i>
+                            {{viewing ? 'Podgląd' : 'Edycja'}}
+                        </button>
+                    </div>
                     <div>
                         <button type="button" class="btn btn-success" @click="btnUrl"><i class="fa fa-save pe-3"></i>
                             Zapisz
@@ -352,6 +401,7 @@ export default {
             modalShow: true,
             form: this.data,
             is_edit: false,
+            viewing: false,
             errors: {},
             vat_rate_options: [
                 {
@@ -402,7 +452,7 @@ export default {
     computed: {
         btnUrl() {
             return this.is_edit ? this.edit : this.save
-        },
+        }
     },
     methods: {
         defaultForm() {
@@ -435,7 +485,7 @@ export default {
                         {
                             name: null,
                             units: null,
-                            unit_cost: null,
+                            unit_net: null,
                             vat_rate_id: {
                                 label: 'Wybierz',
                                 value: null
@@ -473,7 +523,7 @@ export default {
                 this.form.contents[index].vat_rate_id !== null
                 && this.form.contents[index].vat_rate_id.value !== null
                 && this.form.contents[index].units !== null
-                && this.form.contents[index].unit_cost !== null
+                && this.form.contents[index].unit_net !== null
             ) {
                 this.calculateNet(index)
                 this.$nextTick()
@@ -485,7 +535,7 @@ export default {
             }
         },
         calculateNet(index) {
-            this.form.contents[index].sum_net = priceFormat((this.form.contents[index].units * this.form.contents[index].unit_cost))
+            this.form.contents[index].sum_net = priceFormat((this.form.contents[index].units * this.form.contents[index].unit_net))
         },
         calculateVat(index) {
             this.form.contents[index].sum_vat = priceFormat((this.form.contents[index].sum_net) * this.form.contents[index].vat_rate_id.value)
@@ -510,7 +560,7 @@ export default {
             this.form.contents.push({
                 name: null,
                 units: null,
-                unit_cost: null,
+                unit_net: null,
                 vat_rate_id: {
                     label: 'Wybierz',
                     value: null
@@ -523,6 +573,12 @@ export default {
         removePosition(index) {
             this.form.contents.splice(index, 1)
             this.calculateFinalSums()
+        },
+        setNote($event) {
+            this.form.notes = $event
+        },
+        view() {
+            this.viewing = !this.viewing
         }
     }
 }
@@ -565,7 +621,17 @@ td > input, .vs__dropdown-toggle {
     height: auto !important;
 }
 .summary_table td {
-    border: solid 1px black;
+    /*border: solid 1px black;*/
+}
+
+.sum-td {
+    background: #e7903e;
+}
+
+.textarea-viewing {
+    border: none;
+    resize: none;
+    background: none;
 }
 
 @media (max-width: 991px) {

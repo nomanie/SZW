@@ -17,14 +17,14 @@ class DocumentService
         $this->document = $document;
     }
 
-    public function saveOrUpdate(): Document|bool
+    public function saveOrUpdate(array $data, Document $document): Document|bool
     {
-
+        $data = $this->prepareDataToSave($data);
     }
 
-    public function prepareDataToSave(): array
+    public function prepareDataToSave(array $data): array
     {
-        //@todo przygotowanie danych do zapisania
+        return $data;
     }
 
     public function getDocumentNumber(): string
