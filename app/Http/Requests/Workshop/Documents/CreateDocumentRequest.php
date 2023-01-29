@@ -42,9 +42,15 @@ class CreateDocumentRequest extends FormRequest
             'notes' => 'sometimes|nullable',
             'payment_type' => 'required',
             'contents' => 'required|array',
+            'contents.*.name' => 'required',
+            'contents.*.sum_net' => 'required',
+            'contents.*.sum_vat' => 'required',
+            'contents.*.sum_gross' => 'required',
             'contents.*.units' => 'required',
             'contents.*.unit_net' => 'required',
             'contents.*.vat_rate_id' => 'required',
+            'fv_number' => 'required',
+            'client_id' => 'required',
         ];
     }
 

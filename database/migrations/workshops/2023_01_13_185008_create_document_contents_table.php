@@ -20,7 +20,7 @@ return new class extends Migration
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('name');
             $table->integer('units');
-            $table->double('unit_cost');
+            $table->double('unit_net');
             $table->integer('vat_rate_id');
             $table->double('sum_net');
             $table->double('sum_vat');

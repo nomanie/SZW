@@ -28,6 +28,9 @@ var dtMixin = {
         },
         restore(id) {
             this.$emit('restore', id)
+        },
+        download(id) {
+            this.$emit('download', id)
         }
     }
 }

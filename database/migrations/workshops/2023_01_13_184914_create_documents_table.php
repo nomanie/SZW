@@ -19,6 +19,7 @@ return new class extends Migration
                 ->references('id')->on('clients')
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('car_id')
+                ->nullable()
                 ->references('id')->on('cars')
                 ->cascadeOnUpdate()->cascadeOnDelete();
 //            $table->foreignId('repair_id')
@@ -27,11 +28,10 @@ return new class extends Migration
             $table->string('fv_number')->unique();
             $table->string('issuer_name');
             $table->string('issuer_address');
-            $table->string('issuer_zip_code');
             $table->string('issuer_nip');
             $table->string('recipient_name');
             $table->string('recipient_address');
-            $table->string('recipient_zip_code');
+            $table->string('recipient_nip');
             $table->string('fv_header')->nullable();
             $table->string('fv_footer')->nullable();
             $table->date('issue_at')->nullable();
@@ -41,6 +41,11 @@ return new class extends Migration
             $table->string('account_number');
             $table->integer('bank_type')->nullable();
             $table->string('comments')->nullable();
+            $table->date('issue_date');
+            $table->date('sold_date');
+            $table->float('sum_net');
+            $table->float('sum_vat');
+            $table->float('sum_gross');
             $table->softDeletes();
             $table->timestamps();
         });

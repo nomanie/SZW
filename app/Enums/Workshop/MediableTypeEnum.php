@@ -6,11 +6,13 @@ use App\Enums\EnumInterface;
 class MediableTypeEnum implements EnumInterface
 {
     public const EXPORT = 0;
+    public const INVOICE = 1;
 
     public static function getList($id = null): array|bool|string|null
     {
         $list = [
-            self::EXPORT => 'export'
+            self::EXPORT => 'export',
+            self::INVOICE => 'document',
         ];
 
         if ($id !== null) {
@@ -24,7 +26,8 @@ class MediableTypeEnum implements EnumInterface
     {
 
         $list = [
-            self::EXPORT => 'exports/'
+            self::EXPORT => 'exports/',
+            self::INVOICE => 'documents/'
         ];
 
         if ($id !== null) {

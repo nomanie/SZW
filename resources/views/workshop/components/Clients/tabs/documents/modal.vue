@@ -38,7 +38,7 @@
                 </div>
                 <div class="row cmt-4 px-4">
                     <div class="col-12 fv-number">
-                        Faktura nr /1/2023/12
+                        Faktura nr {{form.fv_number}}
                     </div>
                 </div>
                 <hr class="separator">
@@ -394,6 +394,10 @@ export default {
             type: Boolean,
             default: () => {
             }
+        },
+        isEdit: {
+            type: Boolean,
+            default: () => false
         }
     },
     data() {
@@ -494,20 +498,21 @@ export default {
                             sum_vat: null,
                             sum_gross: null,
                         }
-                    ]
+                    ],
+                    fv_number: '1/2023/12'
                 }
             }
         },
         save() {
             this.form.client_id = this.$route.params.id
             this.$http.post(route('workshop.documents.store'), this.form).then((response) => {
-                this.$bvModal.hide('clients-modal')
+                this.$bvModal.hide('client-documents-modal')
                 this.$emit('reload')
             })
         },
         edit() {
-            this.$http.put(route('workshop.clients.update', this.form.id), this.form).then((response) => {
-                this.$bvModal.hide('clients-modal')
+            this.$http.put(route('workshop.documents.update', this.form.id), this.form).then((response) => {
+                this.$bvModal.hide('client-documents-modal')
                 this.$emit('reload')
             })
         },

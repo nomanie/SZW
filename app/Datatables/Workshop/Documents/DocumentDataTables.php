@@ -10,6 +10,7 @@ class DocumentDataTables extends BaseDataTables
     protected string $model = Document::class;
     protected $table;
     protected array $rawColumns = [];
+    protected $dropdownType = 2;
 
     public function __construct(int $client_id = null, int $car_id = null) {
         if ($client_id) {
@@ -22,6 +23,16 @@ class DocumentDataTables extends BaseDataTables
     }
     public function columns(): static
     {
+        return $this;
+    }
+
+    public function actionColumn(): static
+    {
+        $this->rawColumns[] = 'actions';
+        $this->table = $this->table
+            ->addColumn('action', function ($row) {
+                return view('global.datatable.dropdown_actions')->with(['row' => $row, 'type' => $this->dropdownType]);
+            });
         return $this;
     }
 }

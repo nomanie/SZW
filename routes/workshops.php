@@ -111,6 +111,7 @@ Route::as('workshop.')->group(function(){
     Route::as('documents.')->prefix('/documents')->group(function(){
         Route::post('/export', [DocumentController::class, 'export'])->name('documents.export');
         Route::get('/download/{mediable}', [DocumentController::class, 'download'])->name('documents.download');
+        Route::get('/download_document/{document}', [DocumentController::class, 'downloadDocument'])->name('download_document');
     });
     Route::resource('/documents', DocumentController::class);
 });

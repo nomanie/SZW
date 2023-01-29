@@ -60,7 +60,6 @@ try {
     require('datatables.net-bs4');
     require('datatables.net-buttons-bs4');
 
-
 } catch (e) {}
 Vue.use(VueResource);
 Vue.use(Router);

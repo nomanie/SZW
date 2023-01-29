@@ -99,7 +99,7 @@ class MediableService
         return $this;
     }
 
-    /** Dodaje rekord do bazy mediable
+    /** Dodaje rekord do tabeli mediable
      *
      * @param bool $new Tworzy nowy obiekt jeśli true
      * @return Mediable

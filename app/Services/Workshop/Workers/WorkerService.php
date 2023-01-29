@@ -5,6 +5,7 @@ namespace App\Services\Workshop\Workers;
 use App\Enums\AccountTypeEnum;
 use App\Models\Workshop\Workers\Worker;
 use App\Services\Auth\AuthService;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class WorkerService

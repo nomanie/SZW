@@ -14,11 +14,13 @@
             @delete="remove"
             @edit="edit($event, true)"
             @show="show"
+            @download="download"
         >
         </datatable>
         <modal
             :data="data"
             @reload="reload_table++"
+            :is-edit="isEdit"
         ></modal>
     </div>
 </template>
@@ -63,7 +65,8 @@ export default {
             ],
             reload_table: 0,
             add_edit_modal_id: 'client-documents-modal',
-            data: {}
+            data: {},
+            isEdit: false
         }
     },
     methods: {
@@ -77,11 +80,14 @@ export default {
             })
         },
         edit($event) {
-            this.isEdit = edit
+            this.isEdit = true
             this.$http.get(route('workshop.documents.show', $event)).then((response) => {
                 this.data = response.data.data
                 this.$bvModal.show(this.add_edit_modal_id)
             })
+        },
+        download($event) {
+            window.location = route('workshop.documents.download_document', $event)
         },
         show() {
 

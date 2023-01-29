@@ -28,5 +28,24 @@
                 Usuń całkowicie
             </li>
         </ul>
+    @elseif($type === 2)
+        <ul class="dropdown-menu">
+            <li class="dt-ajax" data-type="show" data-id="{{$row->id}}">
+                <i class="fa fa-eye"></i>
+                Podgląd
+            </li>
+            <li class="dt-ajax" data-type="edit" data-id="{{$row->id}}">
+                <i class="fa fa-pencil"></i>
+                Edytuj
+            </li>
+            <li class="dt-ajax" data-type="delete" data-id="{{$row->id}}">
+                <i class="fa fa-trash"></i>
+                Usuń
+            </li>
+            <li class="dt-ajax" data-type="download" data-id="{{$row->id}}">
+                <i class="fa fa-download"></i>
+                Pobierz
+            </li>
+        </ul>
     @endif
 </div>

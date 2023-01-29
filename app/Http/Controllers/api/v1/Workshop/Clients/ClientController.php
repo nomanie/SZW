@@ -31,12 +31,6 @@ class ClientController extends Controller
         //@todo dodać Permisje
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return JsonResponse
-     * @throws Exception
-     */
     public function index(): JsonResponse
     {
         return (new ClientDataTables())->render();
@@ -56,25 +50,12 @@ class ClientController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Client $client
-     * @return ClientResource
-     */
     public function show(Client $client): ClientResource
     {
         Session::put('client_id', $client->id);
         return new ClientResource($client);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param UpdateClientRequest $request
-     * @param Client $client
-     * @return JsonResponse
-     */
     public function update(UpdateClientRequest $request, Client $client)
     {
         $input = $request->validated();
@@ -87,13 +68,6 @@ class ClientController extends Controller
         return $this->errorJsonResponse(__('Edycja klienta nie udała się'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Request $request
-     * @param Client $client
-     * @return JsonResponse
-     */
     public function destroy(Request $request, Client $client): JsonResponse
     {
         if (isset($request->all()['data'])) {

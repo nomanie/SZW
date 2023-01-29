@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\v1\Workshop\Documents;
 
 use App\Datatables\Workshop\Clients\ClientDataTables;
 use App\Datatables\Workshop\Documents\DocumentDataTables;
+use App\Generators\PDF\InvoiceGenerator;
 use App\Generators\PDF\PdfGenerator;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Workshop\Clients\CreateClientRequest;
@@ -30,7 +31,8 @@ class DocumentController extends Controller
     public function __construct(
         private readonly DocumentService $service,
         protected readonly LogService $logService,
-        protected readonly PdfGenerator $pdfGenerator
+        protected readonly PdfGenerator $pdfGenerator,
+        protected readonly InvoiceGenerator $invoiceGenerator
     )
     {
         //@todo dodać Permisje
@@ -55,7 +57,6 @@ class DocumentController extends Controller
 
     public function store(CreateDocumentRequest $request): JsonResponse
     {
-        dd($request->all());
         $input = $request->validated();
         try {
             $document = $this->service->saveOrUpdate($input);
@@ -141,5 +142,19 @@ class DocumentController extends Controller
     public function download(Mediable $mediable)
     {
         return $this->pdfGenerator->setMediable($mediable)->download();
+    }
+
+    public function downloadDocument(Document $document)
+    {
+        $document = Document::with('documentContents')->find($document->id);
+        $mediable = $this->invoiceGenerator
+            ->setModel('App\Models\Workshop\Documents\Document')
+            ->setData($document)
+            ->setView('global.documents.invoice')
+            ->generateFilename('Faktura')
+            ->setDisk('workshop')
+            ->generate();
+        return $mediable;
+        return $this->invoiceGenerator->setMediable($mediable)->download();
     }
 }

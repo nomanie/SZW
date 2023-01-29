@@ -79,7 +79,7 @@ class PdfGenerator
 
     public function generate(): Mediable
     {
-        $data = $this->data;
+        $data = $this->convert_from_latin1_to_utf8_recursively($this->data);
         $view = view($this->view, compact('data'));
         $path = storage_path('app/' . $this->disk . 's/' . $this->path . $this->filename);
         $this->pdf->generateFromHtml($view, $path);
@@ -130,5 +130,23 @@ class PdfGenerator
         $this->path = $path;
 
         return $this;
+    }
+
+    public static function convert_from_latin1_to_utf8_recursively($dat)
+    {
+        if (is_string($dat)) {
+            return utf8_encode($dat);
+        } elseif (is_array($dat)) {
+            $ret = [];
+            foreach ($dat as $i => $d) $ret[ $i ] = self::convert_from_latin1_to_utf8_recursively($d);
+
+            return $ret;
+        } elseif (is_object($dat)) {
+            foreach ($dat as $i => $d) $dat->$i = self::convert_from_latin1_to_utf8_recursively($d);
+
+            return $dat;
+        } else {
+            return $dat;
+        }
     }
 }
