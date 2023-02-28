@@ -74,6 +74,8 @@ Vue.http.interceptors.push((request, next) => {
 
     if (token) {
         request.headers.set('X-CSRF-TOKEN', token)
+        request.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'))
+        request.headers.set('Type', localStorage.getItem('type'))
     }
 
     next()

@@ -3,33 +3,41 @@
 namespace App\Services\Auth;
 
 use App\Enums\AccountTypeEnum;
+use App\Enums\TokenTypeEnum;
 use App\Models\System\Identity;
 use App\Models\System\User;
 use App\Models\System\Workshop;
 use App\Notifications\VerifyEmail;
+use App\Services\System\TokenService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
+use TheSeer\Tokenizer\Token;
 
 class AuthService
 {
     private bool $dontSendEmail = false;
 
     public function __construct(
-        protected Identity|Authenticatable $identity = new Identity(),
+        protected TokenService $tokenService,
+        protected Identity|Authenticatable $identity = new Identity()
     )
     {
         //@todo dodać logi
     }
 
     /** Tworzy rekord w tabeli users
+     *
      * @param array $data - dane użytkownika
      * @param int $account_type - typ tworzonego konta
+     *
      * @return bool null jeśli błąd
+     *
      * @throws Exception
      */
     public function save(array $data, int $account_type, int $workshop_id = null): ?Identity
@@ -55,11 +63,16 @@ class AuthService
             }
         } catch (\Exception $e) {
             throw new Exception;
+            //@todo tutaj wywala exception
         }
 //        $this->sendVerificationEmail();
         return $this->identity;
     }
 
+    /** Wysyła wiadomość e-mail z linkiem potwierdzającym konto
+     *
+     * @return void
+     */
     public function sendVerificationEmail(): void
     {
         if (!$this->dontSendEmail) {
@@ -70,20 +83,32 @@ class AuthService
         }
     }
 
+    /** Ustawia konto jako zweryfikowane
+     *
+     * @return void
+     */
     public function verifyMail(): void
     {
         $this->identity->email_verified_at = Carbon::now();
         $this->identity->save();
     }
 
+    /** Wysyła wiadomość e-mail z linkiem do rejestracji
+     * @param array $data
+     * @return void
+     */
     public function sendLinkToRegisterNewClient(array $data): void
     {
-
+        //@todo zrobić wysyłanie linka do rejestracji jako klient -> widok rejestracji + dane w linku od jakiego warsztatu jest link
+        //      + od razu utworzyć udostępnianie danych dla tego warsztatu
     }
 
     /** Tworzy rekord w tabeli users
+     *
      * @param array $data - dane klienta
+     *
      * @return ?User null jeśli błąd
+     *
      * @throws Exception
      */
     public function saveUser(array $data): ?User
@@ -115,8 +140,11 @@ class AuthService
     }
 
     /** Tworzy rekord w tabeli workshops
+     *
      * @param array $data - dane warsztatu
+     *
      * @return ?Workshop null jeśli błąd
+     *
      * @throws Exception
      */
     public function saveWorkshop(array $data): ?Workshop
@@ -147,7 +175,9 @@ class AuthService
     }
 
     /** Sprawdza czy użytkownik o podanym mailu istnieje już w bazie
+     *
      * @param $data
+     *
      * @return bool
      */
     private function checkIfUserExists($data): bool
@@ -164,6 +194,7 @@ class AuthService
     }
 
     /** Dodaje typ konta do sesji
+     *
      * @return $this
      */
     public function addTypesToSession(): static
@@ -189,8 +220,15 @@ class AuthService
         return $this;
     }
 
+    public function getType(): string
+    {
+        return Session::get('account_type')[0];
+    }
+
     /** Ustawia identity dla serwisu
+     *
      * @param int $id
+     *
      * @return $this
      */
     public function setIdentity(int $id): static
@@ -201,6 +239,7 @@ class AuthService
     }
 
     /** Zwraca widok dashboardu dla danego typu konta
+     *
      * @return string
      */
     public function getView(): string
@@ -215,6 +254,7 @@ class AuthService
     }
 
     /** Zwraca url do widoku dashboard dla danego typu konta
+     *
      * @return string
      */
     public function getRoute(): string
@@ -232,6 +272,7 @@ class AuthService
     }
 
     /** Zwraca url widoku dashboard
+     *
      * @return string
      */
     public function getHomeRoute(): string
@@ -241,7 +282,9 @@ class AuthService
     }
 
     /** Generuje unikalne uuid dla Identity
+     *
      * @param int $length
+     *
      * @return string
      */
     public function generateUuid(int $length = 10): string
@@ -254,38 +297,39 @@ class AuthService
         }
     }
 
-    /** Tworzy token dostępu dla danego Identity
-     * @return void
-     */
-    public function makeToken(): void
-    {
-        auth()->user()->createToken('login');
-    }
-
-    /** Pobiera token dla danego Identity
+    /** Zwraca token dla danego Identity
+     *
      * @return mixed
      */
-    public function getToken()
+    public function getToken(string $device, string $ip)
     {
-        $token = auth()->user()->currentAccessToken();
-        Session::put('token', $token);
-        return $token;
+        return $this->tokenService->setDevice($device)->setIdentity($this->identity)->setIp($ip)->getLoginToken()->token;
     }
 
     /** Ustawia id Identity do sesji
+     *
      * @return void
      */
-    public function addIdToSession(): void
+    public function addIdToSession(): static
     {
         Session::put('id', $this->identity->id);
+
+        return $this;
     }
 
+    /** Tworzy konto dla pracownika
+     *
+     * @param int $workshop_id
+     *
+     * @return bool
+     */
     public function saveWorker(int $workshop_id): bool
     {
         $record = DB::table('system.workers')
             ->where('identity_id', $this->identity->id)
             ->where('workshop_id', $workshop_id)
             ->first();
+
         if (!$record) {
             return DB::table('system.workers')->insert([
                 'identity_id' => $this->identity->id,
@@ -295,6 +339,10 @@ class AuthService
         return true;
     }
 
+    /** Zwraca UUID warsztatu
+     *
+     * @return void
+     */
     private function getWorkshopUuid()
     {
         if ($this->identity->worker->workshop_id !== null) {
@@ -302,6 +350,10 @@ class AuthService
         }
     }
 
+    /** Zwraca UUID użytkownika
+     *
+     * @return string
+     */
     public function getUuid(): string
     {
         if (Session::get('account_type')[0] == 'worker') {
@@ -310,8 +362,44 @@ class AuthService
         return auth()->user()->uuid;
     }
 
+    /** Zwraca informację, czy użytkownik musi zmienić hasło przy logowaniu
+     *
+     * @return bool
+     */
     public function checkIfMustChangePassword(): bool
     {
         return $this->identity->reset_password;
+    }
+
+    /** Tworzy token logowania dla użytkownika oraz zapisuje go w sesji
+     *
+     * @param string $device
+     * @param string $ip
+     *
+     * @return $this
+     *
+     * @throws Exception
+     */
+    public function setToken(string $device, string $ip): static
+    {
+        $token = $this->tokenService->setDevice($device)->setIdentity($this->identity)->setIp($ip)->createLoginToken();
+        Session::put('token', $token);
+
+        return $this;
+    }
+
+    /** Usuwa token logowania użytkownika oraz czyści jego sesje
+     *
+     * @param string $device
+     * @param string $ip
+     *
+     * @return bool
+     */
+    public function logout(string $device, string $ip): bool
+    {
+        $this->tokenService->setDevice($device)->setIdentity($this->identity)->setIp($ip)->revokeLoginToken();
+        Auth::logout();
+
+        return true;
     }
 }

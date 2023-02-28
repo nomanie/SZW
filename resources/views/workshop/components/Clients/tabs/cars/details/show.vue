@@ -19,6 +19,7 @@
                                                     placeholder="Marka"
                                                     class="form-control"
                                                     :class="{invalid : errors.brand}"
+                                                    :disabled="disabledInputs"
                                                 >
                                                 <error :errors="errors.brand"></error>
                                             </div>
@@ -38,6 +39,7 @@
                                                     placeholder="Model"
                                                     class="form-control"
                                                     :class="{invalid : errors.model}"
+                                                    :disabled="disabledInputs"
                                                 >
                                                 <error :errors="errors.model"></error>
                                             </div>
@@ -59,6 +61,7 @@
                                                     class="form-control"
                                                     placeholder="Seria"
                                                     :class="{invalid : errors.seria}"
+                                                    :disabled="disabledInputs"
                                                 >
                                                 <error :errors="errors.seria"></error>
                                             </div>
@@ -78,6 +81,7 @@
                                                     placeholder="Generacja"
                                                     class="form-control"
                                                     :class="{invalid : errors.generation}"
+                                                    :disabled="disabledInputs"
                                                 >
                                                 <error :errors="errors.generation"></error>
                                             </div>
@@ -99,6 +103,7 @@
                                                     placeholder="Typ samochodu"
                                                     class="form-control"
                                                     :class="{invalid : errors.car_type}"
+                                                    :disabled="disabledInputs"
                                                 >
                                                 <error :errors="errors.car_type"></error>
                                             </div>
@@ -118,6 +123,7 @@
                                                     placeholder="Adres e-mail"
                                                     class="form-control"
                                                     :class="{invalid : errors.engine}"
+                                                    :disabled="disabledInputs"
                                                 >
                                                 <error :errors="errors.engine"></error>
                                             </div>
@@ -141,6 +147,7 @@
                                                     placeholder="Numery rejestracyjne"
                                                     class="form-control"
                                                     :class="{invalid : errors.registration_number}"
+                                                    :disabled="disabledInputs"
                                                 >
                                                 <error :errors="errors.registration_number"></error>
                                             </div>
@@ -160,6 +167,7 @@
                                                     placeholder="Numer VIN"
                                                     class="form-control"
                                                     :class="{invalid : errors.vin_number}"
+                                                    :disabled="disabledInputs"
                                                 >
                                                 <error :errors="errors.vin_number"></error>
                                             </div>
@@ -178,6 +186,7 @@
                                                 <b-input
                                                     v-model="form.production_date"
                                                     :class="{invalid : errors.production_date}"
+                                                    :disabled="disabledInputs"
                                                     type="text"
                                                 >
 
@@ -200,6 +209,7 @@
                                                     placeholder="Przebieg"
                                                     class="form-control"
                                                     :class="{invalid : errors.distance}"
+                                                    :disabled="disabledInputs"
                                                 >
                                                 <error :errors="errors.distance"></error>
                                             </div>
@@ -220,6 +230,7 @@
                                                     type="date"
                                                     class="form-control"
                                                     :class="{invalid : errors.inspection_date}"
+                                                    :disabled="disabledInputs"
                                                 >
                                                 <error :errors="errors.inspection_date"></error>
                                             </div>
@@ -238,6 +249,7 @@
                                                     type="date"
                                                     class="form-control"
                                                     :class="{invalid : errors.insurance_date}"
+                                                    :disabled="disabledInputs"
                                                 >
                                                 <error :errors="errors.insurance_date"></error>
                                             </div>
@@ -256,7 +268,7 @@
                                         <div>
                                             <div class="input__wrapper mt-1">
                                         <textarea v-model="form.notes" class="form-control"
-                                                  placeholder="Notatki"></textarea>
+                                                  placeholder="Notatki" :disabled="disabledInputs"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -265,10 +277,10 @@
                         </div>
                     </form>
                     <div class="w-100 justify-content-end d-flex mt-3">
-                        <button type="button" class="btn btn-warning mr-2" @click="reset"><i class="fa fa-eraser pe-3"></i>
+                        <button type="button" class="btn btn-warning mr-2" @click="reset" :disabled="disabledInputs"><i class="fa fa-eraser pe-3"></i>
                             Resetuj
                         </button>
-                        <button type="button" class="btn btn-success" @click="save"><i class="fa fa-save pe-3"></i>
+                        <button type="button" class="btn btn-success" @click="save" :disabled="disabledInputs"><i class="fa fa-save pe-3"></i>
                             Zapisz
                         </button>
                     </div>
@@ -309,6 +321,10 @@ export default {
         car: {
             type: [Object, Array],
             default: () => {}
+        },
+        disabledInputs: {
+            type: Boolean,
+            default: () => false
         }
     },
     data() {

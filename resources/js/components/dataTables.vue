@@ -154,7 +154,11 @@ export default {
                 serverSide: true,
                 ajax: {
                     url: route(this.apiUrl + '.index'),
-                    data: this.ajaxParams
+                    data: this.ajaxParams,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('token'));
+                        xhr.setRequestHeader('Type', localStorage.getItem('type'));
+                    },
                 },
                 pageLength: this.perPage,
                 columns: this.cols,

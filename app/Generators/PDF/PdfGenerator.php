@@ -5,6 +5,7 @@ namespace App\Generators\PDF;
 use App\Enums\Workshop\MediableTypeEnum;
 use App\Models\Workshop\Mediable;
 use App\Services\Workshop\MediableService;
+use Dompdf\Dompdf;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -82,7 +83,12 @@ class PdfGenerator
         $data = $this->convert_from_latin1_to_utf8_recursively($this->data);
         $view = view($this->view, compact('data'));
         $path = storage_path('app/' . $this->disk . 's/' . $this->path . $this->filename);
-        $this->pdf->generateFromHtml($view, $path);
+        $dompdf = new Dompdf();
+//        $this->pdf->generateFromHtml($view, $path);
+        $dompdf->loadHtml($view);
+        $dompdf->setPaper('A4', 'landscape');
+//        $dompdf->render();
+//        $dompdf->stream();
         $size = Storage::disk($this->disk)->size($this->path . $this->filename);
 
         return $this->mediableService->setDisk($this->disk)

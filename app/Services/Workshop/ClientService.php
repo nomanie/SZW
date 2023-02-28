@@ -35,8 +35,8 @@ namespace App\Services\Workshop;
         $this->client->building_number = $data['building_number'];
         $this->client->flat_number = $data['flat_number'];
         $this->client->zip_code = $data['zip_code'];
-        $this->client->consent_marketing_notification = $data['consent_marketing_notification'];
-        $this->client->consent_sms_notification = $data['consent_sms_notification'];
+        $this->client->consent_marketing_notification = $data['consent_marketing_notification'] ?? 0;
+        $this->client->consent_sms_notification = $data['consent_sms_notification'] ?? 0;
         $this->client->save();
 
         return $this->client;

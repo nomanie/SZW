@@ -35,6 +35,8 @@ class CreateClientRequest extends FormRequest
             'city' => 'sometimes|nullable',
             'street' => 'sometimes|nullable',
             'date_of_birth' => 'sometimes|nullable',
+            'consent_sms_notification' => 'sometimes|nullable',
+            'consent_marketing_notification' => 'sometimes|nullable'
         ];
     }
 

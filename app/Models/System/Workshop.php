@@ -7,6 +7,7 @@ use App\Models\Workshop\WorkshopInformations\WorkshopAdditionalField;
 use App\Models\Workshop\WorkshopInformations\WorkshopContactForm;
 use App\Models\Workshop\WorkshopInformations\WorkshopPlace;
 use App\Traits\LogTrait;
+use App\Traits\UseSystemConnection;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -32,9 +33,9 @@ class Workshop extends Model implements TenantWithDatabase
         Concerns\TenantRun,
         Concerns\InvalidatesResolverCache,
         Concerns\HasDatabase,
-        LogTrait, CentralConnection;
+        LogTrait, CentralConnection, UseSystemConnection;
 
-    protected $table = 'system.workshops';
+    protected $table = 'workshops';
     protected $casts = [
         'owners' => 'array',
         'social_media' => 'array',

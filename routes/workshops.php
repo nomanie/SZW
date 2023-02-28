@@ -77,40 +77,40 @@ Route::as('workshop.')->group(function(){
     Route::resource('/workshops', WorkshopController::class)->only(['index', 'update']);
 
     Route::as('workers.')->prefix('/workers')->group(function(){
-        Route::post('/export', [WorkerController::class, 'export'])->name('workers.export');
-        Route::get('/download/{mediable}', [WorkerController::class, 'download'])->name('workers.download');
+        Route::post('/export', [WorkerController::class, 'export'])->name('export');
+        Route::get('/download/{mediable}', [WorkerController::class, 'download'])->name('download');
         Route::resource('contracts', App\Http\Controllers\api\v1\Workshop\Workers\ContractController::class);
         Route::resource('permissions', App\Http\Controllers\api\v1\Workshop\Workers\Permission\PermissionController::class);
     });
     Route::resource('/workers', App\Http\Controllers\api\v1\Workshop\Workers\WorkerController::class);
 
     Route::as('clients.')->prefix('/clients')->group(function(){
-        Route::post('/export', [ClientController::class, 'export'])->name('clients.export');
-        Route::get('/download/{mediable}', [ClientController::class, 'download'])->name('clients.download');
+        Route::post('/export', [ClientController::class, 'export'])->name('export');
+        Route::get('/download/{mediable}', [ClientController::class, 'download'])->name('download');
     });
     Route::resource('/clients', ClientController::class);
 
     Route::as('archived_clients.')->prefix('/archived_clients')->group(function(){
-        Route::post('/export', [ArchivedClientController::class, 'export'])->name('archived_clients.export');
-        Route::get('/download/{mediable}', [ArchivedClientController::class, 'download'])->name('archived_clients.download');
+        Route::post('/export', [ArchivedClientController::class, 'export'])->name('export');
+        Route::get('/download/{mediable}', [ArchivedClientController::class, 'download'])->name('download');
     });
     Route::resource('/archived_clients', ArchivedClientController::class);
 
     Route::as('cars.')->prefix('/cars')->group(function(){
-        Route::post('/export', [CarController::class, 'export'])->name('cars.export');
-        Route::get('/download/{mediable}', [CarController::class, 'download'])->name('cars.download');
+        Route::post('/export', [CarController::class, 'export'])->name('export');
+        Route::get('/download/{mediable}', [CarController::class, 'download'])->name('download');
     });
     Route::resource('/cars', CarController::class);
 
     Route::as('archived_cars.')->prefix('/archived_cars')->group(function(){
-        Route::post('/export', [ArchivedCarController::class, 'export'])->name('archived_cars.export');
-        Route::get('/download/{mediable}', [ArchivedCarController::class, 'download'])->name('archived_cars.download');
+        Route::post('/export', [ArchivedCarController::class, 'export'])->name('export');
+        Route::get('/download/{mediable}', [ArchivedCarController::class, 'download'])->name('download');
     });
     Route::resource('/archived_cars', ArchivedCarController::class);
 
     Route::as('documents.')->prefix('/documents')->group(function(){
-        Route::post('/export', [DocumentController::class, 'export'])->name('documents.export');
-        Route::get('/download/{mediable}', [DocumentController::class, 'download'])->name('documents.download');
+        Route::post('/export', [DocumentController::class, 'export'])->name('export');
+        Route::get('/download/{mediable}', [DocumentController::class, 'download'])->name('download');
         Route::get('/download_document/{document}', [DocumentController::class, 'downloadDocument'])->name('download_document');
     });
     Route::resource('/documents', DocumentController::class);

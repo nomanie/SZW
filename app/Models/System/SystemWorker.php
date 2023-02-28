@@ -2,12 +2,13 @@
 
 namespace App\Models\System;
 
+use App\Traits\UseSystemConnection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class SystemWorker extends Model
 {
-    use HasFactory;
+    use HasFactory, UseSystemConnection;
 
-    protected $table = 'system.workers';
+    protected $table = 'workers';
 }

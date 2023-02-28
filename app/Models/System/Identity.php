@@ -2,18 +2,18 @@
 
 namespace App\Models\System;
 
+use App\Traits\HasApiTokens;
+use App\Traits\UseSystemConnection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class Identity extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, UseSystemConnection;
 
-
-    protected $table = 'system.identities';
+    protected $table = 'identities';
     protected $primaryKey = 'id';
     protected $guarded = [];
 

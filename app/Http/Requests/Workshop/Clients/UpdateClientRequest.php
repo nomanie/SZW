@@ -35,8 +35,8 @@ class UpdateClientRequest extends FormRequest
             'city' => 'sometimes|nullable',
             'street' => 'sometimes|nullable',
             'date_of_birth' => 'sometimes|nullable',
-            'consent_sms_notification' => 'required|in:0,1',
-            'consent_marketing_notification' => 'required|in:0,1'
+            'consent_sms_notification' => 'nullable|sometimes',
+            'consent_marketing_notification' => 'nullable|sometimes'
         ];
     }
 

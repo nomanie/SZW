@@ -8,6 +8,7 @@ use App\Services\Auth\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use PHPUnit\Util\Exception;
 
 class LoginController extends Controller
 {
@@ -24,10 +25,17 @@ class LoginController extends Controller
                     'route' => 'change-password',
                 ]);
             }
-            $service->addTypesToSession()->addIdToSession();
+
+            try {
+                $service->addTypesToSession()->addIdToSession()->setToken(exec('getmac'), $request->getClientIp());
+            } catch (Exception $e) {
+                Auth::logout();
+            }
             return response()->json([
                 'route' => $this->service->getRoute(),
                 'id' => $this->service->getUuid(),
+                'token' => $this->service->getToken(exec('getmac'), $request->getClientIp()),
+                'type' => $this->service->getType()
             ]);
         }
         return response()->json(['errors' => ['password' => [0 => 'Hasło jest niepoprawne']]], 422);
@@ -36,7 +44,7 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::logout();
+        $this->service->setIdentity(auth()->user()->id)->logout(exec('getmac'), $request->getClientIp());
 
         return redirect('/login');
     }

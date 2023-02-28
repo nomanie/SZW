@@ -15,6 +15,7 @@ use App\Traits\JsonResponseTrait;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class ArchivedCarController extends Controller
 {
@@ -35,9 +36,10 @@ class ArchivedCarController extends Controller
      * @return JsonResponse
      * @throws Exception
      */
-    public function index(): JsonResponse
+    public function index(): string
     {
-        return (new ArchivedCarDataTables())->render();
+//        return (new ArchivedCarDataTables())->render();
+        return Car::whereNotNull('deleted_at')->where('client_id', Session::get('client_id'))->get()->toJson();
     }
 
     /**

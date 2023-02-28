@@ -24,7 +24,7 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect((new \App\Services\Auth\AuthService)->getHomeRoute());
+                return redirect(app(AuthService::class)->getHomeRoute());
             }
         }
 

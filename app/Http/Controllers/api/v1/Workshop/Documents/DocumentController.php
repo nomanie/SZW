@@ -2,18 +2,13 @@
 
 namespace App\Http\Controllers\api\v1\Workshop\Documents;
 
-use App\Datatables\Workshop\Clients\ClientDataTables;
 use App\Datatables\Workshop\Documents\DocumentDataTables;
 use App\Generators\PDF\InvoiceGenerator;
 use App\Generators\PDF\PdfGenerator;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Workshop\Clients\CreateClientRequest;
-use App\Http\Requests\Workshop\Clients\UpdateClientRequest;
 use App\Http\Requests\Workshop\Documents\CreateDocumentRequest;
 use App\Http\Requests\Workshop\Documents\UpdateDocumentRequest;
-use App\Http\Resources\Workshop\ClientResource;
 use App\Http\Resources\Workshop\Documents\DocumentResource;
-use App\Models\Workshop\Clients\Client;
 use App\Models\Workshop\Documents\Document;
 use App\Models\Workshop\Mediable;
 use App\Services\System\LogService;
@@ -146,6 +141,7 @@ class DocumentController extends Controller
 
     public function downloadDocument(Document $document)
     {
+
         $document = Document::with('documentContents')->find($document->id);
         $mediable = $this->invoiceGenerator
             ->setModel('App\Models\Workshop\Documents\Document')
@@ -154,7 +150,7 @@ class DocumentController extends Controller
             ->generateFilename('Faktura')
             ->setDisk('workshop')
             ->generate();
-        return $mediable;
+
         return $this->invoiceGenerator->setMediable($mediable)->download();
     }
 }

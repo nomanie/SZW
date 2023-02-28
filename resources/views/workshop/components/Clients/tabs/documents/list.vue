@@ -5,7 +5,7 @@
             :server-side-data="true"
             :columns="fields"
             :scroll-x="false"
-            :ajax-params="{type: 'client', id: this.$route.params.id}"
+            :ajax-params="{type: 'client', id: $route.params.id}"
             :reload-table="reload_table"
             :modal-id="add_edit_modal_id"
             api-url="workshop.documents"
@@ -68,6 +68,11 @@ export default {
             data: {},
             isEdit: false
         }
+    },
+    computed: {
+      getToken() {
+          return localStorage.getItem('token')
+      }
     },
     methods: {
         add() {

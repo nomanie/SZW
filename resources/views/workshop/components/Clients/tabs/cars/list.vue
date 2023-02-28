@@ -21,10 +21,9 @@
                         <template #title>
                             Zarchiwizowane pojazdy
                         </template>
-                        <div class="text-center fs-20 my-3">
-                            <i class="fa-solid fa-hammer"></i>
-                            Prace trwają
-                        </div>
+                        <archived-list :key="archivedKey" @reload="getCarList">
+
+                        </archived-list>
                     </b-tab>
                 </b-tabs>
             </div>
@@ -38,17 +37,20 @@
 <script>
 import modal from './modal'
 import carDetails from './details/show'
+import archivedList from './archivedList.vue'
 export default {
     components: {
         modal,
-        carDetails
+        carDetails,
+        archivedList
     },
     data() {
         return {
             data: {},
             add_edit_modal_id: 'cars-modal',
             isEdit: false,
-            cars: {}
+            cars: {},
+            archivedKey: 0
         }
     },
     mounted() {
@@ -61,6 +63,7 @@ export default {
         remove(car_id) {
             this.$http.delete(route('workshop.cars.destroy', car_id)).then((response) => {
                 this.getCarList()
+                this.archivedKey++
             })
         },
         edit($event, edit = false) {

@@ -4,12 +4,9 @@ namespace App\Generators\PDF;
 use App\Enums\Workshop\MediableTypeEnum;
 use App\Models\Workshop\Mediable;
 use App\Services\Workshop\MediableService;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Barryvdh\Snappy\Facades\SnappyPdf;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Spatie\Browsershot\Browsershot;
 
 class InvoiceGenerator
 {
@@ -26,7 +23,7 @@ class InvoiceGenerator
         protected MediableService $mediableService
     )
     {
-        $this->pdf = app('dompdf.wrapper');
+        $this->pdf = App::make('snappy.pdf.wrapper');
     }
 
     public function setModel(string $model): static
@@ -74,22 +71,35 @@ class InvoiceGenerator
         $data = $this->data;
         $view = view($this->view, compact('data'))->render();
         $path = storage_path('app/' . $this->disk . 's/' . $this->path . $this->filename);
-//        $pdf = $this->pdf->loadHtml($view)->save($path);
-//        Storage::disk($this->disk)->put($this->path . $this->filename, '');
-
-        return Browsershot::html('<h1>test</h1>')
-            ->setNodeBinary('PATH %~dp0;%PATH%;')
-            ->setNpmBinary('PATH %~dp0;%PATH%;')
-            ->setBinPath(base_path('vendor/spatie/browsershot/bin/browser.js'))
-            ->setNodeModulePath(base_path('node_modules'))
-            ->setChromePath('C:\Program Files\Google\Chrome\Application\chrome.exe')
-            ->showBackground()
-            ->windowSize(1920, 1080)
-            ->format('A4')
-            ->waitUntilNetworkIdle()
-            ->showBrowserHeaderAndFooter()
-            ->base64pdf();
-
+        $this->pdf
+            ->setPaper('A4')
+            ->loadHTML($view)
+            ->save($path);
+//        $dompdf = new Dompdf();
+//        $dompdf->loadHtml($view);
+//        $dompdf->setPaper('A4');
+//        $dompdf->render();
+//        $output = $dompdf->output();
+//        Storage::disk($this->disk)->put($this->path . $this->filename, $output);
+//        Browsershot::html('<h1>test</h1>')
+//            ->setNodeBinary('PATH %~dp0;%PATH%;')
+//            ->setNpmBinary('PATH %~dp0;%PATH%;')
+//            ->setBinPath(base_path('vendor/spatie/browsershot/bin/browser.js'))
+//            ->setNodeModulePath(base_path('node_modules'))
+//            ->setChromePath('C:\Program Files\Google\Chrome\Application\chrome.exe')
+//            ->showBackground()
+//            ->windowSize(1920, 1080)
+//            ->format('A4')
+//            ->setOption('args', ['--disable-web-security'])
+//            ->waitUntilNetworkIdle()
+//            ->showBrowserHeaderAndFooter()
+//            ->emulateMedia('screen')
+//            ->usePipe()
+//            ->pages('1-5, 8, 11-13')
+//            ->initialPageNumber(8)
+//            ->savePdf($path);
+//            ->save($path);
+//        Storage::disk($this->disk)->put($this->path . $this->filename, $pdf);
         $size = Storage::disk($this->disk)->size($this->path . $this->filename);
 
         return $this->mediableService->setDisk($this->disk)

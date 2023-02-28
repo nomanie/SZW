@@ -2,41 +2,79 @@
 
 namespace App\Traits;
 
+use App\Models\System\Identity;
+use App\Models\System\Token;
 use App\Models\System\Workshop;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-
+use PHPUnit\Util\Exception;
+use Illuminate\Http\Request;
 trait UseTenantConnection
 {
     /** Ustawia bazę danych na kliencką
      *
      */
-    public function __construct()
+    public function __construct(Request $request = null)
     {
-        if (tenancy()->tenant !== null) {
-            // Najpierw sprawdzamy czy tenancy jest zalogowany (administratorzy warsztatu)
-            $this->table = tenancy()->tenant->tenancy_db_name . '.' . $this->getTable();
+        if (auth()->user() === null){
+            if ($token = $this->getAuthorizationToken($request)) {
+                $this->setTableByToken($token, $request->header('type'));
+            } else {
+                throw new Exception('Użytkownik nie jest zalogowany');
+            }
         } else if (auth()->user()?->worker !== null) {
-            // Sprawdzanie czy loguje się pracownik warsztatu
-            $this->table = Workshop::where('id', auth()->user()->worker->workshop_id)
-                    ->first()->tenancy_db_name . '.' . $this->getTable();
-        } else if (auth()->user() !== null) {
-            // Sprawdzanie czy loguje się administrator warsztatu, ale tenancy() nie zapisało id
-            $this->table = Workshop::where('identity_id', auth()->user()->id)
-                    ->first()->tenancy_db_name . '.' . $this->getTable();
+            $this->setTableForWorker(auth()->user()->worker->workshop_id);
+        } else {
+            $this->setTableForWorkshopAdmin(auth()->user()->id);
         }
-//        else if (Session::get('id') !== null) {
-//            // Jeśli nie działa sesja auth() to sprawdza czy w sesji jest id
-//            $this->table = Workshop::where('identity_id', Session::get('id'))
-//                    ->first()->tenancy_db_name . '.' . $this->getTable();
-//        }
     }
 
-    /**Zwraca bazę danych danego użytkownika (do użytku przy n:m relacjach)
+    /** Zwraca bazę danych danego użytkownika (do użytku przy n:m relacjach)
+     *
      * @return string
      */
     public function getDatabase(): string
     {
         return explode('.', $this->table)[0];
+    }
+
+    /** Ustawia tabelę dla pracownika
+     *
+     * @return bool
+     */
+    public function setTableForWorker(int $id): void
+    {
+        $this->table = Workshop::where('id', $id)
+                ->first()->tenancy_db_name . '.' . $this->getTable();
+    }
+
+    /** Ustawia tabelę dla administratora warsztatu
+     * @return bool
+     */
+    public function setTableForWorkshopAdmin(int $id): void
+    {
+        $this->table = Workshop::where('identity_id', $id)
+                ->first()->tenancy_db_name . '.' . $this->getTable();
+    }
+
+    protected function getAuthorizationToken(Request $request): string
+    {
+        $authorization = explode(' ', $request->header('authorization'));
+        if ($authorization[0] !== 'Bearer') {
+            return false;
+        }
+
+        return $authorization[1];
+    }
+
+    protected function setTableByToken(string $token, string $type): void
+    {
+        $identity = Identity::find(Token::where('token', $token)->first()->tokenable_id);
+        if ($type === 'workshop') {
+            $this->setTableForWorkshopAdmin($identity->id);
+        } else if($type === 'worker') {
+            $this->setTableForWorker($identity->id);
+        } else {
+            throw new Exception('Błędny typ użytkownika');
+        }
     }
 }

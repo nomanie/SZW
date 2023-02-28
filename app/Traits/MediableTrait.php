@@ -3,13 +3,13 @@
 namespace App\Traits;
 
  use App\Models\Workshop\Mediable;
- use Illuminate\Database\Eloquent\Relations\BelongsTo;
+ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
  trait MediableTrait
 {
-     public function mediables(): belongsTo
+     public function mediables(): MorphToMany
      {
          //@todo zmienić na morph
-         return $this->belongsTo(Mediable::class, 'mediable_id');
+         return $this->MorphToMany(Mediable::class, 'mediable');
      }
 }
