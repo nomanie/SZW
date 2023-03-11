@@ -7,9 +7,9 @@
     <meta name=description content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body class="w-100" style="">
+<body class="w-100">
 <div class="container w-100" style="width: 860px; height: 1123px;background: white;">
-    <div class="document" ref="documentModal">
+    <div class="document">
         <div class="row px-4">
             <div class="col-xs-6"></div>
             <div class="col-xs-6">
@@ -48,7 +48,7 @@
         <hr class="separator">
         <div class="row px-4 mb-4">
             <div class="col-xs-6 col-data">
-                <div class="row">
+                <div class="row w-100">
                     <div class="col-xs-12">
                         <div class="row">
                             <div class="col-xs-12 font-weight-bold mb-3">
@@ -72,8 +72,7 @@
                             <div class="col-xs-12">
                                 <div class="row">
                                     <div class="col-xs-12">
-                                        <textarea
-                                            class="textarea-viewing h-100">{{ $data['issuer_address'] }}</textarea>
+                                        <div class="textarea-viewing h-100 w-100 pre-wrap">{!! $data['issuer_address'] !!}</div>
                                     </div>
                                 </div>
                             </div>
@@ -91,7 +90,7 @@
                 </div>
             </div>
             <div class="col-xs-6 col-data">
-                <div class="row">
+                <div class="row w-100">
                     <div class="col-xs-12">
                         <div class="row">
                             <div class="col-xs-12 font-weight-bold mb-3">
@@ -111,8 +110,7 @@
                             <div class="col-xs-12">
                                 <div class="row">
                                     <div class="col-xs-12">
-                                        <textarea
-                                            class="textarea-viewing h-100">{{ $data['recipient_address'] }}</textarea>
+                                        <div class="textarea-viewing h-100 pre-wrap">{!! $data['recipient_address'] !!}</div>
                                     </div>
                                 </div>
                             </div>
@@ -131,31 +129,31 @@
             </div>
         </div>
         <div class="mb-4 table-container">
-            <div style="width: 764px; margin:auto;">
+            <div style="width: 100%; margin:auto;">
                 <table class="content-table text-center">
                     <tr>
                         <th style="width: 50px">
                             Lp
                         </th>
-                        <th style="width: 232px">
+                        <th style="width: 269px">
                             Nazwa towaru lub usługi
                         </th>
                         <th style="width: 60px">
                             Ilość
                         </th>
-                        <th style="width: 80px">
+                        <th style="width: 90px">
                             Cena Netto
                         </th>
                         <th style="width: 100px">
                             Stawka VAT
                         </th>
-                        <th style="width: 80px">
+                        <th style="width: 90px">
                             Wartość Netto
                         </th>
-                        <th style="width: 70px">
+                        <th style="width: 80px">
                             Wartość VAT
                         </th>
-                        <th style="width: 80px">
+                        <th style="width: 90px">
                             Wartość Brutto
                         </th>
                     </tr>
@@ -283,13 +281,13 @@
                         <td colspan="3">
                             Zwolenienie z podatku VAT na podstawie:
                             <div>
-                                {{ $data['comments'] }}
+                                {!! $data['comments'] !!}
                             </div>
                         </td>
                     </tr>
                 </table>
             </div>
-            <div class="mt-5">
+            <div class="mt-5 overflow-hidden">
                 <div class="row mt-5">
                     <div class="col-xs-6 text-center">
                         . . . . . . . . . . . . . . . . . . . . . . . . <br>
@@ -306,6 +304,12 @@
 </div>
 </body>
 <style>
+    .mt-5 {
+        margin-top: 1.5rem !important;
+    }
+    .pre-wrap {
+        white-space: pre-wrap;
+    }
     .row {
         display: -webkit-flex;
     }
@@ -319,11 +323,6 @@
         color: white;
         font-size: 18px;
     }
-
-    /*.header-date {*/
-    /*    width: 120px;*/
-    /*    display: -webkit-flex;*/
-    /*}*/
 
     .separator {
         border-width: 3px;
@@ -451,6 +450,14 @@
 
     .mt-3 {
         margin-top: 1rem !important
+    }
+
+    .w-100 {
+        width: 100% !important;
+    }
+
+    .overflow-hidden {
+        overflow: hidden;
     }
 
     /*!

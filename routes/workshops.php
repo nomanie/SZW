@@ -110,6 +110,7 @@ Route::as('workshop.')->group(function(){
 
     Route::as('documents.')->prefix('/documents')->group(function(){
         Route::post('/export', [DocumentController::class, 'export'])->name('export');
+        Route::get('/download/token', [DocumentController::class, 'getDownloadToken'])->name('token');
         Route::get('/download/{mediable}', [DocumentController::class, 'download'])->name('download');
         Route::get('/download_document/{document}', [DocumentController::class, 'downloadDocument'])->name('download_document');
     });

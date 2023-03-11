@@ -92,7 +92,9 @@ export default {
             })
         },
         download($event) {
-            window.location = route('workshop.documents.download_document', $event)
+            this.$http.get(route('workshop.documents.token')).then((res) => {
+                window.location = route('workshop.documents.download_document', $event) + '?token=' + res.data.token
+            })
         },
         show() {
 

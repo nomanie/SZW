@@ -12,6 +12,7 @@ use App\Http\Resources\Workshop\Documents\DocumentResource;
 use App\Models\Workshop\Documents\Document;
 use App\Models\Workshop\Mediable;
 use App\Services\System\LogService;
+use App\Services\System\TokenService;
 use App\Services\Workshop\Documents\DocumentService;
 use App\Traits\JsonResponseTrait;
 use Exception;
@@ -27,7 +28,8 @@ class DocumentController extends Controller
         private readonly DocumentService $service,
         protected readonly LogService $logService,
         protected readonly PdfGenerator $pdfGenerator,
-        protected readonly InvoiceGenerator $invoiceGenerator
+        protected readonly InvoiceGenerator $invoiceGenerator,
+        protected readonly TokenService $tokenService
     )
     {
         //@todo dodać Permisje
@@ -139,6 +141,11 @@ class DocumentController extends Controller
         return $this->pdfGenerator->setMediable($mediable)->download();
     }
 
+    public function getDownloadToken(Request $request): JsonResponse
+    {
+        return response()->json(['token' => $this->tokenService->setIdentity(auth()->user()->id)->createDownloadToken(exec('getmac'), $request->getClientIp())->token]);
+    }
+
     public function downloadDocument(Document $document)
     {
 
@@ -151,6 +158,12 @@ class DocumentController extends Controller
             ->setDisk('workshop')
             ->generate();
 
-        return $this->invoiceGenerator->setMediable($mediable)->download();
+        $headers = [
+            'Content-Encoding' => 'UTF-8',
+            'Content-Description' => 'Dokumenty',
+            'Content-Type' => 'application/pdf',
+        ];
+
+        return response()->download($this->invoiceGenerator->getPath(), $this->invoiceGenerator->getFilename(), $headers);
     }
 }

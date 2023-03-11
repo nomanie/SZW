@@ -229,4 +229,17 @@ class TokenService
 
     }
 
+    /**
+     * @return Token
+     * @throws \Exception
+     */
+    public function createDownloadToken(string $device, string $ip): Token
+    {
+        $this->ip = $ip;
+        $this->device = $device;
+        $this->name = TokenTypeEnum::Download->value;
+
+        return $this->createToken();
+    }
+
 }

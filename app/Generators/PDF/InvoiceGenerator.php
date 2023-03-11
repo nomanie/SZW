@@ -14,7 +14,7 @@ class InvoiceGenerator
     protected string $view;
     protected string $filename;
     protected string $model;
-    protected string $path = 'documents/';
+    protected string $path = 'documents\\';
     protected $pdf;
     protected string $disk;
     protected Mediable $mediable;
@@ -75,31 +75,6 @@ class InvoiceGenerator
             ->setPaper('A4')
             ->loadHTML($view)
             ->save($path);
-//        $dompdf = new Dompdf();
-//        $dompdf->loadHtml($view);
-//        $dompdf->setPaper('A4');
-//        $dompdf->render();
-//        $output = $dompdf->output();
-//        Storage::disk($this->disk)->put($this->path . $this->filename, $output);
-//        Browsershot::html('<h1>test</h1>')
-//            ->setNodeBinary('PATH %~dp0;%PATH%;')
-//            ->setNpmBinary('PATH %~dp0;%PATH%;')
-//            ->setBinPath(base_path('vendor/spatie/browsershot/bin/browser.js'))
-//            ->setNodeModulePath(base_path('node_modules'))
-//            ->setChromePath('C:\Program Files\Google\Chrome\Application\chrome.exe')
-//            ->showBackground()
-//            ->windowSize(1920, 1080)
-//            ->format('A4')
-//            ->setOption('args', ['--disable-web-security'])
-//            ->waitUntilNetworkIdle()
-//            ->showBrowserHeaderAndFooter()
-//            ->emulateMedia('screen')
-//            ->usePipe()
-//            ->pages('1-5, 8, 11-13')
-//            ->initialPageNumber(8)
-//            ->savePdf($path);
-//            ->save($path);
-//        Storage::disk($this->disk)->put($this->path . $this->filename, $pdf);
         $size = Storage::disk($this->disk)->size($this->path . $this->filename);
 
         return $this->mediableService->setDisk($this->disk)
@@ -118,9 +93,14 @@ class InvoiceGenerator
         return $this->pdf->inline();
     }
 
-    public function download(): StreamedResponse
+    public function getPath(): string
     {
-        return Storage::disk($this->disk)->download($this->path . $this->filename);
+        return config('filesystems.disks.workshop.root') . '\\' . $this->path . '\\' . $this->filename;
+    }
+
+    public function getDisk(): string
+    {
+        return $this->disk;
     }
 
     public function setDisk(string $disk): static

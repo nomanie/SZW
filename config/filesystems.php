@@ -44,7 +44,7 @@ return [
 
         'workshop' => [
             'driver' => 'local',
-            'root' => storage_path('app/workshops'),
+            'root' => storage_path('app\workshops'),
             'url' => env('APP_URL').'/storage/app/workshops',
             'visibility' => 'public',
         ],

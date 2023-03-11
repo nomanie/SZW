@@ -2,10 +2,13 @@
 
 namespace App\Traits;
 
+use App\Enums\TokenTypeEnum;
 use App\Models\System\Identity;
 use App\Models\System\Token;
 use App\Models\System\Workshop;
+use http\Cookie;
 use Illuminate\Support\Facades\Session;
+use phpDocumentor\Reflection\Types\Collection;
 use PHPUnit\Util\Exception;
 use Illuminate\Http\Request;
 trait UseTenantConnection
@@ -15,16 +18,23 @@ trait UseTenantConnection
      */
     public function __construct(Request $request = null)
     {
-        if (auth()->user() === null){
+        $identity = auth()->user();
+
+        // obsługa download tokens
+        if (isset($request->token) && in_array($request->token, $this->getDownloadTokens())) {
+            $identity = $this->getTokenIdentity($request->token);
+        }
+
+        if ($identity === null){
             if ($token = $this->getAuthorizationToken($request)) {
                 $this->setTableByToken($token, $request->header('type'));
             } else {
                 throw new Exception('Użytkownik nie jest zalogowany');
             }
-        } else if (auth()->user()?->worker !== null) {
-            $this->setTableForWorker(auth()->user()->worker->workshop_id);
+        } else if ($identity?->worker !== null) {
+            $this->setTableForWorker($identity->worker->workshop_id);
         } else {
-            $this->setTableForWorkshopAdmin(auth()->user()->id);
+            $this->setTableForWorkshopAdmin($identity->id);
         }
     }
 
@@ -76,5 +86,15 @@ trait UseTenantConnection
         } else {
             throw new Exception('Błędny typ użytkownika');
         }
+    }
+
+    protected function getDownloadTokens(): array
+    {
+        return Token::where('name', TokenTypeEnum::Download->value)->pluck('token')->toArray();
+    }
+
+    protected function getTokenIdentity($token): Identity
+    {
+        return Identity::find(Token::where('token', $token)->first()->tokenable_id);
     }
 }
