@@ -7,10 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\changePasswordRequest;
 use App\Http\Requests\Auth\RegisterClientRequest;
 use App\Http\Requests\Auth\RegisterWorkshopRequest;
-use App\Models\System\Identity;
-use App\Services\Auth\AuthService;
+use App\Services\Auth\LoginService;
+use App\Services\Auth\RegisterService;
 use App\Services\System\LogService;
-use App\Traits\EmailExistsInAccountTypeTrait;
 use App\Traits\JsonResponseTrait;
 use Illuminate\Http\JsonResponse;
 
@@ -19,8 +18,9 @@ class RegisterController extends Controller
     use JsonResponseTrait;
 
     public function __construct(
-        protected AuthService $service,
-        protected LogService  $logService
+        protected readonly RegisterService $service,
+        protected readonly LoginService $loginService,
+        protected readonly LogService  $logService
     )
     {
         //@todo odpalać rejestrację w tle jako joba
@@ -60,7 +60,7 @@ class RegisterController extends Controller
             $identity->password = bcrypt($input['password']);
             $identity->reset_password = false;
             $identity->save();
-            return redirect()->to($this->service->setIdentity(auth()->user()->id)->getRoute());
+            return redirect()->to($this->loginService->setIdentity(auth()->user()->id)->getRoute());
         }
         else auth()->logout();
     }

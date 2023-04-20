@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\changePasswordRequest;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
@@ -11,7 +12,7 @@ use Illuminate\Support\Str;
 
 class ForgotPasswordController extends Controller
 {
-    public function sendResetEmail(ForgotPasswordRequest $request)
+    public function sendResetEmail(ChangePasswordRequest $request)
     {
         $data = $request->validated();
 
@@ -24,7 +25,7 @@ class ForgotPasswordController extends Controller
             : back()->withErrors(['email' => __($status)]);
     }
 
-    public function resetPassword(ForgotPasswordRequest $request)
+    public function resetPassword(ChangePasswordRequest $request)
     {
         $request->validated();
 

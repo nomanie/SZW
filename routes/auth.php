@@ -12,6 +12,11 @@ Route::middleware(MustResetPasswordMiddleware::class)->get('/change-password', f
 })->name('change_password');
 Route::middleware(MustResetPasswordMiddleware::class)->post('/change-password', [\App\Http\Controllers\Auth\RegisterController::class, 'changePassword'])->name('change_password.post');
 
+Route::get('/login-next', function () {
+    return view('auth.insert_pin');
+})->name('insert_pin');
+Route::post('/login-next', [\App\Http\Controllers\Auth\LoginController::class, 'insertPin'])->name('insert_pin.post');
+
 Route::middleware('guest')->group(function(){
 
     Route::get('/login', function () {
