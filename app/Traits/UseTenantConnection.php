@@ -6,10 +6,7 @@ use App\Enums\TokenTypeEnum;
 use App\Models\System\Identity;
 use App\Models\System\Token;
 use App\Models\System\Workshop;
-use http\Cookie;
-use Illuminate\Support\Facades\Session;
-use phpDocumentor\Reflection\Types\Collection;
-use PHPUnit\Util\Exception;
+use Exception;
 use Illuminate\Http\Request;
 trait UseTenantConnection
 {

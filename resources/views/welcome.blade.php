@@ -18,21 +18,21 @@
     </head>
     <body class="antialiased">
        <div id="app" class="overflow-hidden">
-           @if (isset($content))
-               @yield('content')
-           @else
-               <div class="row h-100vh">
-                   <div class="sidebar__container">
-                       <sidebar></sidebar>
-                   </div>
-                   <div class="content">
-                        <header-nav name="{{auth()->user()->email}}"></header-nav>
-                        <div class="pager">
-                            <router-view></router-view>
-                        </div>
-                   </div>
+           <div class="row h-100vh">
+               @if (auth()->user())
+               <div class="sidebar__container">
+                   <sidebar></sidebar>
                </div>
-           @endif
+               <div class="content">
+                   <header-nav name="{{auth()->user()->email}}"></header-nav>
+                    <div class="pager">
+                        <router-view></router-view>
+                    </div>
+               </div>
+               @else
+                   <router-view></router-view>
+               @endif
+           </div>
        </div>
     </body>
     <script src="{{mix('js/app.js')}}"></script>

@@ -121,7 +121,7 @@ export default {
     methods: {
         logout() {
             console.log('test')
-            this.$http.post(route('logout')).then((response) => {
+            this.$http.post(route('api.logout')).then((response) => {
                 localStorage.removeItem('id');
                 window.location = '/login'
             })

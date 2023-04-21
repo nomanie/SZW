@@ -42,12 +42,11 @@ trait HasApiTokens
      * @param  array  $abilities
      * @return Token
      */
-    public function createToken(string $name, string $ip, array $abilities = ['*'], string $device = null)
+    public function createToken(string $name, string $ip, array $abilities = ['*']): Token
     {
         return $this->tokens()->create([
             'name' => $name,
             'token' => hash('sha256', $plainTextToken = Str::random(40)),
-            'device' => $device,
             'ip_address' => $ip,
             'abilities' => $abilities,
         ]);

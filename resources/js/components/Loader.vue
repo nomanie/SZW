@@ -25,7 +25,7 @@ import {mapState} from "vuex";
 export default {
     name: 'Loader',
     computed: {
-        ...mapState(['loading'])
+        ...mapState('loader', ['loading'])
     },
 }
 </script>

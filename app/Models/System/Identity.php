@@ -2,6 +2,7 @@
 
 namespace App\Models\System;
 
+use App\Models\UserCode;
 use App\Traits\HasApiTokens;
 use App\Traits\UseSystemConnection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -35,5 +36,4 @@ class Identity extends Authenticatable
     {
         return $this->hasOne(SystemWorker::class, 'identity_id', 'id');
     }
-
 }

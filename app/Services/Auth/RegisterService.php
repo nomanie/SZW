@@ -3,21 +3,16 @@
 namespace App\Services\Auth;
 
 use App\Enums\AccountTypeEnum;
-use App\Enums\TokenTypeEnum;
 use App\Models\System\Identity;
 use App\Models\System\User;
 use App\Models\System\Workshop;
 use App\Notifications\VerifyEmail;
-use App\Services\System\TokenService;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
-use TheSeer\Tokenizer\Token;
+use function App\Services\Auth\public_path;
 
 class RegisterService extends AuthService
 {
@@ -34,7 +29,7 @@ class RegisterService extends AuthService
      */
     public function save(array $data, int $account_type, int $workshop_id = null): ?Identity
     {
-        try {
+//        try {
             if (!$this->checkIfUserExists($data)) {
                 // Zapis podstawowego usera
                 $this->identity->uuid = $this->generateUuid();
@@ -53,11 +48,13 @@ class RegisterService extends AuthService
                 // Zapis konta typu pracownik
                 $this->saveWorker($workshop_id);
             }
-        } catch (\Exception $e) {
-            throw new Exception;
-            //@todo tutaj wywala exception
-        }
-//        $this->sendVerificationEmail();
+//        } catch (\Exception $e) {
+//            throw new Exception;
+//            //@todo tutaj wywala exception
+//        }
+
+        $this->sendVerificationEmail($this->identity->id);
+
         return $this->identity;
     }
 
@@ -65,13 +62,18 @@ class RegisterService extends AuthService
      *
      * @return void
      */
-    public function sendVerificationEmail(): void
+    public function sendVerificationEmail(int $id): void
     {
         if (!$this->dontSendEmail) {
             if ($this->identity === null) {
-                $this->identity = auth()->user();
+                $this->identity = Identity::find($id);
             }
-            $this->identity->notify(new VerifyEmail());
+
+            try {
+                $this->identity->notify(new VerifyEmail());
+            } catch (\Exception) {
+                throw new Exception(__('Nie udało się wysłać wiadomości potwierdzającej adres e-mail'));
+            }
         }
     }
 
@@ -151,7 +153,8 @@ class RegisterService extends AuthService
 //            $workshop->logo = $data['logo'] ?? null;
         $workshop->nip = $data['nip'];
         $workshop->regon = $data['regon'];
-        $workshop->logo = public_path('/images/person');
+
+        $workshop->logo = \public_path('/images/person');
 //            $workshop->company_created_at = $data['company_created_at'] ?? null;
 //            $workshop->website = $data['website'] ?? null;
 //            $workshop->social_media = $data['social_media'] ?? null;

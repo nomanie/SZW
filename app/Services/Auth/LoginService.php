@@ -2,105 +2,144 @@
 
 namespace App\Services\Auth;
 
-use App\Enums\AccountTypeEnum;
-use App\Enums\TokenTypeEnum;
 use App\Models\System\Identity;
-use App\Models\System\User;
-use App\Models\System\Workshop;
+use App\Models\System\Token;
+use App\Models\UserCode;
 use App\Notifications\PinEmail;
-use App\Notifications\VerifyEmail;
-use App\Services\System\TokenService;
-use Carbon\Carbon;
+use App\Traits\JsonResponseTrait;
 use Exception;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Str;
-use TheSeer\Tokenizer\Token;
 
 class LoginService extends AuthService
 {
+    use JsonResponseTrait;
+
     private bool $dontSendEmail = false;
 
     /** Tworzy token logowania dla użytkownika oraz zapisuje go w sesji
      *
-     * @param string $device
      * @param string $ip
      *
-     * @return $this
+     * @return ?Token
      *
      * @throws Exception
      */
-    public function setToken(string $device, string $ip): static
+    public function setToken(string $ip): ?Token
     {
-        $token = $this->tokenService->setDevice($device)->setIdentity($this->identity)->setIp($ip)->createLoginToken();
-        Session::put('token', $token);
-
-        return $this;
+        return $this->tokenService->setIdentity($this->identity)->setIp($ip)->createLoginToken();
     }
 
     /** Usuwa token logowania użytkownika oraz czyści jego sesje
      *
-     * @param string $device
      * @param string $ip
      *
      * @return bool
      */
-    public function logout(string $device, string $ip): bool
+    public function logout(string $ip): bool
     {
-        $this->tokenService->setDevice($device)->setIdentity($this->identity)->setIp($ip)->revokeLoginToken();
+        $this->tokenService->setIdentity($this->identity)->setIp($ip)->revokeLoginToken();
         Auth::logout();
 
         return true;
     }
 
-    public function login(array $data, $remember_me, $ip)
+    /** Sprawdza stan logowania użytkownika
+     *
+     * @param array $data
+     * @param $remember_me
+     * @param $ip
+     *
+     * @return int
+     *
+     * @throws Exception
+     */
+    public function login(array $data, $remember_me, $ip): int
     {
         $mac = exec('getmac');
 
         if (Auth::attempt($data, $remember_me)) {
             // sprawdzenie czy użytkownik ma zapamiętane urządzenie
             $hasAuthorized = DB::table('authorized_devices')
-                ->where('identity_id', auth()->user()->id)
-                ->where('ip_address', $ip)
-                ->where('mac_address', $mac)
-                ->count() > 0;
+                    ->where('identity_id', auth()->user()->id)
+                    ->where('ip_address', $ip)
+                    ->where('mac_address', $mac)
+                    ->count() > 0;
             if ($hasAuthorized) {
                 // jeśli tak to loguje
-                $this->saveDataToSession($mac, $ip);
+                $this->loginSuccess(auth()->user, $ip);
             } else {
                 // jeśli nie to generuje kod, wysyła go mailem i usuwa sesje usera
-                $this->generatePin(auth()->user()->id);
+                $this->generateCode(auth()->user()->id);
+                Auth::logout();
                 return 3;
             }
         }
         return 0;
     }
 
-    public function saveDataToSession($mac, $ip)
+    /** Uruchamia procedurę po udanym logowaniu
+     * @param Identity $identity
+     * @param string $ip
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function loginSuccess(Identity $identity, string $ip): JsonResponse
     {
-        $service = $this->setIdentity(auth()->user()->id);
-        // sprawdzenie czy musi zmienić hasło
-        if ($service->checkIfMustChangePassword()) {
-            return 2;
-        }
+        $token = $this->setIdentity($identity->id)->setToken(exec('getmac'), $ip);
+        $type = $this->getType($identity->id);
 
-        try {
-            $service->addTypesToSession()->addIdToSession()->setToken($mac, $ip);
-        } catch (\PHPUnit\Util\Exception $e) {
-            Auth::logout();
-            return 0;
-        }
-        return 1;
+        return $this->successJsonResponse(__('Zalogowano pomyślnie, za chwilę nastąpi przekierowanie'), 200, [
+            'user' => [
+                'uuid' => $identity->uuid,
+                'is_admin' => $identity->is_admin,
+                'type' => $type[0],
+                'token' => $token->token,
+                'email' => $identity->email
+            ],
+            'route' => 'dashboard'
+        ]);
     }
 
-    public function generatePin($id)
+    /** Generuje kod autoryzacyjny oraz wysyła go na maila
+     *
+     * @param $id
+     *
+     * @return void
+     *
+     * @throws Exception
+     */
+    public function generateCode($id): void
     {
-        $pin = (string)random_int(100000, 999999);
-        DB::table('pin')->insert(['identity_id' => $id, 'pin' => bcrypt($pin)]);
+        $code = (string)random_int(100000, 999999);
+        UserCode::insert(['identity_id' => $id, 'code' => bcrypt($code), 'created_at' => now()]);
 
-        Identity::find($id)->notify(new PinEmail($pin));
+        Identity::find($id)->notify(new PinEmail($code));
+    }
+
+    /** Sprawdza czy podany kod istnieje w bazie danych, jest przypisany do tego użytkownika oraz czy nie wygasł
+     *
+     * @param int $identity_id
+     * @param string $code
+     *
+     * @return bool
+     */
+    public function checkCode(int $identity_id, string $code): bool
+    {
+        $codes = UserCode::where('identity_id', $identity_id)
+            ->where('created_at', '>=', now()->subMinutes(5))
+            ->select('code')
+            ->get();
+
+        foreach ($codes as $encryptedCode) {
+            if (Hash::check($code, $encryptedCode->code)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

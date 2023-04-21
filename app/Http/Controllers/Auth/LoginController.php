@@ -4,15 +4,14 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Services\Auth\AuthService;
 use App\Services\Auth\LoginService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use PHPUnit\Util\Exception;
 
 class LoginController extends Controller
 {
-    public function __construct(protected LoginService $service){}
+    public function __construct(protected LoginService $service){
+        $this->middleware('guest')->except('logout');
+    }
 
     public function login(LoginRequest $request)
     {
@@ -20,9 +19,9 @@ class LoginController extends Controller
         $response = $this->service->login($data, $request->get('remember_me'), $request->getClientIp());
         if ($response === 1) {
             return response()->json([
-                'route' => $this->service->getRoute(),
+                'route' => 'dashboard',
                 'id' => $this->service->getUuid(),
-                'token' => $this->service->getToken(exec('getmac'), $request->getClientIp()),
+                'token' => $this->service->getToken(`exec('getmac')`, $request->getClientIp()),
                 'type' => $this->service->getType()
             ]);
         } else if ($response === 2) {
@@ -32,7 +31,7 @@ class LoginController extends Controller
             ]);
         } else if ($response === 3) {
             return response()->json([
-                'route' => 'login-next',
+                'route' => '2fa',
             ]);
         }
         else {
@@ -45,11 +44,6 @@ class LoginController extends Controller
     {
         $this->service->setIdentity(auth()->user()->id)->logout(exec('getmac'), $request->getClientIp());
 
-        return redirect('/login');
-    }
-
-    public function insertPin(Request $request)
-    {
-
+        return ['route' => 'login'];
     }
 }

@@ -29,7 +29,7 @@
         "yajra/laravel-datatables-buttons": "^9.1",
         "yajra/laravel-datatables-html": "^9.0",
         "yajra/laravel-datatables-oracle": "^10.0",
-      "ext-http": "*"
+        "ext-http": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

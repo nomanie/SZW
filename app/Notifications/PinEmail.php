@@ -16,7 +16,7 @@ class PinEmail extends Notification
      *
      * @return void
      */
-    public function __construct(protected $pin)
+    public function __construct(protected $code)
     {
     }
 
@@ -42,8 +42,8 @@ class PinEmail extends Notification
         return (new MailMessage)
             ->from(env('MAIL_USERNAME'))
             ->subject(__('Logowanie do systemu SZW'))
-            ->line('Aby się zalogować wprowadź poniższy pin w systemie')
-            ->line($this->pin)
+            ->line('Aby się zalogować wprowadź poniższy kod w systemie')
+            ->line($this->code)
             ->line(__('To nie Ty próbujesz się zalogować do systemu? Natychmiastowo zmień hasło!'));
     }
 

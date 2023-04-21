@@ -2,7 +2,7 @@
     <div class="container mt-5 login">
         <div class="row">
             <div class="col-12 d-flex justify-content-center">
-                <img :src="img" height="120">
+                <img src="/images/logoSZW.png" height="120">
             </div>
         </div>
         <div class="row">
@@ -61,9 +61,9 @@
                 </div>
                 <div class="row mt-2 justify-content-center">
                     <div class="col-12 col-md-4 d-flex justify-content-center">
-                        <a href="/register" class="w-50">
+                        <router-link :to="{ name: 'register' }">
                             <button class="btn btn-warning w-100">Zarejestruj się</button>
-                        </a>
+                        </router-link>
                     </div>
                 </div>
             </div>
@@ -81,10 +81,6 @@ export default {
         loader
     },
     props: {
-        img: {
-            type: String,
-            default: () => null
-        },
         verified: {
             type: Boolean,
             default: () => false
@@ -97,32 +93,47 @@ export default {
                 password: null,
                 remember_me: false
             },
-            errors: {}
+            errors: {},
+            processing: false
         }
     },
     mounted() {
-        if (this.verified) {
-            this.$bvToast.toast('Adres e-mail został potwierdzony', {
-                title: 'Komunikat', variant: 'success', toaster: 'b-toaster-top-center'
-            })
+      const params = this.$route.params
+        if (params.hasOwnProperty('id') && params.hasOwnProperty('token')) {
+            this.verify(params.id, params.token)
         }
     },
     methods: {
-        login() {
-            this.$http.get('/sanctum/csrf-cookie').then(response => {
-                this.$http.post(route('login'), this.form).then((response) => {
+        async login() {
+            this.processing = true
+            await this.$http.get('/sanctum/csrf-cookie').then(response => {
+                this.$http.post(route('api.login'), this.form).then((response) => {
+                    this.$store.commit('auth/SET_USER', {email: this.form.email})
+
                     if (response.data.route === 'change-password') {
-                        window.location = response.data.route
+                        this.$store.dispatch('auth/changePassword')
+                        this.$router.push( {name: response.data.route} )
                     }
-                    localStorage.setItem('id', response.data.id)
-                    localStorage.setItem('token', response.data.token)
-                    localStorage.setItem('type', response.data.type)
-                    window.location = response.data.route
+                    if (response.data.route === '2fa') {
+                        this.$store.dispatch('auth/twoFA')
+                        this.$router.push( {name: response.data.route} )
+                    }
+
                 }).catch((error) => {
                     this.errors = error.data.errors
+                }).finally(()=>{
+                    this.processing = false
                 })
             });
 
+        },
+        async verify(id, token) {
+            this.processing = true
+                await this.$http.get('/sanctum/csrf-cookie').then(response => {
+                    this.$http.post(route('api.verification.verify', {id: id, hash: token})).then((response) => {
+                        this.$router.push({ name: 'login' })
+                    })
+                })
         }
     }
 }

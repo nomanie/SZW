@@ -10,7 +10,6 @@ class TokenService
 {
     protected Identity $identity;
     protected ?Token $token = null;
-    protected string $device;
     protected string $ip;
     protected mixed $abilities = ['*'];
     protected string $name;
@@ -41,19 +40,6 @@ class TokenService
     public function setAbilities(mixed $abilities): static
     {
         $this->abilities = $abilities;
-
-        return $this;
-    }
-
-    /** Ustawia adres mac urządzenia użytkownika dla tokena
-     *
-     * @param mixed $abilities
-     *
-     * @return $this
-     */
-    public function setDevice(string $device): static
-    {
-        $this->device = $device;
 
         return $this;
     }
@@ -92,7 +78,6 @@ class TokenService
     {
         $this->token = $this->identity->tokens
             ->where('name', $this->name)
-            ->where('device', $this->device)
             ->where('ip_address', $this->ip)
             ->first();
 
@@ -124,9 +109,6 @@ class TokenService
         if ($this->identity === null) {
             throw new \Exception(__('Użytkownik nie jest ustawiony'));
         }
-        if ($this->device === null) {
-            throw new \Exception(__('Urządzenie nie jest ustawione'));
-        }
         if ($this->ip === null) {
             throw new \Exception(__('Adres IP nie jest ustawiony'));
         }
@@ -149,13 +131,13 @@ class TokenService
      */
     public function createToken(): Token
     {
-        if ($this->name === null || $this->ip === null || $this->device === null) {
+        if ($this->name === null || $this->ip === null) {
             throw new \Exception(__('Wymagane dane nie zostały ustawione, sprawdź czy ustawiłeś wszystkie dane.'));
         }
 
         $this->checkIfOtherTokenExists(true);
 
-        $this->token = $this->identity->createToken($this->name, $this->ip, $this->abilities, $this->device);
+        $this->token = $this->identity->createToken($this->name, $this->ip, $this->abilities);
 
         if ($this->token === null) {
             throw new \Exception(__('Nie udało się stworzyć tokena'));
@@ -186,7 +168,7 @@ class TokenService
      */
     public function revokeToken(): bool
     {
-        if ($this->name === null || $this->ip === null || $this->device === null) {
+        if ($this->name === null || $this->ip === null) {
             throw new \Exception(__('Wymagane dane nie zostały ustawione, sprawdź czy ustawiłeś wszystkie dane.'));
         }
 
@@ -233,10 +215,9 @@ class TokenService
      * @return Token
      * @throws \Exception
      */
-    public function createDownloadToken(string $device, string $ip): Token
+    public function createDownloadToken(string $ip): Token
     {
         $this->ip = $ip;
-        $this->device = $device;
         $this->name = TokenTypeEnum::Download->value;
 
         return $this->createToken();

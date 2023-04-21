@@ -4,7 +4,7 @@
     <div class="container d-flex flex-column justify-content-center align-items-center">
         <div class="row mt-5">
             <div class="col-12">
-                <h2>Wprowadź pin aby się zalogować</h2>
+                <h2>Wprowadź Kod aby się zalogować</h2>
             </div>
         </div>
         <form method="post" action="{{route('insert_pin.post')}}">

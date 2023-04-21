@@ -26,7 +26,6 @@ class Token extends PersonalAccessToken
         'name',
         'token',
         'abilities',
-        'device',
         'ip_address'
     ];
 

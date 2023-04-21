@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\changePasswordRequest;
 use App\Http\Requests\Auth\RegisterClientRequest;
 use App\Http\Requests\Auth\RegisterWorkshopRequest;
+use App\Models\System\Workshop;
 use App\Services\Auth\LoginService;
 use App\Services\Auth\RegisterService;
 use App\Services\System\LogService;
@@ -31,9 +32,11 @@ class RegisterController extends Controller
         $input = $request->validated();
 
         $user = $this->service->save($input, AccountTypeEnum::WORKSHOP);
+        $workshop = Workshop::where('identity_id', $user->id)->first();
 
         if ($user) {
-            $this->logService->add($user, $request, new_data: $input);
+            //@todo obsłużyć rejestrację konta jako log workshopowy
+//            $this->logService->add($user, $request, new_data: $input);
             return $this->successJsonResponse(__('Pomylnie utworzono konto'));
         }
         return $this->errorJsonResponse(__('Nie udało się utworzyć konta'));
@@ -46,13 +49,14 @@ class RegisterController extends Controller
         $user = $this->service->save($input, AccountTypeEnum::CLIENT);
 
         if ($user) {
-            $this->logService->add($user, $request, new_data: $input);
+            //@todo tutaj logi systemowe, nie workshopowe
+//            $this->logService->add($user, $request, new_data: $input);
             return $this->successJsonResponse(__('Pomylnie utworzono konto'));
         }
         return $this->errorJsonResponse(__('Nie udało się utworzyć konta'));
     }
 
-    public function changePassword(ChangePasswordRequest $request)
+    public function changePassword(ChangePasswordRequest $request): JsonResponse
     {
         if (auth()->user()->reset_password) {
             $input = $request->validated();
@@ -60,9 +64,18 @@ class RegisterController extends Controller
             $identity->password = bcrypt($input['password']);
             $identity->reset_password = false;
             $identity->save();
-            return redirect()->to($this->loginService->setIdentity(auth()->user()->id)->getRoute());
+            return $this->successJsonResponse(__('Pomyślnie zmieniono hasło! Za chwilę zostaniesz przekierowany.'),
+            200,
+                ['route' => 'dashboard']
+            );
         }
-        else auth()->logout();
+
+        $this->loginService->logout(exec('getmac'), $request->getClientIp());
+
+        return $this->errorJsonResponse(__('Nie udało się zmienić hasła!'),
+            403,
+            ['route' => 'login']
+        );
     }
 
 }
