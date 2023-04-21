@@ -2,6 +2,7 @@
 
 namespace App\Services\Auth;
 
+use App\Models\AuthorizedDevice;
 use App\Models\System\Identity;
 use App\Models\System\Token;
 use App\Models\UserCode;
@@ -41,7 +42,7 @@ class LoginService extends AuthService
      */
     public function logout(string $ip): bool
     {
-        $this->tokenService->setIdentity($this->identity)->setIp($ip)->revokeLoginToken();
+//        $this->tokenService->setIdentity($this->identity)->setIp($ip)->revokeLoginToken();
         Auth::logout();
 
         return true;
@@ -53,13 +54,14 @@ class LoginService extends AuthService
      * @param $remember_me
      * @param $ip
      *
-     * @return int
+     * @return JsonResponse|int
      *
      * @throws Exception
      */
-    public function login(array $data, $remember_me, $ip): int
+    public function login(array $data, $remember_me, $ip): JsonResponse|int
     {
         $mac = exec('getmac');
+        $identity = Identity::where('email', $data['email'])->first();
 
         if (Auth::attempt($data, $remember_me)) {
             // sprawdzenie czy użytkownik ma zapamiętane urządzenie
@@ -70,14 +72,14 @@ class LoginService extends AuthService
                     ->count() > 0;
             if ($hasAuthorized) {
                 // jeśli tak to loguje
-                $this->loginSuccess(auth()->user, $ip);
+                return $this->loginSuccess($identity, $ip);
             } else {
                 // jeśli nie to generuje kod, wysyła go mailem i usuwa sesje usera
-                $this->generateCode(auth()->user()->id);
-                Auth::logout();
+                $this->generateCode($identity->id);
                 return 3;
             }
         }
+        Auth::logout();
         return 0;
     }
 
@@ -92,6 +94,10 @@ class LoginService extends AuthService
         $token = $this->setIdentity($identity->id)->setToken(exec('getmac'), $ip);
         $type = $this->getType($identity->id);
 
+        AuthorizedDevice::insert(['identity_id' => $identity->id, 'ip_address' => $ip, 'mac_address' => exec('getmac')]);
+
+        Auth::logout();
+
         return $this->successJsonResponse(__('Zalogowano pomyślnie, za chwilę nastąpi przekierowanie'), 200, [
             'user' => [
                 'uuid' => $identity->uuid,
@@ -100,7 +106,7 @@ class LoginService extends AuthService
                 'token' => $token->token,
                 'email' => $identity->email
             ],
-            'route' => 'dashboard'
+            'route' => $type[0] . '.dashboard'
         ]);
     }
 

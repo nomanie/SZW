@@ -19,19 +19,7 @@
     <body class="antialiased">
        <div id="app" class="overflow-hidden">
            <div class="row h-100vh">
-               @if (auth()->user())
-               <div class="sidebar__container">
-                   <sidebar></sidebar>
-               </div>
-               <div class="content">
-                   <header-nav name="{{auth()->user()->email}}"></header-nav>
-                    <div class="pager">
-                        <router-view></router-view>
-                    </div>
-               </div>
-               @else
-                   <router-view></router-view>
-               @endif
+               <main-container></main-container>
            </div>
        </div>
     </body>

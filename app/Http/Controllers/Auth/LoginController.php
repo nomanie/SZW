@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Services\Auth\LoginService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class LoginController extends Controller
@@ -17,13 +18,9 @@ class LoginController extends Controller
     {
         $data = $request->validated();
         $response = $this->service->login($data, $request->get('remember_me'), $request->getClientIp());
-        if ($response === 1) {
-            return response()->json([
-                'route' => 'dashboard',
-                'id' => $this->service->getUuid(),
-                'token' => $this->service->getToken(`exec('getmac')`, $request->getClientIp()),
-                'type' => $this->service->getType()
-            ]);
+
+        if (gettype($response) === 'object') {
+            return $response;
         } else if ($response === 2) {
             return response()->json([
                 'route' => 'change-password',

@@ -51,6 +51,7 @@ Vue.component('settings', require('../views/workshop/components/Settings').defau
 Vue.component('wiki-header', require('../views/wiki/components/header.vue').default);
 // Admin component
 Vue.component('car-brands', require('../views/admin/components/cars/brands/brand').default);
+Vue.component('main-container', require('../views/main.vue').default);
 
 try {
     window.Popper = require('popper.js').default;

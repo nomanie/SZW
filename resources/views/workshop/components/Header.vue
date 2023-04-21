@@ -17,12 +17,12 @@
                 <b-dropdown class="m-md-2" no-caret offset="5">
                     <template #button-content>
                         <button class="btn-no-style" type="button">
-                            <img src="../../../../public/images/flags/poland.svg" height="20">
+                            <img src="/images/flags/poland.svg" height="20">
                         </button>
                     </template>
                     <b-dropdown-item>
                         <a class="dropdown-item" href="#">
-                            <img src="../../../../public/images/flags/uk.svg" height="20">
+                            <img src="/images/flags/uk.svg" height="20">
                         </a>
                     </b-dropdown-item>
                 </b-dropdown>
@@ -54,7 +54,7 @@
                     <template #button-content>
                         <button class="btn-no-style" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown"
                                 aria-expanded="false">
-                            <img src="../../../../public/images/person.jpg" width="50">
+                            <img src="/images/person.jpg" width="50">
                         </button>
                     </template>
                     <b-dropdown-item>
@@ -63,37 +63,37 @@
                     <b-dropdown-divider></b-dropdown-divider>
                     <b-dropdown-item>
                         <i class="fa-regular fa-id-card"></i>
-                        <router-link :to="{name: 'informations'}">
+                        <router-link :to="{name: 'workshop.informations'}">
                             <span>Informacje</span>
                         </router-link>
                     </b-dropdown-item>
                     <b-dropdown-item>
                         <i class="fa-solid fa-cogs"></i>
-                        <router-link :to="{name: 'settings'}">
+                        <router-link :to="{name: 'workshop.settings'}">
                             <span>Ustawienia</span>
                         </router-link>
                     </b-dropdown-item>
                     <b-dropdown-item>
                         <i class="fa-solid fa-book"></i>
-                        <router-link :to="{name: 'settings'}">
+                        <router-link :to="{name: 'workshop.settings'}">
                             <span>Dziennik aktywności</span>
                         </router-link>
                     </b-dropdown-item>
                     <b-dropdown-item>
                         <i class="fa-solid fa-users"></i>
-                        <router-link :to="{name: 'workers'}">
+                        <router-link :to="{name: 'workshop.workers'}">
                             <span>Użytkownicy</span>
                         </router-link>
                     </b-dropdown-item>
                     <b-dropdown-item>
                         <i class="fa-solid fa-arrows-rotate"></i>
-                        <router-link :to="{name: 'workers'}">
+                        <router-link :to="{name: 'workshop.workers'}">
                             <span>Synchronizacje</span>
                         </router-link>
                     </b-dropdown-item>
                     <b-dropdown-item>
                         <i class="fa-solid fa-bug"></i>
-                        <router-link :to="{name: 'error-report'}">
+                        <router-link :to="{name: 'workshop.error-report'}">
                             <span>Zgłoś błąd</span>
                         </router-link>
                     </b-dropdown-item>

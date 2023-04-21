@@ -114,11 +114,15 @@ export default {
                         this.$store.dispatch('auth/changePassword')
                         this.$router.push( {name: response.data.route} )
                     }
-                    if (response.data.route === '2fa') {
+                    else if (response.data.route === '2fa') {
                         this.$store.dispatch('auth/twoFA')
                         this.$router.push( {name: response.data.route} )
                     }
-
+                    else {
+                        this.$store.commit('auth/SET_USER', response.data.data.user)
+                        this.$store.dispatch('auth/logged')
+                        this.$router.push({ name: response.data.data.route, params: {uuid: response.data.data.user.uuid}})
+                    }
                 }).catch((error) => {
                     this.errors = error.data.errors
                 }).finally(()=>{

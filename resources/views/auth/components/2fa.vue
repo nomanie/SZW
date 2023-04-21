@@ -43,7 +43,7 @@ export default {
                 this.$http.post(route('api.2fa.post'), {code: this.form.code, email: this.$store.state.auth.user.email}).then((response) => {
                     this.$store.commit('auth/SET_USER', response.data.data.user)
                     this.$store.dispatch('auth/logged')
-                    this.$router.push({ name: response.data.data.route })
+                    this.$router.push({ name: response.data.data.route, params: {uuid: response.data.data.user.uuid}})
                 }).catch((error) => {
                     console.log(error)
                     this.errors = error.data.data.errors
