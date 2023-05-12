@@ -1,6 +1,6 @@
 <template>
-    <span>
-        <div :class="{'col-12 col-lg-6 col-xl-4': !full_width, 'col-12': full_width}" v-if="type === 'chart'">
+    <div :class="{'col-12 col-lg-6 col-xl-4': !full_width, 'col-12': full_width}">
+        <div v-if="type === 'chart'">
         <div class="card">
             <div class="card-header">
                 <div :class="[color, chart_data.chart_type + `-diagram` ]">
@@ -235,7 +235,7 @@
             </div>
         </div>
     </div>
-    <div :class="{'col-12 col-lg-6 col-xl-3': !full_width , 'col-12': full_width}" v-if="type === 'information'">
+    <div v-if="type === 'information'">
         <div class="card">
             <div class="card-body">
                 <div class="card__small--top">
@@ -258,7 +258,7 @@
             </div>
         </div>
     </div>
-    <div :class="{'col-12 col-lg-12 col-xl-6': !full_width , 'col-12': full_width}" v-if="type === 'list'">
+    <div v-if="type === 'list'">
         <div class="card">
             <div class="card-header mb-3">
                 <div class="table__top" :class="color">
@@ -288,7 +288,7 @@
             </div>
         </div>
     </div>
-    <div :class="{'col-12 col-lg-12 col-xl-6': !full_width, 'col-12': full_width}" v-if="type === 'task_list'">
+    <div v-if="type === 'task_list'">
         <div class="card">
             <div class="card-header mb-3">
                 <div class="table__top" :class="color">
@@ -309,7 +309,7 @@
             </div>
         </div>
     </div>
-    </span>
+    </div>
 </template>
 
 <script>

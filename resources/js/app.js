@@ -51,7 +51,7 @@ Vue.component('settings', require('../views/workshop/components/Settings').defau
 Vue.component('wiki-header', require('../views/wiki/components/header.vue').default);
 // Admin component
 Vue.component('car-brands', require('../views/admin/components/cars/brands/brand').default);
-Vue.component('main-container', require('../views/main.vue').default);
+Vue.component('main-container', require('../views/workshop/workshopMain.vue').default);
 
 try {
     window.Popper = require('popper.js').default;
@@ -70,14 +70,17 @@ Vue.use(IconsPlugin)
 Vue.use(Vuex)
 
 Vue.prototype.$store = store;
+store.dispatch('loader/reset');
 
 Vue.http.interceptors.push((request, next) => {
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 
     if (token) {
         request.headers.set('X-CSRF-TOKEN', token)
-        request.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'))
-        request.headers.set('Type', localStorage.getItem('type'))
+    }
+
+    if (Vue.prototype.$store.state.auth.user.token) {
+        request.headers.set('Authorization', 'Bearer ' + Vue.prototype.$store.state.auth.user.token)
     }
 
     next()

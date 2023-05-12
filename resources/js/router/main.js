@@ -12,16 +12,41 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    const workshop = store.getters["auth/user"].type === 'workshop'
-    const admin = store.getters["auth/user"].is_admin
+    const auth = store.getters["auth/user"]
     const logged = store.getters["auth/authenticated"];
-
-    if (!workshop && !logged) {
+    const prefix = auth.is_admin ? 'admin' : (auth.type === 'workshop' ? 'workshop' : (auth.type === 'client' ? 'client' : null))
+    if (to.meta.auth === true && logged === false) {
+        console.log(1)
+        // niezalogowany próbuje dostać się na route dla zalogowanych, redirect to login
         next("/login");
-    } else if (admin) {
-        next("/admin/dashboard");
-    }  else {
-        next();
+    } else if (logged === '2fa' || logged === 'must_2fa') {
+        if (to.name === '2fa') {
+            next()
+        } else {
+            next({name: '2fa'})
+        }
+    } else if (!to.meta.auth && logged === false) {
+        console.log(3)
+        // niezalogowany próbuje dostać się na route dla guesta, redirect
+        next()
+    } else if (!to.meta.auth && logged === 'logged') {
+        console.log(4)
+        //zalogowany próbuje dostać się na routy guesta, redirect to dashboard
+        next({name: prefix + '.dashboard', params: {uuid: auth.uuid}})
+    } else {
+        if (to.meta.type === prefix) {
+            // sprawdzamy czy zgadza się uuid strony
+            if (to.path.split('/')[1] === auth.uuid) {
+                console.log(5)
+                next()
+            } else {
+                console.log(6)
+                next({name: prefix + '.dashboard', params: {uuid: auth.uuid}})
+            }
+        } else {
+            console.log(7)
+            next({name: prefix + '.dashboard', params: {uuid: auth.uuid}})
+        }
     }
 });
 

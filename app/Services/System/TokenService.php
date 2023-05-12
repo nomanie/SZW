@@ -223,4 +223,14 @@ class TokenService
         return $this->createToken();
     }
 
+    public function getIdentityId(string $token): int
+    {
+        $this->token = (new Token)->newQuery()->where('token', $token)->first();
+        if ($this->token->tokenable_type === Identity::class) {
+            return $this->token->tokenable_id;
+        }
+
+        return -1;
+    }
+
 }

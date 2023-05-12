@@ -228,7 +228,8 @@
             </form>
             <template #modal-footer="{cancel}">
                 <div class="w-100 justify-content-between d-flex">
-                    <button type="button" class="btn btn-warning me-4" @click="defaultForm"><i class="fa fa-eraser pe-3"></i>
+                    <button type="button" class="btn btn-warning me-4" @click="defaultForm"><i
+                        class="fa fa-eraser pe-3"></i>
                         Wyczyść
                     </button>
                     <div>
@@ -257,11 +258,13 @@ export default {
     props: {
         data: {
             type: [Object, Array],
-            default: () => {}
+            default: () => {
+            }
         },
         show: {
             type: Boolean,
-            default: () => {}
+            default: () => {
+            }
         }
     },
     data() {
@@ -273,7 +276,7 @@ export default {
         }
     },
     watch: {
-        data: function() {
+        data: function () {
             this.form = this.data
             this.is_edit = true
         },
@@ -302,10 +305,13 @@ export default {
             }
         },
         save() {
-            this.$http.post(route('workshop.clients.store'), this.form).then((response) => {
-                this.$bvModal.hide('clients-modal')
-                this.$emit('reload')
+            this.$http.get('/sanctum/csrf-cookie').then(response => {
+                this.$http.post(route('workshop.clients.store'), this.form).then((response) => {
+                    this.$bvModal.hide('clients-modal')
+                    this.$emit('reload')
+                })
             })
+
         },
         edit() {
             this.$http.put(route('workshop.clients.update', this.form.id), this.form).then((response) => {

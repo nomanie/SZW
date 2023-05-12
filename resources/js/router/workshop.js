@@ -1,71 +1,124 @@
 export default [
     {
         path: "/:uuid",
+        component: () => import('@root/main'),
         children: [
             {
-                path: "/dashboard",
+                path: "dashboard",
                 name: "workshop.dashboard",
                 component: () => import('@workshop/Dashboard'),
+                meta: {
+                    auth: true,
+                    type: 'workshop'
+                },
             },
             {
-                path: "/clients",
+                path: "clients",
                 name: "workshop.clients",
                 component: () => import('@workshop/Clients'),
+                meta: {
+                    auth: true,
+                    type: 'workshop'
+                },
             },
             {
-                path: "/clients/:id",
+                path: "clients/:id",
                 name: "workshop.clients.show",
                 component: () => import('@workshop/Clients/show'),
+                meta: {
+                    auth: true,
+                    type: 'workshop'
+                },
             },
             {
-                path: "/support",
+                path: "support",
                 name: "workshop.support",
                 component: () => import('../components/Support.vue'),
+                meta: {
+                    auth: true,
+                    type: 'workshop'
+                },
             },
             {
-                path: "/documents",
+                path: "documents",
                 name: "workshop.documents",
                 component: () => import('@workshop/Documents'),
+                meta: {
+                    auth: true,
+                    type: 'workshop'
+                },
             },
             {
-                path: "/repairs",
+                path: "repairs",
                 name: "workshop.repairs",
                 component: () => import('@workshop/Repairs'),
+                meta: {
+                    auth: true,
+                    type: 'workshop'
+                },
             },
             {
-                path: "/messages",
+                path: "messages",
                 name: "workshop.messages",
                 component: () => import('../components/Messages.vue'),
+                meta: {
+                    auth: true,
+                    type: 'workshop'
+                },
             },
             {
-                path: "/calendar",
+                path: "calendar",
                 name: "workshop.calendar",
                 component: () => import('../components/Calendar.vue'),
+                meta: {
+                    auth: true,
+                    type: 'workshop'
+                },
             },
             {
-                path: "/error-report",
+                path: "error-report",
                 name: "workshop.error-report",
                 component: () => import('../components/ErrorReport.vue'),
+                meta: {
+                    auth: true,
+                    type: 'workshop'
+                },
             },
             {
-                path: "/informations",
+                path: "informations",
                 name: "workshop.informations",
                 component: () => import('@workshop/Workshop/Information'),
+                meta: {
+                    auth: true,
+                    type: 'workshop'
+                },
             },
             {
-                path: "/settings",
+                path: "settings",
                 name: "workshop.settings",
                 component: () => import('@workshop/Settings'),
+                meta: {
+                    auth: true,
+                    type: 'workshop'
+                },
             },
             {
-                path: "/workers",
+                path: "workers",
                 name: "workshop.workers",
                 component: () => import('@workshop/Workers/workers/list'),
+                meta: {
+                    auth: true,
+                    type: 'workshop'
+                },
             },
             {
-                path: "/workers/:id",
+                path: "workers/:id",
                 name: "workshop.workers.show",
                 component: () => import('@workshop/Workers/workers/show'),
+                meta: {
+                    auth: true,
+                    type: 'workshop'
+                },
             }
         ]
     },

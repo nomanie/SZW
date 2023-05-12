@@ -63,37 +63,37 @@
                     <b-dropdown-divider></b-dropdown-divider>
                     <b-dropdown-item>
                         <i class="fa-regular fa-id-card"></i>
-                        <router-link :to="{name: 'workshop.informations'}">
+                        <router-link :to="{name: 'workshop.informations', params: { uuid: uuid }}">
                             <span>Informacje</span>
                         </router-link>
                     </b-dropdown-item>
                     <b-dropdown-item>
                         <i class="fa-solid fa-cogs"></i>
-                        <router-link :to="{name: 'workshop.settings'}">
+                        <router-link :to="{name: 'workshop.settings', params: { uuid: uuid }}">
                             <span>Ustawienia</span>
                         </router-link>
                     </b-dropdown-item>
                     <b-dropdown-item>
                         <i class="fa-solid fa-book"></i>
-                        <router-link :to="{name: 'workshop.settings'}">
+                        <router-link :to="{name: 'workshop.settings', params: { uuid: uuid }}">
                             <span>Dziennik aktywności</span>
                         </router-link>
                     </b-dropdown-item>
                     <b-dropdown-item>
                         <i class="fa-solid fa-users"></i>
-                        <router-link :to="{name: 'workshop.workers'}">
+                        <router-link :to="{name: 'workshop.workers', params: { uuid: uuid }}">
                             <span>Użytkownicy</span>
                         </router-link>
                     </b-dropdown-item>
                     <b-dropdown-item>
                         <i class="fa-solid fa-arrows-rotate"></i>
-                        <router-link :to="{name: 'workshop.workers'}">
+                        <router-link :to="{name: 'workshop.workers', params: { uuid: uuid }}">
                             <span>Synchronizacje</span>
                         </router-link>
                     </b-dropdown-item>
                     <b-dropdown-item>
                         <i class="fa-solid fa-bug"></i>
-                        <router-link :to="{name: 'workshop.error-report'}">
+                        <router-link :to="{name: 'workshop.error-report', params: { uuid: uuid }}">
                             <span>Zgłoś błąd</span>
                         </router-link>
                     </b-dropdown-item>
@@ -118,11 +118,16 @@ export default {
             type: String,
         }
     },
+    data() {
+        return {
+            uuid: this.$store.getters["auth/user"].uuid
+        }
+    },
     methods: {
         logout() {
             console.log('test')
             this.$http.post(route('api.logout')).then((response) => {
-                localStorage.removeItem('id');
+                this.$store.dispatch('auth/logout')
                 window.location = '/login'
             })
         }

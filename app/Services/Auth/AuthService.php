@@ -54,8 +54,13 @@ class AuthService
      *
      * @return $this
      */
-    public function setIdentity(int $id): static
+    public function setIdentity(int|string $id): static
     {
+        if (gettype ($id) === 'string') {
+            // ustawianie identity po tokenie
+            $id = $this->tokenService->getIdentityId($id);
+        }
+
         $this->identity = Identity::find($id);
 
         return $this;

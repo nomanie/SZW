@@ -11751,6 +11751,7 @@ a:hover, router-link:hover {
 }
 
 .account-type {
+  box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.3);
   margin: 0 15px;
   display: flex;
   flex-direction: column;
@@ -11760,7 +11761,7 @@ a:hover, router-link:hover {
   justify-content: flex-start;
 }
 .account-type img {
-  width: 100%;
+  width: 90%;
 }
 .account-type__text {
   margin-top: 1rem;
@@ -11769,7 +11770,7 @@ a:hover, router-link:hover {
 }
 .account-type:not(.disabled):hover {
   box-shadow: 1px 1px 2px 2px rgba(13, 110, 253, 0.6);
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 .account-type.disabled:hover {
   color: inherit;

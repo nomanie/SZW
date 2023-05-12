@@ -25,8 +25,10 @@ import {mapState} from "vuex";
 export default {
     name: 'Loader',
     computed: {
-        ...mapState('loader', ['loading'])
-    },
+        loading() {
+            return this.$store.state.loader.loading
+        }
+    }
 }
 </script>
 <style type="scss" scoped>
@@ -38,6 +40,7 @@ export default {
     position: absolute;
     z-index: 700;
     top: 0;
+    left: 0;
 }
 .blur {
     width: 100%;

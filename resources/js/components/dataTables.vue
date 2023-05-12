@@ -128,7 +128,9 @@ export default {
         }
     },
     mounted() {
-        this.render()
+        this.getCsrfToken().then(() => {
+            this.render()
+        })
     },
     watch: {
         reloadTable: function() {
@@ -136,6 +138,9 @@ export default {
         }
     },
     methods: {
+        async getCsrfToken() {
+            await this.$http.get('/sanctum/csrf-cookie').then((response) => {})
+        },
         removeSelected(ids) {
             if (this.deleteUrl) {
                 this.$http.post(route(this.deleteUrl, 0), {_method: 'delete', data: ids}).then((response) => {
@@ -156,9 +161,9 @@ export default {
                     url: route(this.apiUrl + '.index'),
                     data: this.ajaxParams,
                     beforeSend: function (xhr) {
-                        xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('token'));
-                        xhr.setRequestHeader('Type', localStorage.getItem('type'));
-                    },
+                        xhr.setRequestHeader('X-CSRF-TOKEN', 'Bearer ' + _self.$store.state.auth.user.token);
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + _self.$store.state.auth.user.token);
+                    }
                 },
                 pageLength: this.perPage,
                 columns: this.cols,

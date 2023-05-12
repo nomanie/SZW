@@ -6,17 +6,17 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-6 col-12">
+            <div class="col-12">
                 <input v-model="form.code" class="form-control mb-2 mt-4 w-100" type="password" name="password" placeholder="Wpisz kod">
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-6 col-12 mt-3">
+            <div class="col-12 mt-3">
                 <button class="btn btn-primary w-100" @click="save()">Zaloguj się</button>
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-6 col-12 mt-3 cursor-pointer" @click="resend()">
+            <div class="col-12 mt-3 cursor-pointer" @click="resend()">
                 Wyślij kod ponownie
             </div>
         </div>

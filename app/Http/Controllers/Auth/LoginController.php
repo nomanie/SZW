@@ -39,7 +39,7 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        $this->service->setIdentity(auth()->user()->id)->logout(exec('getmac'), $request->getClientIp());
+        $this->service->setIdentity($request->bearerToken())->logout($request->getClientIp());
 
         return ['route' => 'login'];
     }

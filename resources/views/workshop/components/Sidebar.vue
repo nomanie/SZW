@@ -1,7 +1,7 @@
 <template>
     <div class="sidebar">
         <div class="logo">
-            <router-link :to="{name: 'workshop.dashboard'}">
+            <router-link :to="{name: 'workshop.dashboard', params: { uuid: uuid }}">
                 <div class="img">
                     <img src="/images/logoSZW.png" width="50">
                 </div>
@@ -16,7 +16,7 @@
         <div class="sidebar__list">
             <ul>
                 <li class="sidebar__list--item active">
-                    <router-link :to="{name: 'workshop.dashboard'}">
+                    <router-link :to="{name: 'workshop.dashboard', params: { uuid: uuid }}">
                         <div>
                             <i class="fa-solid fa-house"></i>
                             <p>
@@ -26,7 +26,7 @@
                     </router-link>
                 </li>
                 <li class="sidebar__list--item">
-                    <router-link :to="{name: 'workshop.clients'}">
+                    <router-link :to="{name: 'workshop.clients', params: { uuid: uuid }}">
                         <div>
                             <i class="fa-solid fa-users"></i>
                             <p>
@@ -46,7 +46,7 @@
 <!--                    </a>-->
 <!--                </li>-->
                 <li class="sidebar__list--item">
-                    <router-link :to="{name: 'workshop.documents'}">
+                    <router-link :to="{name: 'workshop.documents', params: { uuid: uuid }}">
                         <div>
                             <i class="fa-solid fa-file-lines"></i>
                             <p>
@@ -56,7 +56,7 @@
                     </router-link>
                 </li>
                 <li class="sidebar__list--item">
-                    <router-link :to="{name: 'workshop.repairs'}">
+                    <router-link :to="{name: 'workshop.repairs', params: { uuid: uuid }}">
                         <div>
                             <i class="fa-solid fa-wrench"></i>
                             <p>
@@ -66,7 +66,7 @@
                     </router-link>
                 </li>
                 <li class="sidebar__list--item">
-                    <router-link :to="{name: 'workshop.messages'}">
+                    <router-link :to="{name: 'workshop.messages', params: { uuid: uuid }}">
                         <div>
                             <i class="fa-solid fa-envelope"></i>
                             <p>
@@ -76,7 +76,7 @@
                     </router-link>
                 </li>
                 <li class="sidebar__list--item">
-                    <router-link :to="{name: 'workshop.calendar'}">
+                    <router-link :to="{name: 'workshop.calendar', params: { uuid: uuid }}">
                         <div>
                             <i class="fa-solid fa-calendar"></i>
                             <p>
@@ -106,7 +106,7 @@
                     </a>
                 </li>
                 <li class="sidebar__list--item">
-                    <router-link :to="{name: 'workshop.support'}">
+                    <router-link :to="{name: 'workshop.support', params: { uuid: uuid }}">
                         <div>
                             <i class="fa-solid fa-info-circle"></i>
                             <p>
@@ -119,9 +119,13 @@
         </div>
     </div>
 </template>
-
 <script>
 export default {
     name: 'Sidebar',
+    data() {
+        return {
+            uuid: this.$store.getters["auth/user"].uuid
+        }
+    }
 }
 </script>

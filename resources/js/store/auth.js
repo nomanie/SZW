@@ -4,7 +4,7 @@ export default {
     namespaced: true,
     state: {
         authenticated: false,
-        // authenticated: true\must_change_password\must_2fa\not_verified
+        // authenticated: false\true\must_change_password\2fa\not_verified
         user: {
             uuid: null,
             token: null,
@@ -37,13 +37,23 @@ export default {
             state.authenticated = 'must_change_password';
         },
         twoFA(state) {
-            state.authenticated = 'must_2fa';
+            state.authenticated = '2fa';
         },
         notVerified(state) {
             state.authenticated = 'not_verified';
         },
         logged(state) {
             state.authenticated = 'logged'
+        },
+        logout(state) {
+            state.user = {
+                uuid: null,
+                token: null,
+                type: null,
+                email: null,
+                is_admin: false
+            }
+            state.authenticated = false
         }
     },
     actions: {
@@ -58,6 +68,9 @@ export default {
         },
         logged({ commit }) {
             commit("logged")
+        },
+        logout ({ commit }) {
+            commit ("logout")
         }
     }
 }

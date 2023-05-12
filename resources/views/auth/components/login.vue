@@ -93,8 +93,7 @@ export default {
                 password: null,
                 remember_me: false
             },
-            errors: {},
-            processing: false
+            errors: {}
         }
     },
     mounted() {
@@ -105,10 +104,9 @@ export default {
     },
     methods: {
         async login() {
-            this.processing = true
             await this.$http.get('/sanctum/csrf-cookie').then(response => {
                 this.$http.post(route('api.login'), this.form).then((response) => {
-                    this.$store.commit('auth/SET_USER', {email: this.form.email})
+                    this.$store.commit('auth/SET_USER', response.data.data.user)
 
                     if (response.data.route === 'change-password') {
                         this.$store.dispatch('auth/changePassword')
@@ -119,20 +117,16 @@ export default {
                         this.$router.push( {name: response.data.route} )
                     }
                     else {
-                        this.$store.commit('auth/SET_USER', response.data.data.user)
                         this.$store.dispatch('auth/logged')
                         this.$router.push({ name: response.data.data.route, params: {uuid: response.data.data.user.uuid}})
                     }
                 }).catch((error) => {
                     this.errors = error.data.errors
-                }).finally(()=>{
-                    this.processing = false
                 })
             });
 
         },
         async verify(id, token) {
-            this.processing = true
                 await this.$http.get('/sanctum/csrf-cookie').then(response => {
                     this.$http.post(route('api.verification.verify', {id: id, hash: token})).then((response) => {
                         this.$router.push({ name: 'login' })

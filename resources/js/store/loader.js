@@ -16,6 +16,9 @@ export default {
         },
         done({ commit }) {
             commit("done");
+        },
+        reset({commit}) {
+            commit("reset")
         }
     },
     mutations: {
@@ -40,6 +43,10 @@ export default {
             if (state.requestsPending <= 0) {
                 this.commit("loader/hide");
             }
+        },
+        reset(state) {
+            state.loading = false
+            state.requestsPending = 0
         }
     }
 };
