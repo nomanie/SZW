@@ -91,7 +91,7 @@ export default {
             })
         },
         show($event) {
-            this.$router.push({ name: 'workshop.clients.show', params: { id: $event } })
+            this.$router.push({ name: 'workshop.clients.data', params: { id: $event } })
         }
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Generators\PDF;
 
 use App\Enums\Workshop\MediableTypeEnum;
 use App\Models\Workshop\Mediable;
 use App\Services\Workshop\MediableService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -14,7 +16,7 @@ class InvoiceGenerator
     protected string $view;
     protected string $filename;
     protected string $model;
-    protected string $path = 'documents\\';
+    protected string $path = 'documents/';
     protected $pdf;
     protected string $disk;
     protected Mediable $mediable;
@@ -68,13 +70,18 @@ class InvoiceGenerator
 
     public function generate()
     {
+        if (tenant() !== null) {
+            $this->setPath(tenant()->tenancy_db_name . '/' . 'documents/' . $this->path);
+        }
         $data = $this->data;
         $view = view($this->view, compact('data'))->render();
-        $path = storage_path('app/' . $this->disk . 's/' . $this->path . $this->filename);
+        $path = storage_path('app') . '/' . $this->disk . 's/' . $this->path . $this->filename;
+
         $this->pdf
             ->setPaper('A4')
             ->loadHTML($view)
             ->save($path);
+
         $size = Storage::disk($this->disk)->size($this->path . $this->filename);
 
         return $this->mediableService->setDisk($this->disk)

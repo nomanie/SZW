@@ -44,30 +44,27 @@
                     <b-tabs content-class="mt-3" class="w-100">
                         <b-tab>
                             <template #title>
-                                <i class="fa-solid fa-address-card"></i>
-                                Dane klienta
+                                <router-link :to="{name: 'workshop.clients.data'}">
+                                    <i class="fa-solid fa-address-card"></i>
+                                    Dane klienta
+                                </router-link>
                             </template>
-                            <info
-                            @edit="getName"
-                            ></info>
                         </b-tab>
                         <b-tab @click="showned_tabs.push('cars')">
                             <template #title>
-                                <i class="fa-solid fa-car"></i>
-                                Pojazdy
+                                <router-link :to="{name: 'workshop.clients.cars'}">
+                                    <i class="fa-solid fa-car"></i>
+                                    Pojazdy
+                                </router-link>
                             </template>
-                            <cars-list
-                                v-if="showned_tabs.includes('cars')"
-                            ></cars-list>
                         </b-tab>
                         <b-tab @click="showned_tabs.push('document-list')">
                             <template #title>
-                                <i class="fa-solid fa-file"></i>
-                                Dokumenty
+                                <router-link :to="{name: 'workshop.clients.documents'}">
+                                    <i class="fa-solid fa-file"></i>
+                                    Dokumenty
+                                </router-link>
                             </template>
-                            <document-list
-                                v-if="showned_tabs.includes('document-list')"
-                            ></document-list>
                         </b-tab>
                         <b-tab>
                             <template #title>
@@ -90,6 +87,7 @@
                             </div>
                         </b-tab>
                     </b-tabs>
+                    <router-view></router-view>
                 </div>
             </div>
             <loader></loader>

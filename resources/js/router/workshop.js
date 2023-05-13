@@ -28,12 +28,40 @@ export default [
                 children: [
                     {
                         path: ":id",
-                        name: "workshop.clients.show",
                         component: () => import('@workshop/Clients/show'),
                         meta: {
                             auth: true,
                             type: 'workshop'
                         },
+                        children: [
+                            {
+                                path: "",
+                                name: "workshop.clients.data",
+                                component: () => import('@workshop/Clients/tabs/info'),
+                                meta: {
+                                    auth: true,
+                                    type: 'workshop'
+                                },
+                            },
+                            {
+                                path: "cars",
+                                name: "workshop.clients.cars",
+                                component: () => import('@workshop/Clients/tabs/cars/list'),
+                                meta: {
+                                    auth: true,
+                                    type: 'workshop'
+                                },
+                            },
+                            {
+                                path: "documents",
+                                name: "workshop.clients.documents",
+                                component: () => import('@workshop/Clients/tabs/documents/list'),
+                                meta: {
+                                    auth: true,
+                                    type: 'workshop'
+                                },
+                            }
+                        ]
                     }
                 ]
             },
