@@ -57,7 +57,7 @@ export default {
             this.$router.push({ name: 'cars.show', params: { id: $event } })
         },
         getCarList() {
-            this.$http.get(route('workshop.archived_cars.index')).then((res) => {
+            this.$http.get(route('workshop.archived_cars.index', {tenant: this.$store.state.auth.user.uuid})).then((res) => {
                 this.cars = res.data
             })
         }

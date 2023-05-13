@@ -2,10 +2,13 @@
 
 namespace App\Models\System;
 
+use App\Traits\UseSystemConnection;
 use Laravel\Sanctum\PersonalAccessToken;
 
 class Token extends PersonalAccessToken
 {
+    use UseSystemConnection;
+
     protected $table = 'personal_access_tokens';
     /**
      * The attributes that should be cast to native types.

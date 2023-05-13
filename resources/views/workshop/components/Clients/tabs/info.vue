@@ -311,13 +311,13 @@ export default {
     },
     methods: {
         get() {
-            this.$http.get(route('workshop.clients.show', this.id)).then((res) => {
+            this.$http.get(route('workshop.clients.show', {tenant: this.$store.state.auth.user.uuid, client: this.id})).then((res) => {
                 this.form = res.data.data
                 this.$emit('edit', this.name)
             })
         },
         save() {
-            this.$http.put(route('workshop.clients.update', this.id), this.form).then((res)=>{
+            this.$http.put(route('workshop.clients.update', {tenant: this.$store.state.auth.user.uuid, client: this.id}), this.form).then((res)=>{
                 this.$emit('edit', this.name)
             })
         },

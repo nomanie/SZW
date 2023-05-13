@@ -36,7 +36,13 @@ export default {
         changePassword(state) {
             state.authenticated = 'must_change_password';
         },
-        twoFA(state) {
+        twoFA(state, value) {
+            state.user = {
+                email: value,
+                uuid: null,
+                token: null,
+                type: null
+            }
             state.authenticated = '2fa';
         },
         notVerified(state) {
@@ -54,23 +60,23 @@ export default {
                 is_admin: false
             }
             state.authenticated = false
-        }
+        },
     },
     actions: {
-        twoFA({ commit }) {
+        twoFA({commit}) {
             commit("twoFA");
         },
-        changePassword({ commit }) {
+        changePassword({commit}) {
             commit("changePassword");
         },
-        notVerified({ commit }) {
+        notVerified({commit}) {
             commit("notVerified");
         },
-        logged({ commit }) {
+        logged({commit}) {
             commit("logged")
         },
-        logout ({ commit }) {
-            commit ("logout")
-        }
+        logout({commit}) {
+            commit("logout")
+        },
     }
 }

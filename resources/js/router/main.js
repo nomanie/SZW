@@ -15,12 +15,13 @@ router.beforeEach((to, from, next) => {
     const auth = store.getters["auth/user"]
     const logged = store.getters["auth/authenticated"];
     const prefix = auth.is_admin ? 'admin' : (auth.type === 'workshop' ? 'workshop' : (auth.type === 'client' ? 'client' : null))
+
     if (to.meta.auth === true && logged === false) {
         console.log(1)
         // niezalogowany próbuje dostać się na route dla zalogowanych, redirect to login
         next("/login");
     } else if (logged === '2fa' || logged === 'must_2fa') {
-        if (to.name === '2fa') {
+        if (to.name === '2fa' || to.name === 'login') {
             next()
         } else {
             next({name: '2fa'})

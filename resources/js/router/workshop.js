@@ -1,7 +1,12 @@
+import store from "../store";
+
 export default [
     {
         path: "/:uuid",
         component: () => import('@root/main'),
+        meta: {
+            token: store.state.auth.user.token
+        },
         children: [
             {
                 path: "dashboard",
@@ -20,15 +25,17 @@ export default [
                     auth: true,
                     type: 'workshop'
                 },
-            },
-            {
-                path: "clients/:id",
-                name: "workshop.clients.show",
-                component: () => import('@workshop/Clients/show'),
-                meta: {
-                    auth: true,
-                    type: 'workshop'
-                },
+                children: [
+                    {
+                        path: ":id",
+                        name: "workshop.clients.show",
+                        component: () => import('@workshop/Clients/show'),
+                        meta: {
+                            auth: true,
+                            type: 'workshop'
+                        },
+                    }
+                ]
             },
             {
                 path: "support",

@@ -8,6 +8,8 @@ use App\Models\System\Token;
 use App\Models\System\Workshop;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+
 trait UseTenantConnection
 {
     /** Ustawia bazę danych na kliencką
@@ -15,16 +17,16 @@ trait UseTenantConnection
      */
     public function __construct(Request $request = null)
     {
-        $identity = auth()->user();
-
+        $identity = tenant();
         // obsługa download tokens
         if (isset($request->token) && in_array($request->token, $this->getDownloadTokens())) {
             $identity = $this->getTokenIdentity($request->token);
         }
 
         if ($identity === null){
-            if ($token = $this->getAuthorizationToken($request)) {
-                $this->setTableByToken($token, $request->header('type'));
+            if ($request?->bearerToken() || Session::get('bearer')) {
+                $token = $request === null ? Session::get('bearer') : $request->bearerToken();
+                $this->setTableByToken($token);
             } else {
                 throw new Exception('Użytkownik nie jest zalogowany');
             }
@@ -73,9 +75,10 @@ trait UseTenantConnection
         return $authorization[1];
     }
 
-    protected function setTableByToken(string $token, string $type): void
+    protected function setTableByToken(string $token): void
     {
         $identity = Identity::find(Token::where('token', $token)->first()->tokenable_id);
+        $type = $identity->is_admin ? 'admin' : (Workshop::where('identity_id', $identity->id)->first() !== null ? 'workshop' : 'worker');
         if ($type === 'workshop') {
             $this->setTableForWorkshopAdmin($identity->id);
         } else if($type === 'worker') {

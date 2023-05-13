@@ -105,22 +105,22 @@ export default {
     methods: {
         async login() {
             await this.$http.get('/sanctum/csrf-cookie').then(response => {
-                this.$http.post(route('api.login'), this.form).then((response) => {
-                    this.$store.commit('auth/SET_USER', response.data.data.user)
-
+                this.$http.post(route('login'), this.form).then((response) => {
                     if (response.data.route === 'change-password') {
                         this.$store.dispatch('auth/changePassword')
                         this.$router.push( {name: response.data.route} )
                     }
                     else if (response.data.route === '2fa') {
-                        this.$store.dispatch('auth/twoFA')
+                        this.$store.commit('auth/twoFA', response.data.email)
                         this.$router.push( {name: response.data.route} )
                     }
                     else {
+                        this.$store.commit('auth/SET_USER', response.data.data.user)
                         this.$store.dispatch('auth/logged')
                         this.$router.push({ name: response.data.data.route, params: {uuid: response.data.data.user.uuid}})
                     }
                 }).catch((error) => {
+                    console.log(error)
                     this.errors = error.data.errors
                 })
             });
@@ -128,7 +128,7 @@ export default {
         },
         async verify(id, token) {
                 await this.$http.get('/sanctum/csrf-cookie').then(response => {
-                    this.$http.post(route('api.verification.verify', {id: id, hash: token})).then((response) => {
+                    this.$http.post(route('verification.verify', {id: id, hash: token})).then((response) => {
                         this.$router.push({ name: 'login' })
                     })
                 })

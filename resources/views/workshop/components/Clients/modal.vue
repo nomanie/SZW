@@ -306,7 +306,7 @@ export default {
         },
         save() {
             this.$http.get('/sanctum/csrf-cookie').then(response => {
-                this.$http.post(route('workshop.clients.store'), this.form).then((response) => {
+                this.$http.post(route('workshop.clients.store', {tenant: this.$store.state.auth.user.uuid}), this.form).then((response) => {
                     this.$bvModal.hide('clients-modal')
                     this.$emit('reload')
                 })
@@ -314,7 +314,7 @@ export default {
 
         },
         edit() {
-            this.$http.put(route('workshop.clients.update', this.form.id), this.form).then((response) => {
+            this.$http.put(route('workshop.clients.update', {tenant: this.$store.state.auth.user.uuid, client: this.form.id}), this.form).then((response) => {
                 this.$bvModal.hide('clients-modal')
                 this.$emit('reload')
             })

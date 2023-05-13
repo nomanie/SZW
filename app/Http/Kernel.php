@@ -3,7 +3,7 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
-use Stancl\Tenancy\Middleware\InitializeTenancyByPath;
+use \App\Http\Middleware\InitializeTenancyByPath;
 
 class Kernel extends HttpKernel
 {
@@ -74,7 +74,6 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\AdminMiddleware::class,
         \App\Http\Middleware\WorkshopMiddleware::class,
         \App\Http\Middleware\ClientMiddleware::class,
-        \App\Http\Middleware\CheckRouteDataMiddleware::class,
         \App\Http\Middleware\Authenticate::class,
         \App\Http\Middleware\InitializeTenancyByPath::class
     ];

@@ -505,13 +505,13 @@ export default {
         },
         save() {
             this.form.client_id = this.$route.params.id
-            this.$http.post(route('workshop.documents.store'), this.form).then((response) => {
+            this.$http.post(route('workshop.documents.store', {tenant: this.$store.state.auth.user.uuid}), this.form).then((response) => {
                 this.$bvModal.hide('client-documents-modal')
                 this.$emit('reload')
             })
         },
         edit() {
-            this.$http.put(route('workshop.documents.update', this.form.id), this.form).then((response) => {
+            this.$http.put(route('workshop.documents.update', {tenant: this.$store.state.auth.user.uuid, document: this.form.id}), this.form).then((response) => {
                 this.$bvModal.hide('client-documents-modal')
                 this.$emit('reload')
             })

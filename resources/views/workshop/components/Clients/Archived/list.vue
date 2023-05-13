@@ -67,12 +67,12 @@ export default {
     },
     methods: {
         remove($event) {
-            this.$http.delete(route('workshop.archived_clients.destroy', $event)).then((response) => {
+            this.$http.delete(route('workshop.archived_clients.destroy', {tenant: this.$store.state.auth.user.uuid, client: $event})).then((response) => {
                 this.reload_table++
             })
         },
         restore($event) {
-            this.$http.put(route('workshop.archived_clients.update', $event)).then((response) => {
+            this.$http.put(route('workshop.archived_clients.update', {tenant: this.$store.state.auth.user.uuid, client: $event})).then((response) => {
                 this.reload_table++
                 this.$emit('table:reload')
             })

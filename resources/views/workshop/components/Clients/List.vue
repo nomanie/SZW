@@ -78,20 +78,20 @@ export default {
             this.$bvModal.show(this.add_edit_modal_id)
         },
         remove($event) {
-            this.$http.delete(route('workshop.clients.destroy', $event)).then((response) => {
+            this.$http.delete(route('workshop.clients.destroy', {tenant: this.$store.state.auth.user.uuid, client: $event})).then((response) => {
                 this.reload_table++
                 this.$emit('table:reload')
             })
         },
         edit($event, edit = false) {
             this.isEdit = edit
-            this.$http.get(route('workshop.clients.show', $event)).then((response) => {
+            this.$http.get(route('workshop.clients.show', {tenant: this.$store.state.auth.user.uuid, client: $event})).then((response) => {
                 this.data = response.data.data
                 this.$bvModal.show(this.add_edit_modal_id)
             })
         },
         show($event) {
-            this.$router.push({ name: 'clients.show', params: { id: $event } })
+            this.$router.push({ name: 'workshop.clients.show', params: { id: $event } })
         }
     }
 }

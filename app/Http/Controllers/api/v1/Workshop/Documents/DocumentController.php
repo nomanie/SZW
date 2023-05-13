@@ -143,7 +143,7 @@ class DocumentController extends Controller
 
     public function getDownloadToken(Request $request): JsonResponse
     {
-        return response()->json(['token' => $this->tokenService->setIdentity(auth()->user()->id)->createDownloadToken(exec('getmac'), $request->getClientIp())->token]);
+        return response()->json(['token' => $this->tokenService->setIdentity(auth()->user()->id)->createDownloadToken($request->getClientIp())->token]);
     }
 
     public function downloadDocument(Document $document)

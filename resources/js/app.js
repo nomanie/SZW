@@ -74,14 +74,17 @@ store.dispatch('loader/reset');
 
 Vue.http.interceptors.push((request, next) => {
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    request.credentials = true
 
     if (token) {
         request.headers.set('X-CSRF-TOKEN', token)
+        request.headers.set('type', Vue.prototype.$store.state.auth.user.type)
     }
 
     if (Vue.prototype.$store.state.auth.user.token) {
         request.headers.set('Authorization', 'Bearer ' + Vue.prototype.$store.state.auth.user.token)
     }
+
 
     next()
 })

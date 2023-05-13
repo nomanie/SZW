@@ -1,6 +1,9 @@
 <template>
     <div>
         <div class="m-3 position-relative">
+            <div class="mb-2">
+                <router-link :to="{ name: 'workshop.clients' }"> Wróć do listy klientów</router-link>
+            </div>
             <div class="d-flex justify-content-between">
                 <div class="d-flex">
                     <div class="d-flex">
@@ -112,6 +115,9 @@ export default {
             showned_tabs: [],
             name: ''
         }
+    },
+    mounted() {
+        console.log('test')
     },
     methods: {
         getName($event) {

@@ -4,6 +4,7 @@ namespace App\Services\Workshop;
 
 
  use App\Models\Workshop\Clients\Client;
+ use Illuminate\Support\Facades\Session;
 
  class ClientService
 {

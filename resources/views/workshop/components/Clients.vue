@@ -1,6 +1,6 @@
 <template>
    <div class="mt-3">
-       <b-tabs>
+       <b-tabs v-if="$route.name === 'workshop.clients'">
            <b-tab lazy>
                <template #title>
                    Lista Klientów
@@ -14,6 +14,7 @@
                <archived-clients-list></archived-clients-list>
            </b-tab>
        </b-tabs>
+       <router-view v-if="$route.name !== 'workshop.clients'"></router-view>
    </div>
 </template>
 

@@ -7,7 +7,7 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <input v-model="form.code" class="form-control mb-2 mt-4 w-100" type="password" name="password" placeholder="Wpisz kod">
+                <input v-model="form.code" class="form-control mb-2 mt-4 w-100" type="text" name="password" placeholder="Wpisz kod">
             </div>
         </div>
         <div class="row">
@@ -40,12 +40,11 @@ export default {
         async save() {
             this.processing = true
             await this.$http.get('/sanctum/csrf-cookie').then(response => {
-                this.$http.post(route('api.2fa.post'), {code: this.form.code, email: this.$store.state.auth.user.email}).then((response) => {
+                this.$http.post(route('2fa.post'), {code: this.form.code, email: this.$store.state.auth.user.email}).then((response) => {
                     this.$store.commit('auth/SET_USER', response.data.data.user)
                     this.$store.dispatch('auth/logged')
                     this.$router.push({ name: response.data.data.route, params: {uuid: response.data.data.user.uuid}})
                 }).catch((error) => {
-                    console.log(error)
                     this.errors = error.data.data.errors
                 }).finally(()=>{
                     this.processing = false
@@ -55,7 +54,7 @@ export default {
         async resend() {
             this.processing = true
             await this.$http.get('/sanctum/csrf-cookie').then(response => {
-                this.$http.post(route('api.2fa.resend'), {email: this.$store.state.auth.user.email})
+                this.$http.post(route('2fa.resend'), {email: this.$store.state.auth.user.email})
                     .then((response) => {
                     }).catch((error) => {
                         this.errors = error.data.errors

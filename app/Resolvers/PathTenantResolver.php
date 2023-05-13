@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Resolvers;
 
-use App\Models\System\Identity;
 use App\Models\System\Workshop;
 use Illuminate\Routing\Route;
 use Stancl\Tenancy\Contracts\Tenant;

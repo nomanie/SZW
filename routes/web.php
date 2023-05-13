@@ -17,8 +17,9 @@ use Illuminate\Support\Facades\Route;
 //include_once('wiki.php');
 include_once('auth.php');
 //include_once('client.php');
-//include_once('workshops.php');
+include_once('workshops.php');
 
-Route::get('/{vue_capture?}', function($route) {
+Route::get('/{tenant}/{vue_capture?}', function($route) {
     return view('welcome');
 })->where('vue_capture', '[\/\w\.-]*');
+

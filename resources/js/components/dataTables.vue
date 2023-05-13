@@ -143,7 +143,7 @@ export default {
         },
         removeSelected(ids) {
             if (this.deleteUrl) {
-                this.$http.post(route(this.deleteUrl, 0), {_method: 'delete', data: ids}).then((response) => {
+                this.$http.post(route(this.deleteUrl, {tenant: _self.$store.state.auth.user.uuid, ids: 0}), {_method: 'delete', data: ids}).then((response) => {
                     this.datatable.ajax.reload();
                 })
             }
@@ -158,7 +158,7 @@ export default {
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: route(this.apiUrl + '.index'),
+                    url: route(this.apiUrl + '.index', {tenant: _self.$store.state.auth.user.uuid}),
                     data: this.ajaxParams,
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader('X-CSRF-TOKEN', 'Bearer ' + _self.$store.state.auth.user.token);

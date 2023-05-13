@@ -11,6 +11,7 @@ use App\Traits\JsonResponseTrait;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -95,8 +96,6 @@ class LoginService extends AuthService
         $type = $this->getType($identity->id);
 
         AuthorizedDevice::insert(['identity_id' => $identity->id, 'ip_address' => $ip, 'mac_address' => exec('getmac')]);
-
-        Auth::logout();
 
         return $this->successJsonResponse(__('Zalogowano pomyślnie, za chwilę nastąpi przekierowanie'), 200, [
             'user' => [

@@ -78,21 +78,21 @@ export default {
             this.$bvModal.show(this.add_edit_modal_id)
         },
         remove($event) {
-            this.$http.delete(route('workshop.documents.destroy', $event)).then((response) => {
+            this.$http.delete(route('workshop.documents.destroy', {tenant: this.$store.state.auth.user.uuid, document: $event})).then((response) => {
                 this.reload_table++
                 this.$emit('table:reload')
             })
         },
         edit($event) {
             this.isEdit = true
-            this.$http.get(route('workshop.documents.show', $event)).then((response) => {
+            this.$http.get(route('workshop.documents.show', {tenant: this.$store.state.auth.user.uuid, document: $event})).then((response) => {
                 this.data = response.data.data
                 this.$bvModal.show(this.add_edit_modal_id)
             })
         },
         download($event) {
-            this.$http.get(route('workshop.documents.token')).then((res) => {
-                window.location = route('workshop.documents.download_document', $event) + '?token=' + res.data.token
+            this.$http.get(route('workshop.documents.token', {tenant: this.$store.state.auth.user.uuid})).then((res) => {
+                window.location = route('workshop.documents.download_document', {tenant: this.$store.state.auth.user.uuid, document: $event}) + '?token=' + res.data.token
             })
         },
         show() {

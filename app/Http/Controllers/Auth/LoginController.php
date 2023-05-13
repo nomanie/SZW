@@ -29,6 +29,8 @@ class LoginController extends Controller
         } else if ($response === 3) {
             return response()->json([
                 'route' => '2fa',
+                'email' => $data['email'],
+                $response
             ]);
         }
         else {

@@ -340,7 +340,7 @@ export default {
         },
         save() {
             this.form['client_id'] = this.$route.params.id
-            this.$http.post(route('workshop.cars.store'), this.form).then((response) => {
+            this.$http.post(route('workshop.cars.store', {tenant: this.$store.state.auth.user.uuid}), this.form).then((response) => {
                 this.$bvModal.hide('cars-modal')
                 this.$emit('reload')
             })

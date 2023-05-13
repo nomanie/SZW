@@ -126,7 +126,7 @@ export default {
     methods: {
         logout() {
             console.log('test')
-            this.$http.post(route('api.logout')).then((response) => {
+            this.$http.post(route('logout')).then((response) => {
                 this.$store.dispatch('auth/logout')
                 window.location = '/login'
             })

@@ -61,7 +61,7 @@ export default {
             this.$bvModal.show(this.add_edit_modal_id)
         },
         remove(car_id) {
-            this.$http.delete(route('workshop.cars.destroy', car_id)).then((response) => {
+            this.$http.delete(route('workshop.cars.destroy',{tenant: this.$store.state.auth.user.uuid, car: car_id})).then((response) => {
                 this.getCarList()
                 this.archivedKey++
             })
@@ -77,7 +77,7 @@ export default {
             this.$router.push({ name: 'cars.show', params: { id: $event } })
         },
         getCarList() {
-            this.$http.get(route('workshop.cars.index')).then((res) => {
+            this.$http.get(route('workshop.cars.index', {tenant: this.$store.state.auth.user.uuid})).then((res) => {
                 this.cars = res.data
             })
         }

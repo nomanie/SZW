@@ -144,7 +144,7 @@ export default {
         async save() {
             this.processing = true
             await this.$http.get('/sanctum/csrf-cookie').then(response => {
-                this.$http.post(route('api.register.workshop.post'), this.form).then((response) => {
+                this.$http.post(route('register.workshop.post'), this.form).then((response) => {
                     // this.signIn()
                 }).catch((error) => {
                     this.errors = error.data.errors
